@@ -553,7 +553,7 @@ SCRIPT;
         ];
 
         $settings = [
-            'type'                => 'question',
+            'icon'                => 'question',
             'showCancelButton'    => true,
             'showLoaderOnConfirm' => true,
             'confirmButtonText'   => $trans['submit'],

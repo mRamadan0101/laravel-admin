@@ -123,7 +123,7 @@ trait HasAssets
         }
 
         if (!$css = static::getMinifiedCss()) {
-            $css = array_merge(static::$css, static::baseCss());
+            $css = static::orderedCss();
         }
 
         $css = array_filter(array_unique($css));
@@ -156,6 +156,26 @@ trait HasAssets
         }
 
         return $css;
+    }
+
+    /**
+     * Base css first, then plugin css, then laravel-admin's own stylesheets so they can override both.
+     *
+     * @return array
+     */
+    public static function orderedCss()
+    {
+        $css = array_values(array_unique(array_merge(static::baseCss(), static::$css)));
+
+        $own = array_filter($css, function ($path) {
+            return strpos($path, 'vendor/laravel-admin/laravel-admin/') !== false;
+        });
+
+        usort($own, function ($a, $b) {
+            return (strpos($a, 'bs3-compat') !== false ? 0 : 1) <=> (strpos($b, 'bs3-compat') !== false ? 0 : 1);
+        });
+
+        return array_merge(array_diff($css, $own), $own);
     }
 
     /**

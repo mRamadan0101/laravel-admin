@@ -8,13 +8,10 @@
 
         @foreach($options as $option => $label)
 
-            {!! $inline ? '<span class="icheck">' : '<div class="radio icheck">'  !!}
-
-                <label @if($inline)class="form-check form-check-inline"@endif>
-                    <input type="radio" name="{{$name}}" value="{{$option}}" class="minimal {{$class}}" {{ ($option == old($column, $value)) || ($value === null && in_array($label, $checked)) ?'checked':'' }} {!! $attributes !!} />&nbsp;{{$label}}&nbsp;&nbsp;
-                </label>
-
-            {!! $inline ? '</span>' :  '</div>' !!}
+            <label class="form-check icheck {{ $inline ? 'form-check-inline mt-2' : '' }}">
+                <input type="radio" name="{{$name}}" value="{{$option}}" class="form-check-input minimal {{$class}}" {{ ($option == old($column, $value)) || ($value === null && in_array($label, $checked)) ?'checked':'' }} {!! $attributes !!} />
+                <span class="form-check-label">{{$label}}</span>
+            </label>
 
         @endforeach
 

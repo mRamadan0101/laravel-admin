@@ -2,8 +2,8 @@
     <div class="modal-dialog {{ $modal_size }}" role="document">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title fs-5">{{ $title }}</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                <h4 class="modal-title">{{ $title }}</h4>
             </div>
             <form>
             <div class="modal-body">

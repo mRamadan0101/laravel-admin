@@ -1,5 +1,6 @@
 $('.{{ $trigger }}').popover({
     html: true,
+    sanitize: false,
     container: 'body',
     trigger: 'manual',
     placement: function (context, source) {
@@ -19,7 +20,7 @@ $('.{{ $trigger }}').popover({
     }
 }).on('shown.bs.popover', function (e) {
 
-    var $popover = $($(this).data('bs.popover').$tip[0]).find('.ie-content');
+    var $popover = $(bootstrap.Popover.getInstance(this).tip).find('.ie-content');
     var $display = $(this).parents('.ie-wrap').find('.ie-display');
     var $trigger = $(this);
 

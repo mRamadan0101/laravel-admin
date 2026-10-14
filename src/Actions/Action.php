@@ -338,7 +338,7 @@ var actionResolver = function (data) {
             var target   = data[1];
 
             if (typeof response !== 'object') {
-                return $.admin.swal({type: 'error', title: 'Oops!'});
+                return $.admin.swal({icon: 'error', title: 'Oops!'});
             }
 
             var then = function (then) {

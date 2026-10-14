@@ -330,7 +330,7 @@ trait ExtendDisplay
                 $style = Arr::get($options, $original, $default);
             }
 
-            return "<span class=\"label-{$style}\" style='width: 8px;height: 8px;padding: 0;border-radius: 50%;display: inline-block;'></span>";
+            return "<span class=\"bg-".admin_bs_color($style)."\" style='width: 8px;height: 8px;padding: 0;border-radius: 50%;display: inline-block;'></span>";
         }, '&nbsp;&nbsp;');
     }
 }

@@ -442,6 +442,37 @@ class Admin
 
         self::css($assets['css']);
         self::js($assets['js']);
+        self::js($this->localeAssets());
+        self::js('vendor/laravel-admin/laravel-admin/plugins.js');
+    }
+
+    /**
+     * Locale files of flatpickr and select2 that match the application locale.
+     *
+     * @return array
+     */
+    protected function localeAssets()
+    {
+        $locale = str_replace('_', '-', (string) config('app.locale'));
+        $short = strtolower(strstr($locale, '-', true) ?: $locale);
+        $assets = __DIR__.'/../resources/assets';
+        $js = [];
+
+        $candidates = [
+            'flatpickr/dist/l10n/' => [strtolower($locale), $short],
+            'select2/js/i18n/'     => [$locale, $short],
+        ];
+
+        foreach ($candidates as $dir => $names) {
+            foreach (array_unique($names) as $name) {
+                if ($name !== 'en' && is_file("{$assets}/{$dir}{$name}.js")) {
+                    $js[] = "vendor/laravel-admin/{$dir}{$name}.js";
+                    break;
+                }
+            }
+        }
+
+        return $js;
     }
 
     /**

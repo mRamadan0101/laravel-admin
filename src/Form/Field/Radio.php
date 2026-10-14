@@ -11,13 +11,9 @@ class Radio extends Field
 
     protected $inline = true;
 
-    protected static $css = [
-        '/vendor/laravel-admin/AdminLTE/plugins/iCheck/all.css',
-    ];
+    protected static $css = [];
 
-    protected static $js = [
-        '/vendor/laravel-admin/AdminLTE/plugins/iCheck/icheck.min.js',
-    ];
+    protected static $js = [];
 
     /**
      * @var string

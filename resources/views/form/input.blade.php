@@ -15,13 +15,11 @@
             <input {!! $attributes !!} />
 
             @if ($append)
-                <span class="input-group-text clearfix">{!! $append !!}</span>
+                <span class="input-group-text">{!! $append !!}</span>
             @endif
 
             @isset($btn)
-                <span class="input-group-btn">
-                  {!! $btn !!}
-                </span>
+                {!! $btn !!}
             @endisset
 
         </div>

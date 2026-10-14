@@ -9,7 +9,7 @@
 
         @if($errors->has($listErrorKey))
             @foreach($errors->get($listErrorKey) as $message)
-                <label class="col-form-label" for="inputError"><i class="fa-regular fa-circle-xmark"></i> {{$message}}</label><br/>
+                <label class="invalid-feedback d-block" for="inputError"><i class="fa-regular fa-circle-xmark"></i> {{$message}}</label><br/>
             @endforeach
         @endif
 
@@ -28,7 +28,7 @@
                                 <input name="{{ $column }}[values][]" value="{{ old("{$column}.values.{$k}", $v) }}" class="form-control" />
                                 @if($errors->has($itemErrorKey))
                                     @foreach($errors->get($itemErrorKey) as $message)
-                                        <label class="col-form-label" for="inputError"><i class="fa-regular fa-circle-xmark"></i> {{$message}}</label><br/>
+                                        <label class="invalid-feedback d-block" for="inputError"><i class="fa-regular fa-circle-xmark"></i> {{$message}}</label><br/>
                                     @endforeach
                                 @endif
                             </div>

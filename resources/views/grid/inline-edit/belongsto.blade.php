@@ -10,7 +10,7 @@
         cursor: pointer;
     }
 
-    .belongsto.modal .box {
+    .belongsto.modal .card {
         border-top: none;
         margin-bottom: 0;
         box-shadow: none;
@@ -25,8 +25,8 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content" style="border-radius: 5px;">
                 <div class="modal-header">
+                    <h4 class="modal-title fs-5">{{ admin_trans('admin.choose') }}</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <h4 class="modal-title">{{ admin_trans('admin.choose') }}</h4>
                 </div>
                 <div class="modal-body">
                     <div class="loading text-center">

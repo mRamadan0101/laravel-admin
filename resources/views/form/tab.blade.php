@@ -2,8 +2,8 @@
     <ul class="nav nav-tabs">
 
         @foreach($tabObj->getTabs() as $tab)
-            <li {{ $tab['active'] ? 'class=active' : '' }}>
-                <a href="#tab-{{ $tab['id'] }}" data-bs-toggle="tab">
+            <li class="nav-item">
+                <a class="nav-link {{ $tab['active'] ? 'active' : '' }}" href="#tab-{{ $tab['id'] }}" data-bs-toggle="tab">
                     {{ $tab['title'] }} <i class="fa-solid fa-circle-exclamation text-danger hide"></i>
                 </a>
             </li>
@@ -13,7 +13,7 @@
     <div class="tab-content fields-group">
 
         @foreach($tabObj->getTabs() as $tab)
-            <div class="tab-pane {{ $tab['active'] ? 'active' : '' }}" id="tab-{{ $tab['id'] }}">
+            <div class="tab-pane {{ $tab['active'] ? 'active show' : '' }}" id="tab-{{ $tab['id'] }}">
                 @foreach($tab['fields'] as $field)
                     {!! $field->render() !!}
                 @endforeach

@@ -17,7 +17,7 @@ class FileUploadTest extends TestCase
     {
         $this->visit('admin/files/create')
             ->see('Files')
-            ->seeInElement('h3[class=box-title]', 'Create')
+            ->seeInElement('h3[class=card-title]', 'Create')
             ->seeElement('input[name=file1]')
             ->seeElement('input[name=file2]')
             ->seeElement('input[name=file3]')

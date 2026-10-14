@@ -1,4 +1,4 @@
-<div class="card box-{{ $style }}">
+<div class="card card-{{ $style === 'default' ? 'secondary' : $style }} card-outline">
     <div class="card-header">
         <h3 class="card-title">{{ $title }}</h3>
 

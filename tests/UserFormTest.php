@@ -29,10 +29,10 @@ class UserFormTest extends TestCase
             ->seeElement("input[type=text][name='profile[color]']")
             ->seeElement("input[type=text][name='profile[start_at]']")
             ->seeElement("input[type=text][name='profile[end_at]']")
-            ->seeElement('span[class=help-block] i[class*=fa-info-circle]')
-            ->seeInElement('span[class=help-block]', 'Please input your postcode')
-            ->seeElement('span[class=help-block] i[class*=fa-image]')
-            ->seeInElement('span[class=help-block]', '上传头像')
+            ->seeElement('span[class=form-text] i[class*=fa-info-circle]')
+            ->seeInElement('span[class=form-text]', 'Please input your postcode')
+            ->seeElement('span[class=form-text] i[class*=fa-image]')
+            ->seeInElement('span[class=form-text]', '上传头像')
             ->seeElement("select[name='tags[]'][multiple]")
             ->seeInElement('a[html-field]', 'html...');
     }
@@ -194,7 +194,7 @@ class UserFormTest extends TestCase
 
         $this->visit('admin/users/1/edit')
             ->seeInElement('a[class*=btn-danger]', 'Delete')
-            ->seeInElement('a[class*=btn-default]', 'List')
+            ->seeInElement('a[class*=btn-outline-secondary]', 'List')
             ->seeInElement('a[class*=btn-primary]', 'View');
     }
 

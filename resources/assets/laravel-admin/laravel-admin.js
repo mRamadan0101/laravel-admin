@@ -1,19 +1,6 @@
-$.fn.editable.defaults.params = function (params) {
-    params._token = LA.token;
-    params._editable = 1;
-    params._method = 'PUT';
-    return params;
-};
-
-$.fn.editable.defaults.error = function (data) {
-    var msg = '';
-    if (data.responseJSON.errors) {
-        $.each(data.responseJSON.errors, function (k, v) {
-            msg += v + "\n";
-        });
-    }
-    return msg
-};
+/*!
+ * laravel-admin 2.x
+ */
 
 toastr.options = {
     closeButton: true,
@@ -24,7 +11,7 @@ toastr.options = {
 
 $.pjax.defaults.timeout = 5000;
 $.pjax.defaults.maxCacheLength = 0;
-$(document).pjax('a:not(a[target="_blank"])', {
+$(document).pjax('a:not(a[target="_blank"]):not([data-bs-toggle]):not([data-lte-toggle]):not([href^="#"]):not([href^="javascript:"])', {
     container: '#pjax-container'
 });
 
@@ -32,16 +19,15 @@ NProgress.configure({parent: '#app'});
 
 $(document).on('pjax:timeout', function (event) {
     event.preventDefault();
-})
-
-$(document).on('submit', 'form[pjax-container]', function (event) {
-    $.pjax.submit(event, '#pjax-container')
 });
 
-$(document).on("pjax:popstate", function () {
+$(document).on('submit', 'form[pjax-container]', function (event) {
+    $.pjax.submit(event, '#pjax-container');
+});
 
-    $(document).one("pjax:end", function (event) {
-        $(event.target).find("script[data-exec-on-popstate]").each(function () {
+$(document).on('pjax:popstate', function () {
+    $(document).one('pjax:end', function (event) {
+        $(event.target).find('script[data-exec-on-popstate]').each(function () {
             $.globalEval(this.text || this.textContent || this.innerHTML || '');
         });
     });
@@ -49,52 +35,171 @@ $(document).on("pjax:popstate", function () {
 
 $(document).on('pjax:send', function (xhr) {
     if (xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {
-        $submit_btn = $('form[pjax-container] :submit');
-        if ($submit_btn) {
-            $submit_btn.button('loading')
-        }
+        $('form[pjax-container] :submit').button('loading');
     }
     NProgress.start();
 });
 
 $(document).on('pjax:complete', function (xhr) {
     if (xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {
-        $submit_btn = $('form[pjax-container] :submit');
-        if ($submit_btn) {
-            $submit_btn.button('reset')
-        }
+        $('form[pjax-container] :submit').button('reset');
     }
     NProgress.done();
     $.admin.grid.selects = {};
 });
 
-$(document).click(function () {
-    $('.sidebar-form .dropdown-menu').hide();
+$(document).on('pjax:beforeReplace', function () {
+    $.admin.disposeBootstrap(document.getElementById('pjax-container'));
 });
 
-$(function () {
-    $('.sidebar-menu li:not(.treeview) > a').on('click', function () {
-        var $parent = $(this).parent().addClass('active');
-        $parent.siblings('.treeview.active').find('> a').trigger('click');
-        $parent.siblings().removeClass('active').find('li').removeClass('active');
-    });
-    var menu = $('.sidebar-menu li > a[href$="' + (location.pathname + location.search + location.hash) + '"]').parent().addClass('active');
-    menu.parents('ul.treeview-menu').addClass('menu-open');
-    menu.parents('li.treeview').addClass('active');
+$(document).on('pjax:end', function () {
+    $.admin.initBootstrap(document.getElementById('pjax-container'));
+    $.admin.activateMenu();
+});
 
-    $('[data-bs-toggle="popover"]').popover();
+/* ---------------------------------------------------------------------
+ * Bootstrap 3 style $.fn.button('loading' | 'reset')
+ * Bootstrap 5 registers its own jQuery bridge on DOMContentLoaded,
+ * so the wrapper has to be installed afterwards.
+ * ------------------------------------------------------------------- */
+(function ($) {
+    function install() {
+        var bridge = $.fn.button;
 
-    // Sidebar form autocomplete
-    $('.sidebar-form .autocomplete').on('keyup focus', function () {
-        var $menu = $('.sidebar-form .dropdown-menu');
-        var text = $(this).val();
-
-        if (text === '') {
-            $menu.hide();
+        if (bridge && bridge.laravelAdmin) {
             return;
         }
 
-        var regex = new RegExp(text, 'i');
+        var button = function (action) {
+            if (action === 'loading' || action === 'reset') {
+                return this.each(function () {
+                    var $btn = $(this);
+                    var isInput = $btn.is('input');
+
+                    if (action === 'loading') {
+                        if ($btn.data('reset-html') === undefined) {
+                            $btn.data('reset-html', isInput ? $btn.val() : $btn.html());
+                        }
+                        var text = $btn.data('loading-text') || $btn.data('bs-loading-text');
+                        if (text) {
+                            isInput ? $btn.val(text) : $btn.html(text);
+                        } else if (!isInput) {
+                            $btn.prepend('<span class="spinner-border spinner-border-sm me-1" aria-hidden="true"></span>');
+                        }
+                        $btn.addClass('disabled').prop('disabled', true);
+                    } else {
+                        if ($btn.data('reset-html') !== undefined) {
+                            isInput ? $btn.val($btn.data('reset-html')) : $btn.html($btn.data('reset-html'));
+                            $btn.removeData('reset-html');
+                        }
+                        $btn.removeClass('disabled').prop('disabled', false);
+                    }
+                });
+            }
+
+            return bridge ? bridge.apply(this, arguments) : this;
+        };
+
+        button.laravelAdmin = true;
+        button.Constructor = bridge && bridge.Constructor;
+        button.noConflict = bridge && bridge.noConflict;
+        $.fn.button = button;
+    }
+
+    install();
+    document.addEventListener('DOMContentLoaded', install);
+})(jQuery);
+
+/* ---------------------------------------------------------------------
+ * Color mode
+ * ------------------------------------------------------------------- */
+(function ($) {
+    var KEY = 'laravel-admin.theme';
+    var media = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+
+    function preferred() {
+        var stored = null;
+        try {
+            stored = localStorage.getItem(KEY);
+        } catch (e) {}
+        return stored || document.documentElement.getAttribute('data-admin-theme') || 'light';
+    }
+
+    function apply(theme) {
+        var resolved = theme === 'auto' ? (media && media.matches ? 'dark' : 'light') : theme;
+        document.documentElement.setAttribute('data-bs-theme', resolved);
+
+        $('.admin-theme-switcher [data-admin-theme-value]').each(function () {
+            $(this).toggleClass('active', $(this).data('admin-theme-value') === theme);
+        });
+
+        $('.admin-theme-icon')
+            .toggleClass('fa-sun', resolved === 'light' && theme !== 'auto')
+            .toggleClass('fa-moon', resolved === 'dark' && theme !== 'auto')
+            .toggleClass('fa-circle-half-stroke', theme === 'auto');
+    }
+
+    $(document).on('click', '[data-admin-theme-value]', function () {
+        var theme = $(this).data('admin-theme-value');
+        try {
+            localStorage.setItem(KEY, theme);
+        } catch (e) {}
+        apply(theme);
+    });
+
+    if (media && media.addEventListener) {
+        media.addEventListener('change', function () {
+            if (preferred() === 'auto') {
+                apply('auto');
+            }
+        });
+    }
+
+    $(function () {
+        apply(preferred());
+    });
+})(jQuery);
+
+/* ---------------------------------------------------------------------
+ * Sidebar
+ * ------------------------------------------------------------------- */
+$(document).on('click', function () {
+    $('.sidebar-search-form .dropdown-menu').removeClass('show');
+});
+
+$(function () {
+    $.admin.activateMenu();
+    $.admin.initBootstrap(document);
+
+    var wrapper = document.querySelector('.app-sidebar .sidebar-wrapper');
+    if (wrapper && window.OverlayScrollbarsGlobal && window.OverlayScrollbarsGlobal.OverlayScrollbars) {
+        window.OverlayScrollbarsGlobal.OverlayScrollbars(wrapper, {
+            scrollbars: {
+                theme: 'os-theme-light',
+                autoHide: 'leave',
+                clickScroll: true
+            }
+        });
+    }
+
+    $(document).on('click', '.app-sidebar .sidebar-menu .nav-link:not([href="#"])', function () {
+        var $item = $(this).closest('.nav-item');
+        $('.app-sidebar .sidebar-menu .nav-link.active').removeClass('active');
+        $(this).addClass('active');
+        $item.parents('.nav-item').children('.nav-link').addClass('active');
+    });
+
+    // Sidebar menu search
+    $('.sidebar-search-form .autocomplete').on('keyup focus', function () {
+        var $menu = $('.sidebar-search-form .dropdown-menu');
+        var text = $(this).val();
+
+        if (text === '') {
+            $menu.removeClass('show');
+            return;
+        }
+
+        var regex = new RegExp(text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
         var matched = false;
 
         $menu.find('li').each(function () {
@@ -106,19 +211,20 @@ $(function () {
             }
         });
 
-        if (matched) {
-            $menu.show();
-        }
-    }).click(function(event){
+        $menu.toggleClass('show', matched);
+    }).on('click', function (event) {
         event.stopPropagation();
     });
 
-    $('.sidebar-form .dropdown-menu li a').click(function (){
-        $('.sidebar-form .autocomplete').val($(this).text());
+    $(document).on('click', '.sidebar-search-form .dropdown-menu li a', function () {
+        $('.sidebar-search-form .autocomplete').val($(this).text().trim());
     });
 });
 
-$(window).scroll(function() {
+/* ---------------------------------------------------------------------
+ * Back to top
+ * ------------------------------------------------------------------- */
+$(window).on('scroll', function () {
     if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
         $('#totop').fadeIn(500);
     } else {
@@ -126,11 +232,14 @@ $(window).scroll(function() {
     }
 });
 
-$('#totop').on('click', function (e) {
+$(document).on('click', '#totop', function (e) {
     e.preventDefault();
     $('html,body').animate({scrollTop: 0}, 500);
 });
 
+/* ---------------------------------------------------------------------
+ * $.admin
+ * ------------------------------------------------------------------- */
 (function ($) {
 
     var Grid = function () {
@@ -154,6 +263,64 @@ $('#totop').on('click', function (e) {
         return rows;
     };
 
+    /**
+     * SweetAlert2 11 with the option names used by SweetAlert2 7 (laravel-admin 1.x).
+     */
+    var swal = function (title, text, icon) {
+        var options = title;
+
+        if (typeof title !== 'object' || title === null) {
+            options = {title: title, text: text, icon: icon};
+        } else {
+            options = $.extend({}, title);
+        }
+
+        if (options.type && !options.icon) {
+            options.icon = options.type;
+        }
+        delete options.type;
+
+        if (options.icon === undefined) {
+            delete options.icon;
+        }
+
+        if (options.confirmButtonClass || options.cancelButtonClass) {
+            options.customClass = $.extend({}, options.customClass, {
+                confirmButton: options.confirmButtonClass,
+                cancelButton: options.cancelButtonClass
+            });
+            delete options.confirmButtonClass;
+            delete options.cancelButtonClass;
+        }
+
+        return Swal.fire(options);
+    };
+
+    $.each(['close', 'isVisible', 'showLoading', 'hideLoading', 'isLoading', 'clickConfirm', 'clickCancel',
+        'getPopup', 'getTitle', 'getContent', 'getHtmlContainer', 'getInput', 'showValidationMessage',
+        'resetValidationMessage', 'enableButtons', 'disableButtons', 'mixin', 'update'], function (_, method) {
+        if (typeof Swal[method] === 'function') {
+            swal[method] = function () {
+                return Swal[method].apply(Swal, arguments);
+            };
+        }
+    });
+
+    if (!swal.getContent && Swal.getHtmlContainer) {
+        swal.getContent = function () {
+            return Swal.getHtmlContainer();
+        };
+    }
+
+    swal.fire = swal;
+    swal.DismissReason = Swal.DismissReason;
+    swal.showValidationError = swal.showValidationMessage;
+    swal.resetValidationError = swal.resetValidationMessage;
+
+    if (typeof window.swal === 'undefined') {
+        window.swal = swal;
+    }
+
     $.fn.admin = LA;
     $.admin = LA;
     $.admin.swal = swal;
@@ -166,7 +333,7 @@ $('#totop').on('click', function (e) {
     };
 
     $.admin.redirect = function (url) {
-        $.pjax({container:'#pjax-container', url: url });
+        $.pjax({container: '#pjax-container', url: url});
         $.admin.grid = new Grid();
     };
 
@@ -174,12 +341,93 @@ $('#totop').on('click', function (e) {
         return $('meta[name="csrf-token"]').attr('content');
     };
 
+    $.admin.initBootstrap = function (root) {
+        if (!window.bootstrap || !root) {
+            return;
+        }
+
+        $(root).find('[data-bs-toggle="tooltip"]').each(function () {
+            bootstrap.Tooltip.getOrCreateInstance(this);
+        });
+
+        $(root).find('[data-bs-toggle="popover"]').not('[class^="ie-trigger"],[class*=" ie-trigger"]').each(function () {
+            if (!bootstrap.Popover.getInstance(this)) {
+                bootstrap.Popover.getOrCreateInstance(this);
+            }
+        });
+    };
+
+    $.admin.disposeBootstrap = function (root) {
+        if (!window.bootstrap || !root) {
+            return;
+        }
+
+        $(root).find('[data-bs-toggle="tooltip"],[data-bs-toggle="popover"]').each(function () {
+            var tooltip = bootstrap.Tooltip.getInstance(this);
+            var popover = bootstrap.Popover.getInstance(this);
+            tooltip && tooltip.dispose();
+            popover && popover.dispose();
+        });
+
+        $('body > .modal-backdrop').remove();
+        $('body').removeClass('modal-open').css({overflow: '', paddingRight: ''});
+    };
+
+    $.admin.activateMenu = function () {
+        var $menu = $('.app-sidebar .sidebar-menu');
+
+        if (!$menu.length) {
+            return;
+        }
+
+        var path = location.pathname + location.search + location.hash;
+        var best = null;
+        var bestLength = 0;
+
+        $menu.find('a.nav-link[href]').each(function () {
+            var href = this.getAttribute('href');
+
+            if (!href || href === '#') {
+                return;
+            }
+
+            var link = document.createElement('a');
+            link.href = href;
+
+            if (link.host !== location.host) {
+                return;
+            }
+
+            var target = link.pathname + link.search + link.hash;
+            var exact = target === path;
+            var prefix = path.indexOf(link.pathname.replace(/\/$/, '') + '/') === 0;
+
+            if ((exact || prefix) && link.pathname.length > bestLength) {
+                best = this;
+                bestLength = exact ? Infinity : link.pathname.length;
+            }
+        });
+
+        $menu.find('.nav-link.active').removeClass('active');
+
+        if (best) {
+            var $best = $(best).addClass('active');
+            $best.parents('.nav-item').each(function () {
+                var $item = $(this);
+                if ($item.children('.nav-treeview').length) {
+                    $item.addClass('menu-open').children('.nav-link').addClass('active');
+                    $item.children('.nav-treeview').css('display', 'block');
+                }
+            });
+        }
+    };
+
     $.admin.loadedScripts = [];
 
-    $.admin.loadScripts = function(arr) {
-        var _arr = $.map(arr, function(src) {
+    $.admin.loadScripts = function (arr) {
+        var _arr = $.map(arr, function (src) {
 
-            if ($.inArray(src, $.admin.loadedScripts)) {
+            if ($.inArray(src, $.admin.loadedScripts) !== -1) {
                 return;
             }
 
@@ -188,11 +436,11 @@ $('#totop').on('click', function (e) {
             return $.getScript(src);
         });
 
-        _arr.push($.Deferred(function(deferred){
+        _arr.push($.Deferred(function (deferred) {
             $(deferred.resolve);
         }));
 
         return $.when.apply($, _arr);
-    }
+    };
 
 })(jQuery);

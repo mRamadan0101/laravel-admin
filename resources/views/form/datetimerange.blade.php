@@ -7,7 +7,7 @@
             <div class="col-lg-12">
                 @if($errors->has($errorKey['start']))
                     @foreach($errors->get($errorKey['start']) as $message)
-                        <label class="col-form-label" for="inputError"><i class="fa-regular fa-circle-xmark"></i> {{$message}}</label><br/>
+                        <label class="invalid-feedback d-block" for="inputError"><i class="fa-regular fa-circle-xmark"></i> {{$message}}</label><br/>
                     @endforeach
                 @endif
 
@@ -29,7 +29,7 @@
             <div class="col-lg-12">
                 @if($errors->has($errorKey['end']))
                     @foreach($errors->get($errorKey['end']) as $message)
-                        <label class="col-form-label" for="inputError"><i class="fa-regular fa-circle-xmark"></i> {{$message}}</label><br/>
+                        <label class="invalid-feedback d-block" for="inputError"><i class="fa-regular fa-circle-xmark"></i> {{$message}}</label><br/>
                     @endforeach
                 @endif
 

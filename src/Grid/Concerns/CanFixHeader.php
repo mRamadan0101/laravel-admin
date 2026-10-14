@@ -10,7 +10,7 @@ trait CanFixHeader
     {
         Admin::style(
             <<<'STYLE'
-.wrapper, .grid-box .card-body {
+.app-wrapper, .grid-box .card-body {
     overflow: visible;
 }
 
@@ -20,7 +20,7 @@ trait CanFixHeader
 }
 
 .grid-table thead tr:first-child th {
-    background: white;
+    background: var(--bs-body-bg);
     position: sticky;
     top: 0;
     z-index: 1;

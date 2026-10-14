@@ -327,3 +327,39 @@ if (!function_exists('admin_get_route')) {
         return config('admin.route.prefix').'.'.$name;
     }
 }
+
+if (!function_exists('admin_bs_color')) {
+
+    /**
+     * Map AdminLTE 2 / Bootstrap 3 color names to Bootstrap 5 contextual colors.
+     *
+     * @param string $color
+     *
+     * @return string
+     */
+    function admin_bs_color($color)
+    {
+        $map = [
+            'default'    => 'secondary',
+            'aqua'       => 'info',
+            'light-blue' => 'info',
+            'teal'       => 'info',
+            'blue'       => 'primary',
+            'navy'       => 'primary',
+            'purple'     => 'primary',
+            'green'      => 'success',
+            'olive'      => 'success',
+            'lime'       => 'success',
+            'yellow'     => 'warning',
+            'orange'     => 'warning',
+            'red'        => 'danger',
+            'maroon'     => 'danger',
+            'fuchsia'    => 'danger',
+            'gray'       => 'secondary',
+            'grey'       => 'secondary',
+            'black'      => 'dark',
+        ];
+
+        return $map[$color] ?? $color;
+    }
+}

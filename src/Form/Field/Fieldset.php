@@ -44,7 +44,7 @@ HTML;
     public function collapsed()
     {
         $script = <<<SCRIPT
-$("#{$this->name}").removeClass("in");
+$("#{$this->name}").removeClass("show");
 $(".{$this->name}-title i").toggleClass("fa-angles-down fa-angles-up");
 SCRIPT;
 

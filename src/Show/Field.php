@@ -365,7 +365,7 @@ HTML;
             }
 
             return collect((array) $value)->map(function ($name) use ($style) {
-                return "<span class='badge text-bg-{$style}'>$name</span>";
+                return "<span class='badge text-bg-".admin_bs_color($style)."'>$name</span>";
             })->implode('&nbsp;');
         });
     }

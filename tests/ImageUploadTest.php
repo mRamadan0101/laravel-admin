@@ -24,7 +24,7 @@ class ImageUploadTest extends TestCase
     {
         $this->visit('admin/images/create')
             ->see('Images')
-            ->seeInElement('h3[class=box-title]', 'Create')
+            ->seeInElement('h3[class=card-title]', 'Create')
             ->seeElement('input[name=image1]')
             ->seeElement('input[name=image2]')
             ->seeElement('input[name=image3]')

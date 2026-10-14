@@ -26,7 +26,7 @@ class Label extends AbstractDisplayer
                 }
             }
 
-            return "<span class='badge text-bg-{$style}'>$item</span>";
+            return "<span class='badge text-bg-".admin_bs_color($style)."'>$item</span>";
         })->implode('&nbsp;');
     }
 }

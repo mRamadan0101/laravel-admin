@@ -23,7 +23,7 @@ class UserSettingTest extends TestCase
             ->see('Password confirmation');
 
         $this->seeElement('input[value=Administrator]')
-            ->seeInElement('.box-body', 'administrator');
+            ->seeInElement('.card-body', 'administrator');
     }
 
     public function testUpdateName()

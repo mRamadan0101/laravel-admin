@@ -1,15 +1,13 @@
 <div {!! $attributes !!}>
     @foreach($items as $key => $item)
-    <div class="card card card-primary card-outline" style="margin-bottom: 0px">
-        <div class="card-header">
-            <h4 class="card-title">
-                <a data-bs-toggle="collapse" data-bs-parent="#{{$id}}" href="#collapse{{ $key }}">
-                    {{ $item['title'] }}
-                </a>
-            </h4>
-        </div>
-        <div id="collapse{{ $key }}" class="panel-collapse collapse {{ $key == 0 ? 'in' : '' }}">
-            <div class="card-body">
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button {{ $key == 0 ? '' : 'collapsed' }}" type="button" data-bs-toggle="collapse" data-bs-target="#{{$id}}-collapse{{ $key }}" aria-expanded="{{ $key == 0 ? 'true' : 'false' }}">
+                {{ $item['title'] }}
+            </button>
+        </h2>
+        <div id="{{$id}}-collapse{{ $key }}" class="accordion-collapse collapse {{ $key == 0 ? 'show' : '' }}" data-bs-parent="#{{$id}}">
+            <div class="accordion-body">
                 {!! $item['content'] !!}
             </div>
         </div>

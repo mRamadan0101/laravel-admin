@@ -26,7 +26,7 @@
 
                                 @if($errors->has($keysErrorKey))
                                     @foreach($errors->get($keysErrorKey) as $message)
-                                        <label class="col-form-label" for="inputError"><i class="fa-regular fa-circle-xmark"></i> {{$message}}</label><br/>
+                                        <label class="invalid-feedback d-block" for="inputError"><i class="fa-regular fa-circle-xmark"></i> {{$message}}</label><br/>
                                     @endforeach
                                 @endif
                             </div>
@@ -38,7 +38,7 @@
                                 <input name="{{ $name }}[values][]" value="{{ old("{$column}.values.{$k}", $v) }}" class="form-control" />
                                 @if($errors->has($valsErrorKey))
                                     @foreach($errors->get($valsErrorKey) as $message)
-                                        <label class="col-form-label" for="inputError"><i class="fa-regular fa-circle-xmark"></i> {{$message}}</label><br/>
+                                        <label class="invalid-feedback d-block" for="inputError"><i class="fa-regular fa-circle-xmark"></i> {{$message}}</label><br/>
                                     @endforeach
                                 @endif
                             </div>

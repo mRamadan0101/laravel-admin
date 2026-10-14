@@ -31,9 +31,7 @@
 
         <div class="input-group">
             <input {!! $attributes !!} />
-            <span class="input-group-btn">
-              {!! $btn !!}
-            </span>
+            {!! $btn !!}
         </div>
 
         @include('admin::form.help-block')

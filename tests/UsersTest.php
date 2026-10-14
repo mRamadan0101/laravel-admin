@@ -54,11 +54,11 @@ class UsersTest extends TestCase
 
         $this->assertTrue($this->app['auth']->guard('admin')->getUser()->isAdministrator());
 
-        $this->see('<span>Users</span>')
-            ->see('<span>Roles</span>')
-            ->see('<span>Permission</span>')
-            ->see('<span>Operation log</span>')
-            ->see('<span>Menu</span>');
+        $this->seeInElement('.sidebar-menu .nav-link p', 'Users')
+            ->seeInElement('.sidebar-menu .nav-link p', 'Roles')
+            ->seeInElement('.sidebar-menu .nav-link p', 'Permission')
+            ->seeInElement('.sidebar-menu .nav-link p', 'Operation log')
+            ->seeInElement('.sidebar-menu .nav-link p', 'Menu');
     }
 
     public function testUpdateUser()

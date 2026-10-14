@@ -544,9 +544,9 @@ class Builder
 $('form.{$this->formClass} button[type=submit]').click(function (e) {
     e.preventDefault();
     var form = $(this).parents('form');
-    swal({
+    $.admin.swal({
         title: "$message",
-        type: "warning",
+        icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#DD6B55",
         confirmButtonText: "{$trans['confirm']}",

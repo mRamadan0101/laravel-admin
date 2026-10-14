@@ -1,13 +1,10 @@
-<div class="input-group input-group-sm">
+<div class="pt-1">
     @foreach($options as $option => $label)
 
-        {!! $inline ? '<span class="icheck">' : '<div class="radio icheck">'  !!}
-
-            <label @if($inline)class="form-check form-check-inline"@endif>
-                <input type="radio" class="{{$id}}" name="{{$name}}" value="{{$option}}" class="minimal" {{ ((string)$option === request($name, is_null($value) ? '' : $value)) ? 'checked' : '' }} />&nbsp;{{$label}}&nbsp;&nbsp;
-            </label>
-
-        {!! $inline ? '</span>' :  '</div>' !!}
+        <label class="form-check icheck {{ $inline ? 'form-check-inline' : '' }}">
+            <input type="radio" class="form-check-input {{$id}}" name="{{$name}}" value="{{$option}}" {{ ((string)$option === request($name, is_null($value) ? '' : $value)) ? 'checked' : '' }} />
+            <span class="form-check-label">{{$label}}</span>
+        </label>
 
     @endforeach
 </div>

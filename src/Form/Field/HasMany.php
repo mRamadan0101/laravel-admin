@@ -535,7 +535,7 @@ $('#has-many-{$this->column} > .nav').off('click', 'i.close-tab').on('click', 'i
     }else{
         \$pane.removeClass('active').find('.$removeClass').val(1);
     }
-    if(\$navTab.closest('li').hasClass('active')){
+    if(\$navTab.hasClass('active')){
         \$navTab.closest('li').remove();
         $('#has-many-{$this->column} > .nav > li:nth-child(1) > a').tab('show');
     }else{

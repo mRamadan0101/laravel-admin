@@ -6,8 +6,8 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content" style="border-radius: 5px;">
             <div class="modal-header">
+                <h4 class="modal-title fs-5">{{ $title }}</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                <h4 class="modal-title">{{ $title }}</h4>
             </div>
             <div class="modal-body">
                 {!! $html !!}
@@ -18,7 +18,7 @@
 
 @if($grid)
 <style>
-    .box.grid-box {
+    .card.grid-box {
         box-shadow: none;
         border-top: none;
     }

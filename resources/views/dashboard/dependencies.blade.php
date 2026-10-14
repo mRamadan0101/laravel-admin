@@ -27,5 +27,5 @@
 </div>
 
 <script>
-    $('.dependencies').slimscroll({height:'510px',size:'3px'});
+    $('.dependencies').css({'max-height': '510px', 'overflow-y': 'auto'});
 </script>

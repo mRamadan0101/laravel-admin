@@ -41,12 +41,12 @@ class AuthTest extends TestCase
             ->see('Dependencies');
 
         $this
-            ->see('<span>Admin</span>')
-            ->see('<span>Users</span>')
-            ->see('<span>Roles</span>')
-            ->see('<span>Permission</span>')
-            ->see('<span>Operation log</span>')
-            ->see('<span>Menu</span>');
+            ->seeInElement('.sidebar-menu .nav-link p', 'Admin')
+            ->seeInElement('.sidebar-menu .nav-link p', 'Users')
+            ->seeInElement('.sidebar-menu .nav-link p', 'Roles')
+            ->seeInElement('.sidebar-menu .nav-link p', 'Permission')
+            ->seeInElement('.sidebar-menu .nav-link p', 'Operation log')
+            ->seeInElement('.sidebar-menu .nav-link p', 'Menu');
     }
 
     public function testLogout()

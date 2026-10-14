@@ -37,6 +37,11 @@ class Box extends Widget implements Renderable
     protected $script;
 
     /**
+     * @var bool
+     */
+    protected $solid = false;
+
+    /**
      * Box constructor.
      *
      * @param string $title
@@ -56,7 +61,7 @@ class Box extends Widget implements Renderable
             $this->footer($footer);
         }
 
-        $this->class('box');
+        $this->class('card');
     }
 
     /**
@@ -136,7 +141,13 @@ class Box extends Widget implements Renderable
         $nodeSelector = $nodeSelector ?: '.card-body';
 
         $this->script = <<<SCRIPT
-$("#{$this->id} {$nodeSelector}").slimScroll({$scrollOptions});
+(function () {
+    var options = {$scrollOptions};
+    var \$node = $("#{$this->id} {$nodeSelector}").css({'overflow-y': 'auto', 'max-height': options.height || '300px'});
+    if (window.OverlayScrollbarsGlobal) {
+        OverlayScrollbarsGlobal.OverlayScrollbars(\$node[0], {scrollbars: {autoHide: 'leave'}});
+    }
+})();
 SCRIPT;
 
         return $this;
@@ -168,23 +179,32 @@ SCRIPT;
             return $this->style([$styles]);
         }
 
-        $styles = array_map(function ($style) {
-            return 'box-'.$style;
-        }, $styles);
+        $classes = [];
 
-        $this->class = $this->class.' '.implode(' ', $styles);
+        foreach ($styles as $style) {
+            if ($style === 'solid') {
+                $this->solid = true;
+                continue;
+            }
+
+            $classes[] = 'card-'.($style === 'default' ? 'secondary' : $style);
+        }
+
+        $this->class = trim($this->class.' '.implode(' ', $classes));
 
         return $this;
     }
 
     /**
-     * Add `` class to box.
+     * Use a filled header instead of an outlined card.
      *
      * @return $this
      */
     public function solid()
     {
-        return $this->style('solid');
+        $this->solid = true;
+
+        return $this;
     }
 
     /**
@@ -211,6 +231,10 @@ SCRIPT;
      */
     public function render()
     {
+        if (!$this->solid && preg_match('/\bcard-(primary|secondary|success|info|warning|danger|light|dark)\b/', $this->class)) {
+            $this->class .= ' card-outline';
+        }
+
         return view($this->view, $this->variables())->render();
     }
 }

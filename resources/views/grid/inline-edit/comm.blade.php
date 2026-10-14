@@ -73,7 +73,7 @@
     $('body').on('click', function (e) {
         if ($(e.target).data('bs-toggle') !== 'popover'
             && $(e.target).parents('[data-bs-toggle="popover"]').length === 0
-            && $(e.target).parents('.popover.in').length === 0) {
+            && $(e.target).parents('.popover.show').length === 0) {
             $('[data-bs-toggle="popover"]').popover('hide');
         }
     });

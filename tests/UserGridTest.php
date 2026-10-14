@@ -80,16 +80,16 @@ class UserGridTest extends TestCase
             ->see('Users');
 
         $this->visit('admin/users?page=2');
-        $this->assertCount(20, $this->crawler()->filter('td a i[class*=fa-edit]'));
+        $this->assertCount(20, $this->crawler()->filter('td a i[class*=fa-pen-to-square]'));
 
         $this->visit('admin/users?page=3');
-        $this->assertCount(20, $this->crawler()->filter('td a i[class*=fa-edit]'));
+        $this->assertCount(20, $this->crawler()->filter('td a i[class*=fa-pen-to-square]'));
 
         $this->visit('admin/users?page=4');
-        $this->assertCount(5, $this->crawler()->filter('td a i[class*=fa-edit]'));
+        $this->assertCount(5, $this->crawler()->filter('td a i[class*=fa-pen-to-square]'));
 
         $this->click(1)->seePageIs('admin/users?page=1');
-        $this->assertCount(20, $this->crawler()->filter('td a i[class*=fa-edit]'));
+        $this->assertCount(20, $this->crawler()->filter('td a i[class*=fa-pen-to-square]'));
     }
 
     public function testOrderByJson()
@@ -212,7 +212,7 @@ class UserGridTest extends TestCase
 
         $this->visit('admin/users');
 
-        $this->assertCount(15, $this->crawler()->filter('td a i[class*=fa-edit]'));
+        $this->assertCount(15, $this->crawler()->filter('td a i[class*=fa-pen-to-square]'));
         $this->assertCount(15, $this->crawler()->filter('td a i[class*=fa-trash]'));
     }
 

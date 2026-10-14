@@ -522,7 +522,7 @@ class Form implements Renderable
         ];
 
         $settings = [
-            'type'                => 'question',
+            'icon'                => 'question',
             'showCancelButton'    => true,
             'confirmButtonText'   => $trans['submit'],
             'cancelButtonText'    => $trans['cancel'],
