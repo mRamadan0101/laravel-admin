@@ -1,6 +1,6 @@
 <div class="{{$viewClass['form-group']}} {!! !$errors->has($errorKey) ? '' : 'has-error' !!}">
 
-    <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
+    <label for="{{$id}}" class="{{$viewClass['label']}} col-form-label">{{$label}}</label>
 
     <div class="{{$viewClass['field']}}">
 
@@ -9,13 +9,13 @@
         <div class="input-group">
 
             @if ($prepend)
-            <span class="input-group-addon">{!! $prepend !!}</span>
+            <span class="input-group-text">{!! $prepend !!}</span>
             @endif
 
             <input {!! $attributes !!} />
 
             @if ($append)
-                <span class="input-group-addon clearfix">{!! $append !!}</span>
+                <span class="input-group-text clearfix">{!! $append !!}</span>
             @endif
 
             @isset($btn)

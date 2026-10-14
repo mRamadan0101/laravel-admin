@@ -236,6 +236,61 @@ class Admin
     }
 
     /**
+     * Parse `admin.skin` into an accent color and a sidebar color mode.
+     *
+     * @return array{color: string, sidebar: string}
+     */
+    public function skin()
+    {
+        $skin = preg_replace('/^skin-/', '', (string) config('admin.skin', 'blue-light'));
+
+        $light = str_ends_with($skin, '-light');
+
+        $color = $light ? substr($skin, 0, -6) : $skin;
+
+        if (!in_array($color, ['blue', 'yellow', 'green', 'purple', 'red', 'black'], true)) {
+            $color = 'blue';
+        }
+
+        return ['color' => $color, 'sidebar' => $light ? 'light' : 'dark'];
+    }
+
+    /**
+     * CSS classes of the <body> element, derived from `admin.layout`.
+     *
+     * @return string
+     */
+    public function bodyClass()
+    {
+        $map = [
+            'fixed'            => 'layout-fixed fixed-header',
+            'fixed-footer'     => 'fixed-footer',
+            'sidebar-mini'     => 'sidebar-mini',
+            'sidebar-collapse' => 'sidebar-collapse',
+        ];
+
+        $classes = ['sidebar-expand-lg', 'bg-body-tertiary', 'skin-'.$this->skin()['color']];
+
+        foreach ((array) config('admin.layout', []) as $layout) {
+            $classes[] = $map[$layout] ?? $layout;
+        }
+
+        return implode(' ', array_unique($classes));
+    }
+
+    /**
+     * Initial Bootstrap color mode: light, dark or auto.
+     *
+     * @return string
+     */
+    public function theme()
+    {
+        $theme = config('admin.theme', 'light');
+
+        return in_array($theme, ['light', 'dark', 'auto'], true) ? $theme : 'light';
+    }
+
+    /**
      * Get the currently authenticated user.
      *
      * @return \Illuminate\Contracts\Auth\Authenticatable|null

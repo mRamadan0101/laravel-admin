@@ -13,7 +13,7 @@ $('.{{ $trigger }}').popover({
     },
     content: function () {
         var $trigger = $(this);
-        var $template = $($('template#'+$(this).data('target')).html());
+        var $template = $($('template#'+$(this).data('bs-target')).html());
         {{ $content }}
         return $template.prop("outerHTML");
     }
@@ -29,6 +29,6 @@ $('.{{ $trigger }}').popover({
     {{ $shown ?? '' }}
 
 }).click(function () {
-    $('[data-toggle="popover"]').popover('hide');
+    $('[data-bs-toggle="popover"]').popover('hide');
     $(this).popover('toggle');
 });

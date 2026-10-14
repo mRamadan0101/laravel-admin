@@ -102,4 +102,9 @@ return [
     'prev'                   => 'السابق',
     'next'                   => 'التالي',
     'quick_create'           => 'إضافة سريعة',
+    'theme'                  => 'المظهر',
+    'theme_light'            => 'فاتح',
+    'theme_dark'             => 'داكن',
+    'theme_auto'             => 'تلقائي',
+    'member_since'           => 'عضو منذ',
 ];

@@ -42,8 +42,8 @@ SCRIPT;
         );
 
         return <<<HTML
-<a href="javascript:void(0);" class="grid-column-qrcode text-muted" data-content="{$img}" data-toggle='popover' tabindex='0'>
-    <i class="fa fa-qrcode"></i>
+<a href="javascript:void(0);" class="grid-column-qrcode text-muted" data-bs-content="{$img}" data-bs-toggle='popover' tabindex='0'>
+    <i class="fa-solid fa-qrcode"></i>
 </a>&nbsp;{$this->getValue()}
 HTML;
     }

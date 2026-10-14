@@ -19,7 +19,7 @@ class RadioCard extends RadioButton
     margin-bottom: 0px;
 }
 
-.card-group .panel-body {
+.card-group .card-body {
     padding: 10px 15px;
 }
 

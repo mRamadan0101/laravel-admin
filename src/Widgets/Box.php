@@ -117,7 +117,7 @@ class Box extends Widget implements Renderable
     public function collapsable()
     {
         $this->tools[] =
-            '<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>';
+            '<button class="btn btn-tool" data-lte-toggle="card-collapse"><i class="fa-solid fa-minus"></i></button>';
 
         return $this;
     }
@@ -133,7 +133,7 @@ class Box extends Widget implements Renderable
     {
         $this->id = uniqid('box-slim-scroll-');
         $scrollOptions = json_encode($options);
-        $nodeSelector = $nodeSelector ?: '.box-body';
+        $nodeSelector = $nodeSelector ?: '.card-body';
 
         $this->script = <<<SCRIPT
 $("#{$this->id} {$nodeSelector}").slimScroll({$scrollOptions});
@@ -150,7 +150,7 @@ SCRIPT;
     public function removable()
     {
         $this->tools[] =
-            '<button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>';
+            '<button class="btn btn-tool" data-lte-toggle="card-remove"><i class="fa-solid fa-xmark"></i></button>';
 
         return $this;
     }
@@ -178,7 +178,7 @@ SCRIPT;
     }
 
     /**
-     * Add `box-solid` class to box.
+     * Add `` class to box.
      *
      * @return $this
      */

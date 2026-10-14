@@ -12,7 +12,7 @@ $(document).off('click', '.ie-content .ie-submit').on('click', '.ie-content .ie-
     var original = $trigger.data('original');
 
     if (val == original) {
-        $('[data-toggle="popover"]').popover('hide');
+        $('[data-bs-toggle="popover"]').popover('hide');
         return;
     }
 
@@ -35,14 +35,14 @@ $(document).off('click', '.ie-content .ie-submit').on('click', '.ie-content .ie-
             $trigger.data('value', val)
                 .data('original', val);
 
-            $('[data-toggle="popover"]').popover('hide');
+            $('[data-bs-toggle="popover"]').popover('hide');
         },
         statusCode: {
             422: function(xhr) {
                 $popover.find('.error').empty();
                 var errors = xhr.responseJSON.errors;
                 for (var key in errors) {
-                    $popover.find('.error').append('<div><i class="fa fa-times-circle-o"></i> '+errors[key]+'</div>')
+                    $popover.find('.error').append('<div><i class="fa-regular fa-circle-xmark"></i> '+errors[key]+'</div>')
                 }
             }
         }

@@ -94,7 +94,7 @@ trait ExtendDisplay
 
             $url = request()->fullUrlWithQuery($query);
 
-            return "<a href=\"{$url}\"><i class=\"fa fa-search\"></i></a>";
+            return "<a href=\"{$url}\"><i class=\"fa-solid fa-magnifying-glass\"></i></a>";
         }, '&nbsp;&nbsp;');
 
         return $this;
@@ -216,7 +216,7 @@ trait ExtendDisplay
                 $size
             );
 
-            return "<img src='$src' class='img img-circle'/>";
+            return "<img src='$src' class='img rounded-circle'/>";
         });
     }
 
@@ -234,7 +234,7 @@ trait ExtendDisplay
             $values = (array) $values;
 
             if (in_array($value, $values)) {
-                return '<i class="fa fa-refresh fa-spin text-primary"></i>';
+                return '<i class="fa-solid fa-rotate-right fa-spin text-primary"></i>';
             }
 
             return Arr::get($others, $value, $value);
@@ -295,7 +295,7 @@ trait ExtendDisplay
         return $this->display(function ($value) use ($map, $default) {
             $bool = empty($map) ? boolval($value) : Arr::get($map, $value, $default);
 
-            return $bool ? '<i class="fa fa-check text-green"></i>' : '<i class="fa fa-close text-red"></i>';
+            return $bool ? '<i class="fa-solid fa-check text-success"></i>' : '<i class="fa-solid fa-xmark text-danger"></i>';
         });
     }
 

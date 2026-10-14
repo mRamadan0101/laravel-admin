@@ -1,11 +1,11 @@
 <div class="{{$viewClass['form-group']}}">
-    <label class="{{$viewClass['label']}} control-label">{{$label}}</label>
+    <label class="{{$viewClass['label']}} col-form-label">{{$label}}</label>
     <div class="{{$viewClass['field']}}">
-        <div class="box box-solid box-default no-margin">
-            <!-- /.box-header -->
-            <div class="box-body">
+        <div class="card m-0">
+            <!-- /.card-header -->
+            <div class="card-body">
                 {!! $value !!}&nbsp;
-            </div><!-- /.box-body -->
+            </div><!-- /.card-body -->
         </div>
 
         @include('admin::form.help-block')

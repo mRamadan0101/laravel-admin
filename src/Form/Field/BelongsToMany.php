@@ -57,7 +57,7 @@ class BelongsToMany extends MultipleSelect
                 radioClass:'iradio_minimal-blue',
                 checkboxClass:'icheckbox_minimal-blue'
             });
-            modal.find('.box-header:first').hide();
+            modal.find('.card-header:first').hide();
 
             modal.find('input.select').each(function (index, el) {
                 if ($.inArray($(el).val().toString(), selected) >=0 ) {
@@ -102,7 +102,7 @@ class BelongsToMany extends MultipleSelect
     }).on('click', 'tr', function (e) {
         $(this).find('input.select').iCheck('toggle');
         e.preventDefault();
-    }).on('submit', '.box-header form', function (e) {
+    }).on('submit', '.card-header form', function (e) {
         load($(this).attr('action')+'&'+$(this).serialize());
         e.preventDefault();
         return false;

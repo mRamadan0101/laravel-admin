@@ -103,4 +103,9 @@ return [
     'prev'                   => '上一步',
     'next'                   => '下一步',
     'quick_create'           => '快速创建',
+    'theme'                  => '主题',
+    'theme_light'            => '浅色',
+    'theme_dark'             => '深色',
+    'theme_auto'             => '跟随系统',
+    'member_since'           => '注册于',
 ];

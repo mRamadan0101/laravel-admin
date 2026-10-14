@@ -1,12 +1,12 @@
 <div class="{{$viewClass['form-group']}} {!! !$errors->has($column) ?: 'has-error' !!}">
 
-    <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
+    <label for="{{$id}}" class="{{$viewClass['label']}} col-form-label">{{$label}}</label>
 
     <div class="{{$viewClass['field']}}" id="{{$id}}">
 
         @if($canCheckAll)
             <span class="icheck">
-            <label class="checkbox-inline">
+            <label class="form-check form-check-inline">
                 <input type="checkbox" class="{{ $checkAllClass }}"/>&nbsp;{{ __('admin.all') }}
             </label>
             </span>
@@ -41,7 +41,7 @@
 
             {!! $inline ? '<span class="icheck">' : '<div class="checkbox icheck">' !!}
 
-                <label @if($inline)class="checkbox-inline"@endif>
+                <label @if($inline)class="form-check form-check-inline"@endif>
                     <input type="checkbox" name="{{$name}}[]" value="{{$option}}" class="{{$class}}" {{ false !== array_search($option, array_filter(old($column, $value ?? []))) || ($value === null && in_array($option, $checked)) ?'checked':'' }} {!! $attributes !!} />&nbsp;{{$label}}&nbsp;&nbsp;
                 </label>
 

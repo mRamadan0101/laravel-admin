@@ -104,4 +104,9 @@ return [
     'prev'                   => 'Prev',
     'next'                   => 'Next',
     'quick_create'           => 'Quick create',
+    'theme'                  => 'Theme',
+    'theme_light'            => 'Light',
+    'theme_dark'             => 'Dark',
+    'theme_auto'             => 'Auto',
+    'member_since'           => 'Member since',
 ];

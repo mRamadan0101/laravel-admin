@@ -1,12 +1,12 @@
-<span data-toggle="modal" data-target="#grid-modal-{{ $name }}" data-key="{{ $key }}">
-   <a href="javascript:void(0)"><i class="fa fa-clone"></i>&nbsp;&nbsp;{{ $value }}</a>
+<span data-bs-toggle="modal" data-bs-target="#grid-modal-{{ $name }}" data-key="{{ $key }}">
+   <a href="javascript:void(0)"><i class="fa-regular fa-clone"></i>&nbsp;&nbsp;{{ $value }}</a>
 </span>
 
 <div class="modal grid-modal fade" id="grid-modal-{{ $name }}" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content" style="border-radius: 5px;">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 <h4 class="modal-title">{{ $title }}</h4>
             </div>
             <div class="modal-body">
@@ -23,7 +23,7 @@
         border-top: none;
     }
 
-    .grid-box .box-header:first-child {
+    .grid-box .card-header:first-child {
         display: none;
     }
 </style>
@@ -37,7 +37,7 @@
     var load = function (url) {
 
         modalBody.html("<div class='loading text-center' style='height:200px;'>\
-                <i class='fa fa-spinner fa-pulse fa-3x fa-fw' style='margin-top: 80px;'></i>\
+                <i class='fa-solid fa-spinner fa-pulse fa-3x fa-fw' style='margin-top: 80px;'></i>\
             </div>");
 
         $.get(url, function (data) {
@@ -51,7 +51,7 @@
     }).on('click', '.page-item a, .filter-box a', function (e) {
         load($(this).attr('href'));
         e.preventDefault();
-    }).on('submit', '.box-header form', function (e) {
+    }).on('submit', '.card-header form', function (e) {
         load($(this).attr('action')+'&'+$(this).serialize());
         return false;
     });

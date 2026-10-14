@@ -717,7 +717,7 @@ EOT;
         }, '');
 
         /* Build cell with hidden elements */
-        $template .= '<td class="hidden">'.implode('', $hidden).'</td>';
+        $template .= '<td class="d-none">'.implode('', $hidden).'</td>';
 
         $this->setupScript(implode("\r\n", $scripts));
 

@@ -61,46 +61,45 @@ trait HasAssets
      * @var array
      */
     public static $baseCss = [
-        'vendor/laravel-admin/AdminLTE/bootstrap/css/bootstrap.min.css',
-        'vendor/laravel-admin/font-awesome/css/font-awesome.min.css',
-        'vendor/laravel-admin/laravel-admin/laravel-admin.css',
+        'vendor/laravel-admin/google-fonts/fonts.css',
+        'vendor/laravel-admin/fontawesome/css/all.min.css',
+        'vendor/laravel-admin/fontawesome/css/v4-shims.min.css',
+        'vendor/laravel-admin/overlayscrollbars/overlayscrollbars.min.css',
+        'vendor/laravel-admin/AdminLTE/dist/css/adminlte.min.css',
         'vendor/laravel-admin/nprogress/nprogress.css',
-        'vendor/laravel-admin/sweetalert2/dist/sweetalert2.css',
+        'vendor/laravel-admin/sweetalert2/sweetalert2.min.css',
         'vendor/laravel-admin/nestable/nestable.css',
         'vendor/laravel-admin/toastr/build/toastr.min.css',
-        'vendor/laravel-admin/bootstrap3-editable/css/bootstrap-editable.css',
-        'vendor/laravel-admin/google-fonts/fonts.css',
-        'vendor/laravel-admin/AdminLTE/dist/css/AdminLTE.min.css',
+        'vendor/laravel-admin/laravel-admin/laravel-admin.css',
     ];
+
+    /**
+     * Bootstrap 3 / AdminLTE 2 class aliases for extensions written against 1.x.
+     * Set to null to disable.
+     *
+     * @var string|null
+     */
+    public static $compatCss = 'vendor/laravel-admin/laravel-admin/bs3-compat.css';
 
     /**
      * @var array
      */
     public static $baseJs = [
-        'vendor/laravel-admin/AdminLTE/bootstrap/js/bootstrap.min.js',
-        'vendor/laravel-admin/AdminLTE/plugins/slimScroll/jquery.slimscroll.min.js',
-        'vendor/laravel-admin/AdminLTE/dist/js/app.min.js',
+        'vendor/laravel-admin/bootstrap/js/bootstrap.bundle.min.js',
+        'vendor/laravel-admin/overlayscrollbars/overlayscrollbars.browser.es6.min.js',
+        'vendor/laravel-admin/AdminLTE/dist/js/adminlte.min.js',
         'vendor/laravel-admin/jquery-pjax/jquery.pjax.js',
         'vendor/laravel-admin/nprogress/nprogress.js',
         'vendor/laravel-admin/nestable/jquery.nestable.js',
         'vendor/laravel-admin/toastr/build/toastr.min.js',
-        'vendor/laravel-admin/bootstrap3-editable/js/bootstrap-editable.min.js',
-        'vendor/laravel-admin/sweetalert2/dist/sweetalert2.min.js',
+        'vendor/laravel-admin/sweetalert2/sweetalert2.min.js',
         'vendor/laravel-admin/laravel-admin/laravel-admin.js',
     ];
 
     /**
      * @var string
      */
-    public static $jQuery = 'vendor/laravel-admin/AdminLTE/plugins/jQuery/jquery-3.7.1.min.js';
-
-    /**
-     * Keeps jQuery 1.x/2.x APIs used by bundled plugins and extensions working on jQuery 3.
-     * Set to null to disable.
-     *
-     * @var string|null
-     */
-    public static $jQueryMigrate = 'vendor/laravel-admin/AdminLTE/plugins/jQuery/jquery-migrate-3.5.2.min.js';
+    public static $jQuery = 'vendor/laravel-admin/jquery/jquery.min.js';
 
     /**
      * @var array
@@ -146,11 +145,31 @@ trait HasAssets
             return static::$baseCss = $css;
         }
 
-        $skin = config('admin.skin', 'skin-blue-light');
+        $css = static::$baseCss;
 
-        array_unshift(static::$baseCss, "vendor/laravel-admin/AdminLTE/dist/css/skins/{$skin}.min.css");
+        if (static::isRtl()) {
+            $css = str_replace('adminlte.min.css', 'adminlte.rtl.min.css', $css);
+        }
 
-        return static::$baseCss;
+        if (static::$compatCss) {
+            $css[] = static::$compatCss;
+        }
+
+        return $css;
+    }
+
+    /**
+     * @return bool
+     */
+    public static function isRtl()
+    {
+        $rtl = config('admin.rtl');
+
+        if (is_bool($rtl)) {
+            return $rtl;
+        }
+
+        return in_array(strtolower(substr((string) config('app.locale'), 0, 2)), ['ar', 'fa', 'he', 'ur', 'ku', 'ps'], true);
     }
 
     /**
@@ -336,14 +355,6 @@ trait HasAssets
     public function jQuery()
     {
         return admin_asset(static::$jQuery);
-    }
-
-    /**
-     * @return string|null
-     */
-    public function jQueryMigrate()
-    {
-        return static::$jQueryMigrate ? admin_asset(static::$jQueryMigrate) : null;
     }
 
     /**

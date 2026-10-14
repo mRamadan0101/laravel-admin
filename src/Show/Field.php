@@ -320,11 +320,11 @@ class Field implements Renderable
       <span class="mailbox-attachment-icon"><i class="fa {$field->getFileIcon($name)}"></i></span>
       <div class="mailbox-attachment-info">
         <div class="mailbox-attachment-name">
-            <i class="fa fa-paperclip"></i> {$name}
+            <i class="fa-solid fa-paperclip"></i> {$name}
             </div>
             <span class="mailbox-attachment-size">
               {$size}&nbsp;
-              <a href="{$url}" class="btn btn-default btn-xs pull-right" target="_blank" $download><i class="fa fa-cloud-download"></i></a>
+              <a href="{$url}" class="btn btn-outline-secondary btn-sm float-end" target="_blank" $download><i class="fa-solid fa-cloud-arrow-down"></i></a>
             </span>
       </div>
     </li>
@@ -365,7 +365,7 @@ HTML;
             }
 
             return collect((array) $value)->map(function ($name) use ($style) {
-                return "<span class='label label-{$style}'>$name</span>";
+                return "<span class='badge text-bg-{$style}'>$name</span>";
             })->implode('&nbsp;');
         });
     }

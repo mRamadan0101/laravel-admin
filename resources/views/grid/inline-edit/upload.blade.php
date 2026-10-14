@@ -1,5 +1,5 @@
-<a href='javascript:void(0);' class='text-muted inline-upload-trigger' data-target="{{ $target }}">
-    <i class="fa fa-upload"></i>&nbsp;{!! $value !!}
+<a href='javascript:void(0);' class='text-muted inline-upload-trigger' data-bs-target="{{ $target }}">
+    <i class="fa-solid fa-upload"></i>&nbsp;{!! $value !!}
 </a>
 <div class="hide">
   <input type="file" class="inline-upload" id="{{ $target }}" data-key="{{ $key }}" {{ $multiple ? 'multiple' : '' }}/>
@@ -7,7 +7,7 @@
 
 <script>
 $('.inline-upload-trigger').click(function () {
-    $('#'+$(this).data('target')).trigger('click');
+    $('#'+$(this).data('bs-target')).trigger('click');
 });
 
 $('input.inline-upload').on('change', function () {

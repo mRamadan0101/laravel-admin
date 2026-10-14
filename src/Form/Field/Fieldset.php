@@ -17,7 +17,7 @@ class Fieldset
     {
         $script = <<<SCRIPT
 $('.{$this->name}-title').click(function () {
-    $("i", this).toggleClass("fa-angle-double-down fa-angle-double-up");
+    $("i", this).toggleClass("fa-angles-down fa-angles-up");
 });
 SCRIPT;
 
@@ -27,12 +27,12 @@ SCRIPT;
 <div>
     <div style="height: 20px; border-bottom: 1px solid #eee; text-align: center;margin-top: 20px;margin-bottom: 20px;">
       <span style="font-size: 16px; background-color: #ffffff; padding: 0 10px;">
-        <a data-toggle="collapse" href="#{$this->name}" class="{$this->name}-title">
-          <i class="fa fa-angle-double-up"></i>&nbsp;&nbsp;{$title}
+        <a data-bs-toggle="collapse" href="#{$this->name}" class="{$this->name}-title">
+          <i class="fa-solid fa-angles-up"></i>&nbsp;&nbsp;{$title}
         </a>
       </span>
     </div>
-    <div class="collapse in" id="{$this->name}">
+    <div class="collapse show" id="{$this->name}">
 HTML;
     }
 
@@ -45,7 +45,7 @@ HTML;
     {
         $script = <<<SCRIPT
 $("#{$this->name}").removeClass("in");
-$(".{$this->name}-title i").toggleClass("fa-angle-double-down fa-angle-double-up");
+$(".{$this->name}-title i").toggleClass("fa-angles-down fa-angles-up");
 SCRIPT;
 
         Admin::script($script);

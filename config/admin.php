@@ -266,16 +266,36 @@ return [
     | Application Skin
     |--------------------------------------------------------------------------
     |
-    | This value is the skin of admin pages.
-    | @see https://adminlte.io/docs/2.4/layout
+    | The accent color and sidebar style of admin pages. 1.x skin names keep working:
+    | "{color}" gives a dark sidebar and "{color}-light" a light one.
     |
-    | Supported:
-    |    "skin-blue", "skin-blue-light", "skin-yellow", "skin-yellow-light",
-    |    "skin-green", "skin-green-light", "skin-purple", "skin-purple-light",
-    |    "skin-red", "skin-red-light", "skin-black", "skin-black-light".
+    | Supported colors: "blue", "yellow", "green", "purple", "red", "black".
+    | e.g. "blue", "blue-light", "skin-blue-light".
     |
     */
-    'skin' => env('ADMIN_SKIN', 'skin-blue-light'),
+    'skin' => env('ADMIN_SKIN', 'blue-light'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Color mode
+    |--------------------------------------------------------------------------
+    |
+    | Bootstrap 5 color mode of admin pages: "light", "dark" or "auto" (follow the
+    | operating system preference). Users can switch it from the navbar.
+    |
+    */
+    'theme' => env('ADMIN_THEME', 'light'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Right-to-left layout
+    |--------------------------------------------------------------------------
+    |
+    | Load the RTL build of AdminLTE. `null` turns it on automatically for
+    | RTL locales (ar, fa, he, ur ...).
+    |
+    */
+    'rtl' => null,
 
     /*
     |--------------------------------------------------------------------------
@@ -283,13 +303,13 @@ return [
     |--------------------------------------------------------------------------
     |
     | This value is the layout of admin pages.
-    | @see https://adminlte.io/docs/2.4/layout
+    | @see https://adminlte.io/themes/v4/docs/layout.html
     |
-    | Supported: "fixed", "layout-boxed", "layout-top-nav", "sidebar-collapse",
-    | "sidebar-mini".
+    | Supported: "fixed" (fixed header and sidebar), "fixed-footer",
+    | "sidebar-mini", "sidebar-collapse".
     |
     */
-    'layout' => ['sidebar-mini', 'sidebar-collapse'],
+    'layout' => ['sidebar-mini', 'fixed'],
 
     /*
     |--------------------------------------------------------------------------

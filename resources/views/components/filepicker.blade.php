@@ -4,18 +4,16 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content" style="border-radius: 5px;">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     <h4 class="modal-title">{{ admin_trans('admin.choose') }}</h4>
                 </div>
                 <div class="modal-body">
                     <div class="loading text-center">
-                        <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+                        <i class="fa-solid fa-spinner fa-pulse fa-3x fa-fw"></i>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ admin_trans('admin.cancel') }}</button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{ admin_trans('admin.cancel') }}</button>
                     <button type="button" class="btn btn-primary submit">{{ admin_trans('admin.submit') }}</button>
                 </div>
             </div>
@@ -39,7 +37,7 @@ modal.on('show.bs.modal', function (e) {
 }).on('click', 'tr', function (e) {
     $(this).find('input.select').iCheck('toggle');
     e.preventDefault();
-}).on('submit', '.box-header form', function (e) {
+}).on('submit', '.card-header form', function (e) {
     load($(this).attr('action')+'&'+$(this).serialize());
     return false;
 })
@@ -59,7 +57,7 @@ modal.on('show.bs.modal', function (e) {
                 radioClass:'iradio_minimal-blue',
                 checkboxClass:'icheckbox_minimal-blue'
             });
-            modal.find('.box-header:first').hide();
+            modal.find('.card-header:first').hide();
 
             modal.find('input.select').each(function (index, el) {
                 if ($.inArray($(el).val().toString(), value) >=0 ) {
@@ -103,7 +101,7 @@ modal.on('show.bs.modal', function (e) {
                 radioClass:'iradio_minimal-blue',
                 checkboxClass:'icheckbox_minimal-blue'
             });
-            modal.find('.box-header:first').hide();
+            modal.find('.card-header:first').hide();
 
             modal.find('input.select').each(function (index, el) {
                 if ($(el).val() == value) {

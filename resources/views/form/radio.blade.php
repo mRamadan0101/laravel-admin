@@ -1,6 +1,6 @@
 <div class="{{$viewClass['form-group']}} {!! !$errors->has($errorKey) ? '' : 'has-error' !!}">
 
-    <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
+    <label for="{{$id}}" class="{{$viewClass['label']}} col-form-label">{{$label}}</label>
 
     <div class="{{$viewClass['field']}}">
 
@@ -10,7 +10,7 @@
 
             {!! $inline ? '<span class="icheck">' : '<div class="radio icheck">'  !!}
 
-                <label @if($inline)class="radio-inline"@endif>
+                <label @if($inline)class="form-check form-check-inline"@endif>
                     <input type="radio" name="{{$name}}" value="{{$option}}" class="minimal {{$class}}" {{ ($option == old($column, $value)) || ($value === null && in_array($label, $checked)) ?'checked':'' }} {!! $attributes !!} />&nbsp;{{$label}}&nbsp;&nbsp;
                 </label>
 

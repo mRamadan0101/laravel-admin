@@ -1,6 +1,6 @@
-<span class="grid-selector" data-toggle="modal" data-target="#{{ $modal }}" key="{{ $key }}" data-val="{{ $original }}">
+<span class="grid-selector" data-bs-toggle="modal" data-bs-target="#{{ $modal }}" key="{{ $key }}" data-val="{{ $original }}">
    <a href="javascript:void(0)" class="text-muted">
-       <i class="fa fa-check-square-o"></i>&nbsp;&nbsp;
+       <i class="fa-regular fa-square-check"></i>&nbsp;&nbsp;
        <span class="text">{{ $value }}</span>
    </a>
 </span>
@@ -25,18 +25,16 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content" style="border-radius: 5px;">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     <h4 class="modal-title">{{ admin_trans('admin.choose') }}</h4>
                 </div>
                 <div class="modal-body">
                     <div class="loading text-center">
-                        <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+                        <i class="fa-solid fa-spinner fa-pulse fa-3x fa-fw"></i>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ admin_trans('admin.cancel') }}</button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{ admin_trans('admin.cancel') }}</button>
                     <button type="button" class="btn btn-primary submit">{{ admin_trans('admin.submit') }}</button>
                 </div>
             </div>
@@ -75,7 +73,7 @@
                 radioClass:'iradio_minimal-blue',
                 checkboxClass:'icheckbox_minimal-blue'
             });
-            $modal.find('.box-header:first').hide();
+            $modal.find('.card-header:first').hide();
 
             $modal.find('input.select').each(function (index,    el) {
                 if ($(el).val() == selected) {
@@ -95,10 +93,10 @@
         update(function (data) {
             $related.data('val', selected);
             $related.find('.text').html(data.display["{{ $name }}"]);
-            $related.find('a').toggleClass('text-green text-muted');
+            $related.find('a').toggleClass('text-success text-muted');
 
             setTimeout(function () {
-                $related.find('a').toggleClass('text-green text-muted');
+                $related.find('a').toggleClass('text-success text-muted');
             }, 2000);
 
             $modal.modal('toggle');
@@ -118,7 +116,7 @@
                 radioClass:'iradio_minimal-blue',
                 checkboxClass:'icheckbox_minimal-blue'
             });
-            $modal.find('.box-header:first').hide();
+            $modal.find('.card-header:first').hide();
 
             $modal.find('input.select').each(function (index, el) {
                 if ($.inArray($(el).val().toString(), selected) >=0 ) {
@@ -150,10 +148,10 @@
         update(function (data) {
             $related.data('val', selected);
             $related.find('.text').html(data.display["{{ $name }}"]);
-            $related.find('a').toggleClass('text-green text-muted');
+            $related.find('a').toggleClass('text-success text-muted');
 
             setTimeout(function () {
-                $related.find('a').toggleClass('text-green text-muted');
+                $related.find('a').toggleClass('text-success text-muted');
             }, 2000);
 
             $modal.modal('toggle');
@@ -169,7 +167,7 @@
     }).on('click', 'tr', function (e) {
         $(this).find('input.select').iCheck('toggle');
         e.preventDefault();
-    }).on('submit', '.box-header form', function (e) {
+    }).on('submit', '.card-header form', function (e) {
         load($(this).attr('action')+'&'+$(this).serialize());
         e.preventDefault();
         return false;

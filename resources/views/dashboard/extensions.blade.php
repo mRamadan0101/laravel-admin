@@ -8,18 +8,18 @@
         margin-right: 10px;
     }
 </style>
-<div class="box box-default">
-    <div class="box-header with-border">
-        <h3 class="box-title">Available extensions</h3>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Available extensions</h3>
 
-        <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+        <div class="card-tools float-end">
+            <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"><i class="fa-solid fa-minus"></i>
             </button>
-            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+            <button type="button" class="btn btn-tool" data-lte-toggle="card-remove"><i class="fa-solid fa-xmark"></i></button>
         </div>
     </div>
-    <!-- /.box-header -->
-    <div class="box-body">
+    <!-- /.card-header -->
+    <div class="card-body">
         <ul class="products-list product-list-in-box">
 
             @foreach($extensions as $extension)
@@ -32,7 +32,7 @@
                         {{ $extension['name'] }}
                     </a>
                     @if($extension['installed'])
-                        <span class="pull-right installed"><i class="fa fa-check"></i></span>
+                        <span class="float-end installed"><i class="fa-solid fa-check"></i></span>
                     @endif
                 </div>
             </li>
@@ -41,9 +41,9 @@
             <!-- /.item -->
         </ul>
     </div>
-    <!-- /.box-body -->
-    <div class="box-footer text-center">
+    <!-- /.card-body -->
+    <div class="card-footer text-center">
         <a href="https://github.com/laravel-admin-extensions" target="_blank" class="uppercase">View All Extensions</a>
     </div>
-    <!-- /.box-footer -->
+    <!-- /.card-footer -->
 </div>

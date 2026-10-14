@@ -4,8 +4,8 @@
     <a
         href="javascript:void(0);"
         class="{{ $trigger }}"
-        data-toggle="popover"
-        data-target="{{ $target }}"
+        data-bs-toggle="popover"
+        data-bs-target="{{ $target }}"
         data-value="{{ $value }}"
         data-original="{{ $value }}"
         data-key="{{ $key }}"
@@ -13,7 +13,7 @@
     >
         <span class="ie-display">{{ $display }}</span>
 
-        <i class="fa fa-edit" style="visibility: hidden;"></i>
+        <i class="fa-solid fa-pen-to-square" style="visibility: hidden;"></i>
     </a>
 </span>
 
@@ -26,7 +26,7 @@
             </div>
             <div class="ie-action">
                 <button class="btn btn-primary btn-sm ie-submit">{{ __('admin.submit') }}</button>
-                <button class="btn btn-default btn-sm ie-cancel">{{ __('admin.cancel') }}</button>
+                <button class="btn btn-outline-secondary btn-sm ie-cancel">{{ __('admin.cancel') }}</button>
             </div>
         </div>
     </template>
@@ -67,14 +67,14 @@
 
 <script>
     $(document).on('click', '.ie-action .ie-cancel', function () {
-        $('[data-toggle="popover"]').popover('hide');
+        $('[data-bs-toggle="popover"]').popover('hide');
     });
 
     $('body').on('click', function (e) {
-        if ($(e.target).data('toggle') !== 'popover'
-            && $(e.target).parents('[data-toggle="popover"]').length === 0
+        if ($(e.target).data('bs-toggle') !== 'popover'
+            && $(e.target).parents('[data-bs-toggle="popover"]').length === 0
             && $(e.target).parents('.popover.in').length === 0) {
-            $('[data-toggle="popover"]').popover('hide');
+            $('[data-bs-toggle="popover"]').popover('hide');
         }
     });
 </script>

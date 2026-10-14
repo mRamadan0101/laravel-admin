@@ -3,7 +3,7 @@
     <div>
     @foreach($options as $option => $label)
         <span class="icheck">
-            <label class="radio-inline">
+            <label class="form-check form-check-inline">
                 <input type="radio" name="{{$name}}" value="{{$option}}" class="minimal {{$class}}" {{ ($option == old($column, $value)) || ($value === null && in_array($label, $checked)) ?'checked':'' }} {!! $attributes !!} />&nbsp;{{$label}}&nbsp;&nbsp;
             </label>
         </span>

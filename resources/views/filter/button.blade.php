@@ -1,20 +1,19 @@
-<div class="btn-group" style="margin-right: 5px" data-toggle="buttons">
+<div class="btn-group" style="margin-right: 5px" data-bs-toggle="buttons">
     <label class="btn btn-sm btn-dropbox {{ $btn_class }} {{ $expand ? 'active' : '' }}" title="{{ trans('admin.filter') }}">
-        <input type="checkbox"><i class="fa fa-filter"></i><span class="hidden-xs">&nbsp;&nbsp;{{ trans('admin.filter') }}</span>
+        <input type="checkbox"><i class="fa-solid fa-filter"></i><span class="d-none d-sm-inline-block">&nbsp;&nbsp;{{ trans('admin.filter') }}</span>
     </label>
 
     @if($scopes->isNotEmpty())
-    <button type="button" class="btn btn-sm btn-dropbox dropdown-toggle" data-toggle="dropdown">
+    <button type="button" class="btn btn-sm btn-dropbox dropdown-toggle" data-bs-toggle="dropdown">
 
         <span>{{ $label }}</span>
-        <span class="caret"></span>
-        <span class="sr-only">Toggle Dropdown</span>
+        <span class="visually-hidden">Toggle Dropdown</span>
     </button>
     <ul class="dropdown-menu" role="menu">
         @foreach($scopes as $scope)
             {!! $scope->render() !!}
         @endforeach
-        <li role="separator" class="divider"></li>
+        <li><hr class="dropdown-divider"></li>
         <li><a href="{{ $cancel }}">{{ trans('admin.cancel') }}</a></li>
     </ul>
     @endif

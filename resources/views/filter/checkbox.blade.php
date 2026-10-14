@@ -3,7 +3,7 @@
 
         {!! $inline ? '<span class="icheck">' : '<div class="checkbox icheck">' !!}
 
-        <label @if($inline)class="checkbox-inline"@endif>
+        <label @if($inline)class="form-check form-check-inline"@endif>
             <input type="checkbox" class="{{$id}}" name="{{$name}}[]" value="{{$option}}" class="minimal" {{ in_array((string)$option, request($name, is_null($value) ? [] : $value)) ? 'checked' : '' }} />&nbsp;{{$label}}&nbsp;&nbsp;
         </label>
 

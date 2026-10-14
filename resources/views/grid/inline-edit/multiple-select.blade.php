@@ -1,7 +1,7 @@
 @extends('admin::grid.inline-edit.comm')
 
 @section('field')
-    <select name='multiple-select-{{ $name }}' class="form-control ie-input" multiple>
+    <select name='multiple-select-{{ $name }}' class="form-select ie-input" multiple>
         @foreach($options as $option => $label)
             <option name='multiple-select-{{ $name }}' value="{{ $option }}" data-label="{{ $label }}">&nbsp;{{$label}}&nbsp;&nbsp;</option>
         @endforeach

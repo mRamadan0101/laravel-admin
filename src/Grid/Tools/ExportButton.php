@@ -71,11 +71,10 @@ SCRIPT;
 
         return <<<EOT
 
-<div class="btn-group pull-right" style="margin-right: 10px">
-    <a href="{$this->grid->getExportUrl('all')}" target="_blank" class="btn btn-sm btn-twitter" title="{$trans['export']}"><i class="fa fa-download"></i><span class="hidden-xs"> {$trans['export']}</span></a>
-    <button type="button" class="btn btn-sm btn-twitter dropdown-toggle" data-toggle="dropdown">
-        <span class="caret"></span>
-        <span class="sr-only">Toggle Dropdown</span>
+<div class="btn-group float-end" style="margin-right: 10px">
+    <a href="{$this->grid->getExportUrl('all')}" target="_blank" class="btn btn-sm btn-twitter" title="{$trans['export']}"><i class="fa-solid fa-download"></i><span class="d-none d-sm-inline-block"> {$trans['export']}</span></a>
+    <button type="button" class="btn btn-sm btn-twitter dropdown-toggle" data-bs-toggle="dropdown">
+        <span class="visually-hidden">Toggle Dropdown</span>
     </button>
     <ul class="dropdown-menu" role="menu">
         <li><a href="{$this->grid->getExportUrl('all')}" target="_blank">{$trans['all']}</a></li>
