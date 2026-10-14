@@ -2,8 +2,9 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateTestTables extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -96,4 +97,4 @@ class CreateTestTables extends Migration
         Schema::dropIfExists('test_tags');
         Schema::dropIfExists('test_user_tags');
     }
-}
+};

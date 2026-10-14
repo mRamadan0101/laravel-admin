@@ -106,9 +106,11 @@ class Dashboard
      */
     public static function dependencies()
     {
-        $json = file_get_contents(base_path('composer.json'));
+        $composer = base_path('composer.json');
 
-        $dependencies = json_decode($json, true)['require'];
+        $json = is_file($composer) ? json_decode(file_get_contents($composer), true) : [];
+
+        $dependencies = $json['require'] ?? [];
 
         return Admin::component('admin::dashboard.dependencies', compact('dependencies'));
     }

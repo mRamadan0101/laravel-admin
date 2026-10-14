@@ -51,11 +51,11 @@ class UserGridTest extends TestCase
 
     protected function seedsTable($count = 100)
     {
-        factory(\Tests\Models\User::class, $count)
+        \Tests\Models\User::factory()->count($count)
             ->create()
             ->each(function ($u) {
-                $u->profile()->save(factory(\Tests\Models\Profile::class)->make());
-                $u->tags()->saveMany(factory(\Tests\Models\Tag::class, 5)->make());
+                $u->profile()->save(\Tests\Models\Profile::factory()->make());
+                $u->tags()->saveMany(\Tests\Models\Tag::factory()->count(5)->make());
                 $u->data = ['json' => ['field' => random_int(0, 50)]];
                 $u->save();
             });
@@ -129,12 +129,12 @@ class UserGridTest extends TestCase
             ->seeInElement('td', $user->mobile)
             ->seeElement("img[src='{$user->avatar}']")
             ->seeInElement('td', "{$user->profile->first_name} {$user->profile->last_name}")
-            ->seeInElement('td', $user->postcode)
-            ->seeInElement('td', $user->address)
+            ->seeInElement('td', $user->profile->postcode)
+            ->seeInElement('td', $user->profile->address)
             ->seeInElement('td', "{$user->profile->latitude} {$user->profile->longitude}")
-            ->seeInElement('td', $user->color)
-            ->seeInElement('td', $user->start_at)
-            ->seeInElement('td', $user->end_at);
+            ->seeInElement('td', $user->profile->color)
+            ->seeInElement('td', $user->profile->start_at)
+            ->seeInElement('td', $user->profile->end_at);
     }
 
     public function testLikeFilter()
@@ -170,12 +170,12 @@ class UserGridTest extends TestCase
             ->seeInElement('td', $user->mobile)
             ->seeElement("img[src='{$user->avatar}']")
             ->seeInElement('td', "{$user->profile->first_name} {$user->profile->last_name}")
-            ->seeInElement('td', $user->postcode)
-            ->seeInElement('td', $user->address)
+            ->seeInElement('td', $user->profile->postcode)
+            ->seeInElement('td', $user->profile->address)
             ->seeInElement('td', "{$user->profile->latitude} {$user->profile->longitude}")
-            ->seeInElement('td', $user->color)
-            ->seeInElement('td', $user->start_at)
-            ->seeInElement('td', $user->end_at);
+            ->seeInElement('td', $user->profile->color)
+            ->seeInElement('td', $user->profile->start_at)
+            ->seeInElement('td', $user->profile->end_at);
     }
 
     public function testDisplayCallback()
@@ -193,11 +193,11 @@ class UserGridTest extends TestCase
 
     public function testHasManyRelation()
     {
-        factory(\Tests\Models\User::class, 10)
+        \Tests\Models\User::factory()->count(10)
             ->create()
             ->each(function ($u) {
-                $u->profile()->save(factory(\Tests\Models\Profile::class)->make());
-                $u->tags()->saveMany(factory(\Tests\Models\Tag::class, 5)->make());
+                $u->profile()->save(\Tests\Models\Profile::factory()->make());
+                $u->tags()->saveMany(\Tests\Models\Tag::factory()->count(5)->make());
             });
 
         $this->visit('admin/users')
