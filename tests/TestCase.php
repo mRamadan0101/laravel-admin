@@ -26,6 +26,10 @@ class TestCase extends BaseTestCase
 
         $app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
 
+        if (class_exists(\Illuminate\Database\Eloquent\LegacyFactoryServiceProvider::class)) {
+            $app->register(\Illuminate\Database\Eloquent\LegacyFactoryServiceProvider::class);
+        }
+
         $app->register('Encore\Admin\AdminServiceProvider');
 
         return $app;

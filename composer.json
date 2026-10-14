@@ -12,16 +12,17 @@
         }
     ],
     "require": {
-        "php": ">=7.0.0",
-        "symfony/dom-crawler": "~3.1|~4.0|~5.0",
-        "laravel/framework": ">=5.5",
-        "doctrine/dbal": "2.*|3.*"
+        "php": "^7.2|^8.0",
+        "symfony/dom-crawler": "^4.0|^5.0",
+        "laravel/framework": "^6.0|^7.0|^8.0",
+        "doctrine/dbal": "^2.6|^3.0"
     },
     "require-dev": {
-        "laravel/laravel": ">=5.5",
-        "fzaninotto/faker": "~1.4",
-        "intervention/image": "~2.3",
-        "laravel/browser-kit-testing": "^6.0",
+        "laravel/laravel": "^6.0|^7.0|^8.0",
+        "fakerphp/faker": "^1.9.1",
+        "intervention/image": "^2.3",
+        "laravel/browser-kit-testing": "^5.2|^6.0",
+        "laravel/legacy-factories": "^1.0",
         "spatie/phpunit-watcher": "^1.22.0"
     },
     "autoload": {

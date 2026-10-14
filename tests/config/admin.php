@@ -61,6 +61,13 @@ return [
                 'model'  => Encore\Admin\Auth\Database\Administrator::class,
             ],
         ],
+
+        'redirect_to' => 'auth/login',
+
+        'excepts' => [
+            'auth/login',
+            'auth/logout',
+        ],
     ],
 
     /*
