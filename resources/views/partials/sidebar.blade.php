@@ -1,5 +1,5 @@
 @php($skin = Admin::skin())
-<aside class="app-sidebar shadow {{ $skin['sidebar'] === 'dark' ? 'bg-body-secondary' : 'bg-body' }}" data-bs-theme="{{ $skin['sidebar'] }}">
+<aside class="app-sidebar shadow {{ $skin['sidebar'] === 'dark' ? 'bg-body-secondary' : 'bg-body' }}" @if($skin['sidebar'] === 'dark') data-bs-theme="dark" @endif>
 
     <div class="sidebar-brand">
         <a href="{{ admin_url('/') }}" class="brand-link">
@@ -27,7 +27,7 @@
             <ul class="dropdown-menu w-100" role="menu">
                 @foreach(Admin::menuLinks() as $link)
                 <li>
-                    <a class="dropdown-item" href="{{ admin_url($link['uri']) }}"><i class="fa {{ $link['icon'] }} me-2"></i>{{ admin_trans($link['title']) }}</a>
+                    <a class="dropdown-item" href="{{ admin_url($link['uri']) }}"><i class="{{ admin_icon_class($link['icon']) }} me-2"></i>{{ admin_trans($link['title']) }}</a>
                 </li>
                 @endforeach
             </ul>

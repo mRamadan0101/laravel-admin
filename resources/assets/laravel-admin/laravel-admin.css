@@ -127,12 +127,46 @@ input.content {
     color: var(--bs-danger);
 }
 
+/* Bootstrap 3 made .form-horizontal .form-group behave like a .row */
 .form-horizontal .form-group {
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 0;
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: calc(-.5 * var(--bs-gutter-x));
+    margin-left: calc(-.5 * var(--bs-gutter-x));
     margin-bottom: 1rem;
+}
+
+:where(.form-horizontal .form-group) > * {
+    flex-shrink: 0;
+    width: 100%;
+    max-width: 100%;
+    padding-right: calc(var(--bs-gutter-x) * .5);
+    padding-left: calc(var(--bs-gutter-x) * .5);
+}
+
+.form-horizontal .form-group > input[type=hidden],
+.form-horizontal .form-group > script,
+.form-horizontal .form-group > style,
+.form-horizontal .form-group > template {
+    display: none;
+}
+
+.form-horizontal td.form-group {
+    display: table-cell;
+    margin: 0;
+}
+
+.form-horizontal td.form-group > * {
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .form-horizontal .form-group > .col-form-label[class*="col-"] {
     text-align: right;
+    overflow-wrap: normal;
+    word-wrap: normal;
 }
 
 [dir="rtl"] .form-horizontal .form-group > .col-form-label[class*="col-"] {
@@ -374,6 +408,26 @@ input.content {
     background: var(--bs-primary) !important;
 }
 
+.bootstrap-duallistbox-container select {
+    color: var(--bs-body-color);
+    background-color: var(--bs-body-bg);
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+}
+
+.grid-expand-row > td {
+    background-color: var(--bs-tertiary-bg) !important;
+}
+
+/* fontawesome-iconpicker still uses Bootstrap 3 popover classes */
+.iconpicker-popover.popover.fade.in {
+    opacity: 1;
+}
+
+.iconpicker-popover.popover {
+    max-width: none;
+}
+
 /* plugins in dark mode */
 [data-bs-theme="dark"] .select2-container--bootstrap-5 .select2-selection,
 [data-bs-theme="dark"] .select2-container--bootstrap-5 .select2-dropdown {
@@ -396,6 +450,16 @@ input.content {
 [data-bs-theme="dark"] .flatpickr-calendar {
     background: var(--bs-body-bg);
     box-shadow: 0 0 0 1px var(--bs-border-color), 0 3px 13px rgba(0, 0, 0, .3);
+}
+
+[data-bs-theme="dark"] .flatpickr-calendar .shortcut-buttons-flatpickr-wrapper {
+    background: var(--bs-tertiary-bg);
+}
+
+[data-bs-theme="dark"] .flatpickr-calendar .shortcut-buttons-flatpickr-button {
+    color: var(--bs-body-color);
+    background: var(--bs-secondary-bg);
+    border-color: var(--bs-border-color);
 }
 
 [data-bs-theme="dark"] .flatpickr-calendar .flatpickr-months .flatpickr-month,

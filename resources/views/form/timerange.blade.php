@@ -6,16 +6,16 @@
 
         @include('admin::form.error')
 
-        <div class="row" style="width: 370px">
-            <div class="col-lg-6">
-                <div class="input-group">
+        <div class="d-flex flex-wrap gap-2">
+            <div>
+                <div class="input-group flex-nowrap">
                     <span class="input-group-text"><i class="fa-regular fa-calendar"></i></span>
                     <input type="text" name="{{$name['start']}}" value="{{ old($column['start'], $value['start'] ?? null) }}" class="form-control {{$class['start']}}" autocomplete="off" style="width: 150px" {!! $attributes !!} />
                 </div>
             </div>
 
-            <div class="col-lg-6">
-                <div class="input-group">
+            <div>
+                <div class="input-group flex-nowrap">
                     <span class="input-group-text"><i class="fa-regular fa-calendar"></i></span>
                     <input type="text" name="{{$name['end']}}" value="{{ old($column['end'], $value['end'] ?? null) }}" class="form-control {{$class['end']}}" autocomplete="off" style="width: 150px" {!! $attributes !!} />
                 </div>

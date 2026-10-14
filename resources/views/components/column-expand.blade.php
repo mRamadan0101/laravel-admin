@@ -1,10 +1,9 @@
 <div>
-    <span class="{{ $elementClass }}" data-inserted="0" data-key="{{ $key }}" data-name="{{ $name }}"
-          data-bs-toggle="collapse" data-bs-target="#grid-collapse-{{ $name }}">
+    <span class="{{ $elementClass }}" data-inserted="0" data-key="{{ $key }}" data-name="{{ $name }}">
         <a href="javascript:void(0)"><i class="fa-solid fa-angles-down"></i>&nbsp;&nbsp;{{ $value }}</a>
     </span>
     <template class="grid-expand-{{ $name }}">
-        <tr style='background-color: #ecf0f5;'>
+        <tr class='grid-expand-row'>
             <td colspan='100%' style='padding:0 !important; border:0;'>
                 <div id="grid-collapse-{{ $name }}" class="collapse">
                     <div style="padding: 10px 10px 0 10px;" class="html">
@@ -47,11 +46,12 @@
             load('{{ $url }}'+'&key='+key, $('#grid-collapse-'+name));
         }
 
+        bootstrap.Collapse.getOrCreateInstance(document.getElementById('grid-collapse-'+$(this).data('name')), {toggle: false}).toggle();
+
         $("i", this).toggleClass("fa-angles-down fa-angles-up");
     });
 
     $(document).on('pjax:click', '.collapse a.pjax, .collapse a.pjax', function (e) {
-        console.log(11111);
         // load($(this).attr('href'), $(this).parent('.collapse'));
         e.preventDefault();
         return false;
@@ -73,6 +73,8 @@
 
             $(this).data('inserted', 1);
         }
+
+        bootstrap.Collapse.getOrCreateInstance(document.getElementById('grid-collapse-'+$(this).data('name')), {toggle: false}).toggle();
 
         $("i", this).toggleClass("fa-angles-down fa-angles-up");
     });

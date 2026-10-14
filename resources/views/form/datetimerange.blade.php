@@ -11,7 +11,7 @@
                     @endforeach
                 @endif
 
-                <div class="input-group">
+                <div class="input-group flex-nowrap">
                     <span class="input-group-text"><i class="fa-regular fa-calendar"></i></span>
                     <input type="text"
                            name="{{$name['start']}}"
@@ -33,7 +33,7 @@
                     @endforeach
                 @endif
 
-                <div class="input-group">
+                <div class="input-group flex-nowrap">
                     <span class="input-group-text"><i class="fa-regular fa-calendar"></i></span>
                     <input type="text"
                            name="{{$name['end']}}"

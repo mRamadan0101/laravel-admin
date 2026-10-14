@@ -363,3 +363,26 @@ if (!function_exists('admin_bs_color')) {
         return $map[$color] ?? $color;
     }
 }
+
+if (!function_exists('admin_icon_class')) {
+
+    /**
+     * Build the class list for a stored icon value. Bare names like `fa-bars`
+     * get the `fa` prefix, values that carry their own style (`fab fa-github`,
+     * `fa-regular fa-bell`) are used as is.
+     *
+     * @param string|null $icon
+     *
+     * @return string
+     */
+    function admin_icon_class($icon)
+    {
+        $icon = trim((string) $icon);
+
+        if (preg_match('/(^|\s)(fa[bsrldt]|fa-(solid|regular|brands|light|duotone|thin))(\s|$)/', $icon)) {
+            return $icon;
+        }
+
+        return 'fa '.$icon;
+    }
+}

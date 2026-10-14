@@ -7,14 +7,14 @@
             @else
                 <a href="{{ admin_url($item['uri']) }}" class="nav-link">
             @endif
-                <i class="nav-icon fa {{$item['icon']}}"></i>
+                <i class="nav-icon {{ admin_icon_class($item['icon']) }}"></i>
                 <p>{{ Lang::has($titleTranslation) ? __($titleTranslation) : admin_trans($item['title']) }}</p>
             </a>
         </li>
     @else
         <li class="nav-item">
             <a href="#" class="nav-link">
-                <i class="nav-icon fa {{ $item['icon'] }}"></i>
+                <i class="nav-icon {{ admin_icon_class($item['icon']) }}"></i>
                 <p>
                     {{ Lang::has($titleTranslation) ? __($titleTranslation) : admin_trans($item['title']) }}
                     <i class="nav-arrow fa-solid fa-angle-right"></i>

@@ -20,6 +20,42 @@
     var locale = (document.documentElement.getAttribute('lang') || 'en').toLowerCase();
 
     /* ------------------------------------------------------------------
+     * Bootstrap tooltip / popover API used by 1.x-era plugins
+     * ------------------------------------------------------------------ */
+    if (window.bootstrap && bootstrap.Tooltip) {
+        var tooltipProto = bootstrap.Tooltip.prototype;
+
+        if (!tooltipProto.getTipElement && tooltipProto._getTipElement) {
+            tooltipProto.getTipElement = function () {
+                return this._getTipElement();
+            };
+        }
+
+        if (!tooltipProto.destroy) {
+            tooltipProto.destroy = function () {
+                return this.dispose();
+            };
+        }
+
+        // bootstrap-colorpicker keeps a reference to the tip element, so it must survive hide().
+        var disposePopper = tooltipProto._disposePopper;
+        if (disposePopper) {
+            tooltipProto._disposePopper = function () {
+                if (this.tip && this.tip.classList.contains('colorpicker-bs-popover')) {
+                    if (this._popper) {
+                        this._popper.destroy();
+                        this._popper = null;
+                    }
+                    this.tip.remove();
+                    return;
+                }
+
+                return disposePopper.apply(this, arguments);
+            };
+        }
+    }
+
+    /* ------------------------------------------------------------------
      * select2
      * ------------------------------------------------------------------ */
     if ($.fn.select2) {
@@ -832,6 +868,22 @@
     if ($.fn.fileinput) {
         $.fn.fileinputBsVersion = '5';
         $.fn.fileinput.defaults = $.extend($.fn.fileinput.defaults || {}, {theme: 'fa6'});
+    }
+
+    // Stored icon values stay in the 1.x format ("fa-bars"); only non-solid
+    // icons keep their style prefix ("fab fa-github").
+    if ($.iconpicker && $.iconpicker.defaultOptions) {
+        var seen = {};
+        $.iconpicker.defaultOptions.icons = $.grep($.map($.iconpicker.defaultOptions.icons, function (icon) {
+            var title = icon.title.replace(/^fas\s+/, '');
+            return seen[title] ? null : (seen[title] = true, {title: title, searchTerms: icon.searchTerms});
+        }), function (icon) { return icon !== null; });
+        $.iconpicker.defaultOptions.fullClassFormatter = function (value) {
+            return /(^|\s)(fa[bsrldt]|fa-(solid|regular|brands))(\s|$)/.test(value) ? value : 'fa ' + value;
+        };
+        $.iconpicker.prototype._updateFormGroupStatus = function () {
+            return true;
+        };
     }
 
 })(window.jQuery);
