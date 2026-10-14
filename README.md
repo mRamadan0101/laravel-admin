@@ -14,8 +14,8 @@
 </p>
 
 <p align="center">
-    <a href="https://travis-ci.org/z-song/laravel-admin">
-        <img src="https://travis-ci.org/z-song/laravel-admin.svg?branch=master" alt="Build Status">
+    <a href="https://github.com/z-song/laravel-admin/actions/workflows/tests.yml">
+        <img src="https://github.com/z-song/laravel-admin/actions/workflows/tests.yml/badge.svg?branch=2.x" alt="Build Status">
     </a>
     <a href="https://styleci.io/repos/48796179">
         <img src="https://styleci.io/repos/48796179/shield" alt="StyleCI">
@@ -51,19 +51,29 @@ Sponsor
 
 Requirements
 ------------
- - PHP >= 7.0.0
- - Laravel >= 5.5.0
+ - PHP >= 8.2
+ - Laravel 10, 11 or 12
  - Fileinfo PHP Extension
+
+Versions
+------------
+
+| Version | Branch | PHP       | Laravel | Frontend                                                | Status          |
+|---------|--------|-----------|---------|---------------------------------------------------------|-----------------|
+| 2.x     | `2.x`  | 8.2+      | 10 - 12 | AdminLTE 4, Bootstrap 5.3, jQuery 3.7, Font Awesome 6   | active          |
+| 1.x     | `1.x`  | 7.2 - 8.x | 6 - 8   | AdminLTE 2, Bootstrap 3.4.1, jQuery 3.7 + migrate, FA 4 | security fixes  |
+
+Upgrading from 1.x? Read [UPGRADE.md](UPGRADE.md).
 
 Installation
 ------------
 
-> This package requires PHP 7+ and Laravel 5.5, for old versions please refer to [1.4](https://laravel-admin.org/docs/v1.4/#/)
+> For PHP 7.2 - 8.x with Laravel 6 - 8 use `composer require encore/laravel-admin:^1.9`.
 
-First, install laravel 5.5, and make sure that the database connection settings are correct.
+First, install Laravel, and make sure that the database connection settings are correct.
 
 ```
-composer require encore/laravel-admin
+composer require encore/laravel-admin:^2.0
 ```
 
 Then run these commands to publish assets and config：
@@ -86,9 +96,12 @@ The file `config/admin.php` contains an array of configurations, you can find th
 
 Right to left support
 ------------
-just go to this path `<YOUR_PROJECT_PATH>\vendor\encore\laravel-admin\src\Traits\HasAssets.php` and modify `$baseCss` array for loading right to left (rtl) version of bootstap and AdminLTE css files.    
-**bootstrap.min.css** change it to **bootstrap.rtl.min.css**    
-**AdminLTE.min.css** change it to **AdminLTE.rtl.min.css**  
+The RTL build of AdminLTE is loaded automatically for right-to-left locales (`ar`, `fa`, `he`, `ur`, ...).
+Set `rtl` in `config/admin.php` to `true` or `false` to force it on or off.
+
+Dark mode
+------------
+Set `theme` in `config/admin.php` to `light`, `dark` or `auto`. Users can switch the color mode from the navbar.
 
 ## Extensions
 
