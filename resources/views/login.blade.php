@@ -25,6 +25,8 @@
   <link rel="stylesheet" href="{{ admin_asset("vendor/laravel-admin/fontawesome/css/all.min.css") }}">
   <link rel="stylesheet" href="{{ admin_asset("vendor/laravel-admin/fontawesome/css/v4-shims.min.css") }}">
   <link rel="stylesheet" href="{{ admin_asset(Admin::isRtl() ? "vendor/laravel-admin/AdminLTE/dist/css/adminlte.rtl.min.css" : "vendor/laravel-admin/AdminLTE/dist/css/adminlte.min.css") }}">
+  <link rel="stylesheet" href="{{ admin_asset("vendor/laravel-admin/google-fonts/fonts.css") }}">
+  <link rel="stylesheet" href="{{ admin_asset("vendor/laravel-admin/laravel-admin/laravel-admin.css") }}">
 </head>
 <body class="login-page bg-body-secondary" @if(config('admin.login_background_image'))style="background: url({{config('admin.login_background_image')}}) no-repeat;background-size: cover;"@endif>
 <div class="login-box">

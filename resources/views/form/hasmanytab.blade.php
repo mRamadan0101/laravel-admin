@@ -4,10 +4,10 @@
     }
     .close-tab {
         position: absolute;
-        font-size: 10px;
+        font-size: .75rem;
         top: 2px;
         right: 5px;
-        color: #94A6B0;
+        color: var(--bs-secondary-color);
         cursor: pointer;
         display: none;
     }
