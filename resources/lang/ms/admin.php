@@ -99,4 +99,5 @@ return [
         'filter_placeholder' => 'Penapis',
     ],
     'menu_titles' => [],
+    'language'               => 'Bahasa',
 ];

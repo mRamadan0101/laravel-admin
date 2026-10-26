@@ -99,4 +99,5 @@ return [
         'filter_placeholder' => 'Filtrlə',
     ],
     'menu_titles'           => [],
+    'language'               => 'Dil',
 ];

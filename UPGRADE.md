@@ -1,3 +1,4 @@
+
 # Upgrading from 1.x to 2.x
 
 laravel-admin 2.x targets modern stacks only. Applications that must stay on
@@ -35,11 +36,15 @@ Compare your `config/admin.php` with the one shipped in the package. New keys:
 
 - `skin` – 1.x names keep working. `"blue"` gives a dark sidebar, `"blue-light"`
   (or `"skin-blue-light"`) a light one. Supported colors: blue, yellow, green,
-  purple, red, black.
+  purple, red, black. The color also recasts the navbar, logo bar, primary
+  buttons and accent CSS variables (AdminLTE 4 has no built-in skins). Republish
+  `laravel-admin.css` after upgrading for this to show up.
 - `theme` – Bootstrap color mode: `light`, `dark` or `auto` (follows the OS).
   Users can switch it from the navbar; the choice is stored in `localStorage`.
 - `rtl` – load the RTL build of AdminLTE. `null` (default) enables it
-  automatically for RTL locales (ar, fa, he, ur, ...).
+  automatically for RTL locales (ar, fa, he, ur, ...). `true` / `false` force
+  it on or off. A locale code such as `"ar"` also adds a navbar language
+  switcher between that language and the application locale.
 - `layout` – AdminLTE 4 layout options: `fixed`, `fixed-footer`, `sidebar-mini`,
   `sidebar-collapse`. The 1.x values `layout-boxed` and `layout-top-nav` have no
   AdminLTE 4 styles; they are still added to `<body>` but change nothing.

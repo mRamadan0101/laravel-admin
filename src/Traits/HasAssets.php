@@ -189,7 +189,7 @@ trait HasAssets
             return $rtl;
         }
 
-        return in_array(strtolower(substr((string) config('app.locale'), 0, 2)), ['ar', 'fa', 'he', 'ur', 'ku', 'ps'], true);
+        return self::localeIsRtl(app()->getLocale());
     }
 
     /**

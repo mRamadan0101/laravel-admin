@@ -104,4 +104,5 @@ return [
     'prev'                   => 'Vorherige',
     'next'                   => 'Nächste',
     'quick_create'           => 'Schnellerstellung',
+    'language'               => 'Sprache',
 ];

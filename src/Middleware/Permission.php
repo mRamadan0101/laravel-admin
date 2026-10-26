@@ -88,6 +88,7 @@ class Permission
         $excepts = array_merge(config('admin.auth.excepts', []), [
             'auth/login',
             'auth/logout',
+            'locale/*',
             '_handle_action_',
             '_handle_form_',
             '_handle_selectable_',

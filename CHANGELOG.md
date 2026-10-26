@@ -11,7 +11,10 @@ New major version for modern stacks. See [UPGRADE.md](UPGRADE.md) for the migrat
 - Anonymous class migrations; route and service provider registration compatible with the Laravel 11+ skeleton.
 - Frontend rebuilt on AdminLTE 4.10, Bootstrap 5.3.8, jQuery 3.7.1 and Font Awesome 6.7 (with v4 shims).
 - Light / dark / auto color modes (`admin.theme`) with a navbar switcher; RTL build loaded automatically for RTL locales (`admin.rtl`).
-  1.x `admin.skin` names keep working.
+  1.x `admin.skin` names keep working and now recolor the navbar, brand, primary
+  buttons and accent variables (AdminLTE 4 has no built-in skins).
+  Setting `admin.rtl` to a locale code (e.g. `"ar"`) adds a navbar language
+  switcher; direction and translations follow the selected language.
 - Replaced plugins: flatpickr for every date/time field, native `form-check` / `form-switch` instead of iCheck and
   bootstrap-switch, a Bootstrap 5 popover editor instead of x-editable, OverlayScrollbars instead of slimScroll.
 - Updated plugins: SweetAlert2 11, select2 4.1 with the Bootstrap 5 theme, bootstrap-fileinput 5.5,

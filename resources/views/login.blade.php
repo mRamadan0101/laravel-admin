@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="{{ admin_asset("vendor/laravel-admin/google-fonts/fonts.css") }}">
   <link rel="stylesheet" href="{{ admin_asset("vendor/laravel-admin/laravel-admin/laravel-admin.css") }}">
 </head>
-<body class="login-page bg-body-secondary" @if(config('admin.login_background_image'))style="background: url({{config('admin.login_background_image')}}) no-repeat;background-size: cover;"@endif>
+<body class="login-page bg-body-secondary skin-{{ Admin::skin()['color'] }}" @if(config('admin.login_background_image'))style="background: url({{config('admin.login_background_image')}}) no-repeat;background-size: cover;"@endif>
 <div class="login-box">
   <div class="login-logo">
     <a href="{{ admin_url('/') }}"><b>{{config('admin.name')}}</b></a>

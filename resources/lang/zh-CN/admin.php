@@ -108,4 +108,5 @@ return [
     'theme_dark'             => '深色',
     'theme_auto'             => '跟随系统',
     'member_since'           => '注册于',
+    'language'               => '语言',
 ];

@@ -11,7 +11,7 @@ toastr.options = {
 
 $.pjax.defaults.timeout = 5000;
 $.pjax.defaults.maxCacheLength = 0;
-$(document).pjax('a:not(a[target="_blank"]):not([data-bs-toggle]):not([data-lte-toggle]):not([href^="#"]):not([href^="javascript:"])', {
+$(document).pjax('a:not(a[target="_blank"]):not([data-bs-toggle]):not([data-lte-toggle]):not([data-pjax="false"]):not([href^="#"]):not([href^="javascript:"])', {
     container: '#pjax-container'
 });
 

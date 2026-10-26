@@ -291,8 +291,12 @@ return [
     | Right-to-left layout
     |--------------------------------------------------------------------------
     |
-    | Load the RTL build of AdminLTE. `null` turns it on automatically for
-    | RTL locales (ar, fa, he, ur ...).
+    | Load the RTL build of AdminLTE.
+    | - null: follow the current locale (ar, fa, he, ur, ...).
+    | - true / false: force RTL on or off.
+    | - a locale code such as "ar": show a navbar language switcher between
+    |   that language and the application locale. Direction follows the
+    |   selected language.
     |
     */
     'rtl' => null,

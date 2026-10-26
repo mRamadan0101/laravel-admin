@@ -182,6 +182,128 @@ body {
     color: var(--bs-nav-link-color);
 }
 
+/* ---------- skins (AdminLTE 2 names) ---------- */
+/*
+ * AdminLTE 4 has no built-in skins. `Admin::bodyClass()` still adds
+ * `.skin-{color}` from `admin.skin`; these rules map that class to the
+ * 1.x palette (colored navbar + brand, primary accent, sidebar hint).
+ */
+
+body.skin-blue {
+    --admin-skin: #3c8dbc;
+    --admin-skin-dark: #367fa9;
+    --admin-skin-rgb: 60, 141, 188;
+}
+
+body.skin-yellow {
+    --admin-skin: #f39c12;
+    --admin-skin-dark: #e08e0b;
+    --admin-skin-rgb: 243, 156, 18;
+}
+
+body.skin-green {
+    --admin-skin: #00a65a;
+    --admin-skin-dark: #008d4c;
+    --admin-skin-rgb: 0, 166, 90;
+}
+
+body.skin-purple {
+    --admin-skin: #605ca8;
+    --admin-skin-dark: #555299;
+    --admin-skin-rgb: 96, 92, 168;
+}
+
+body.skin-red {
+    --admin-skin: #dd4b39;
+    --admin-skin-dark: #d73925;
+    --admin-skin-rgb: 221, 75, 57;
+}
+
+body.skin-black {
+    --admin-skin: #222222;
+    --admin-skin-dark: #111111;
+    --admin-skin-rgb: 34, 34, 34;
+}
+
+body:is(.skin-blue, .skin-yellow, .skin-green, .skin-purple, .skin-red, .skin-black) {
+    --bs-primary: var(--admin-skin);
+    --bs-primary-rgb: var(--admin-skin-rgb);
+    --bs-link-color: var(--admin-skin);
+    --bs-link-color-rgb: var(--admin-skin-rgb);
+    --bs-link-hover-color: var(--admin-skin-dark);
+    --bs-focus-ring-color: rgba(var(--admin-skin-rgb), .25);
+}
+
+body:is(.skin-blue, .skin-yellow, .skin-green, .skin-purple, .skin-red, .skin-black) .btn-primary {
+    --bs-btn-bg: var(--admin-skin);
+    --bs-btn-border-color: var(--admin-skin);
+    --bs-btn-hover-bg: var(--admin-skin-dark);
+    --bs-btn-hover-border-color: var(--admin-skin-dark);
+    --bs-btn-active-bg: var(--admin-skin-dark);
+    --bs-btn-active-border-color: var(--admin-skin-dark);
+    --bs-btn-disabled-bg: var(--admin-skin);
+    --bs-btn-disabled-border-color: var(--admin-skin);
+    --bs-btn-focus-shadow-rgb: var(--admin-skin-rgb);
+}
+
+body:is(.skin-blue, .skin-yellow, .skin-green, .skin-purple, .skin-red, .skin-black) .btn-outline-primary {
+    --bs-btn-color: var(--admin-skin);
+    --bs-btn-border-color: var(--admin-skin);
+    --bs-btn-hover-bg: var(--admin-skin);
+    --bs-btn-hover-border-color: var(--admin-skin);
+    --bs-btn-active-bg: var(--admin-skin);
+    --bs-btn-active-border-color: var(--admin-skin);
+    --bs-btn-disabled-color: var(--admin-skin);
+    --bs-btn-disabled-border-color: var(--admin-skin);
+    --bs-btn-focus-shadow-rgb: var(--admin-skin-rgb);
+}
+
+body:is(.skin-blue, .skin-yellow, .skin-green, .skin-purple, .skin-red, .skin-black) .form-check-input:checked {
+    background-color: var(--admin-skin);
+    border-color: var(--admin-skin);
+}
+
+body:is(.skin-blue, .skin-yellow, .skin-green, .skin-purple, .skin-red, .skin-black) .pagination {
+    --bs-pagination-active-bg: var(--admin-skin);
+    --bs-pagination-active-border-color: var(--admin-skin);
+}
+
+body:is(.skin-blue, .skin-yellow, .skin-green, .skin-purple, .skin-red) .app-header {
+    --bs-navbar-color: rgba(255, 255, 255, .9);
+    --bs-navbar-hover-color: #fff;
+    --bs-navbar-active-color: #fff;
+    --bs-navbar-disabled-color: rgba(255, 255, 255, .5);
+    --bs-navbar-brand-color: #fff;
+    --bs-navbar-brand-hover-color: #fff;
+    --bs-nav-link-color: rgba(255, 255, 255, .9);
+    background-color: var(--admin-skin) !important;
+    border-bottom-color: var(--admin-skin-dark);
+    color: #fff;
+}
+
+body.skin-black .app-header {
+    background-color: var(--bs-body-bg) !important;
+    border-bottom: 1px solid var(--bs-border-color);
+}
+
+body:is(.skin-blue, .skin-yellow, .skin-green, .skin-purple, .skin-red, .skin-black) .sidebar-brand {
+    background-color: var(--admin-skin);
+}
+
+body:is(.skin-blue, .skin-yellow, .skin-green, .skin-purple, .skin-red) .app-sidebar[data-bs-theme="dark"] .sidebar-brand {
+    background-color: var(--admin-skin-dark);
+}
+
+body:is(.skin-blue, .skin-yellow, .skin-green, .skin-purple, .skin-red, .skin-black) .sidebar-brand .brand-link,
+body:is(.skin-blue, .skin-yellow, .skin-green, .skin-purple, .skin-red, .skin-black) .sidebar-brand .brand-link:hover {
+    color: #fff;
+}
+
+body:is(.skin-blue, .skin-yellow, .skin-green, .skin-purple, .skin-red, .skin-black) .sidebar-menu > .nav-item > .nav-link.active,
+body:is(.skin-blue, .skin-yellow, .skin-green, .skin-purple, .skin-red, .skin-black) .sidebar-menu > .nav-item.menu-open > .nav-link {
+    border-inline-start: 3px solid var(--admin-skin);
+}
+
 /* ---------- forms ---------- */
 
 input.content {

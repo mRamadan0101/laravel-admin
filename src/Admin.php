@@ -291,6 +291,178 @@ class Admin
     }
 
     /**
+     * Locales that use a right-to-left layout.
+     *
+     * @var string[]
+     */
+    public const RTL_LOCALES = ['ar', 'fa', 'he', 'ur', 'ku', 'ps'];
+
+    /**
+     * Application locale captured before the admin switcher overrides it.
+     *
+     * @var string|null
+     */
+    protected static $defaultLocale;
+
+    /**
+     * Apply the locale stored by the navbar language switcher.
+     */
+    public function applyLocale()
+    {
+        if (is_null(static::$defaultLocale)) {
+            static::$defaultLocale = (string) config('app.locale');
+        }
+
+        if (!$this->localeSwitcherEnabled()) {
+            return;
+        }
+
+        $locale = session('admin.locale');
+
+        if (is_string($locale) && ($resolved = $this->resolveLocale($locale))) {
+            app()->setLocale($resolved);
+        }
+    }
+
+    /**
+     * Whether the navbar should show a language switcher.
+     *
+     * Shown when `admin.rtl` is `true` or a locale code such as `"ar"`.
+     *
+     * @return bool
+     */
+    public function localeSwitcherEnabled()
+    {
+        $rtl = config('admin.rtl');
+
+        if ($rtl === false || $rtl === null || $rtl === '') {
+            return false;
+        }
+
+        return count($this->locales()) > 1;
+    }
+
+    /**
+     * Locales offered by the navbar switcher: app language + RTL language.
+     *
+     * @return array<string, string>
+     */
+    public function locales()
+    {
+        $rtl = config('admin.rtl');
+        $locales = [];
+
+        $push = function ($code) use (&$locales) {
+            $code = str_replace('_', '-', trim((string) $code));
+
+            if ($code !== '') {
+                $locales[$code] = static::localeName($code);
+            }
+        };
+
+        $push(static::$defaultLocale ?: config('app.locale'));
+        $push(config('app.fallback_locale', 'en'));
+
+        if (is_string($rtl) && $rtl !== '') {
+            $push($rtl);
+        } elseif ($rtl === true) {
+            $push('ar');
+        }
+
+        return $locales;
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return string|null
+     */
+    public function resolveLocale($locale)
+    {
+        foreach (array_keys($this->locales()) as $code) {
+            if (static::localeCodesMatch($locale, $code)) {
+                return $code;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Native display name of a locale.
+     *
+     * @param string $locale
+     *
+     * @return string
+     */
+    public static function localeName($locale)
+    {
+        $names = [
+            'ar'    => 'العربية',
+            'az'    => 'Azərbaycan',
+            'bn'    => 'বাংলা',
+            'de'    => 'Deutsch',
+            'en'    => 'English',
+            'es'    => 'Español',
+            'fa'    => 'فارسی',
+            'fr'    => 'Français',
+            'he'    => 'עברית',
+            'id'    => 'Indonesia',
+            'ja'    => '日本語',
+            'ko'    => '한국어',
+            'ms'    => 'Bahasa Melayu',
+            'nl'    => 'Nederlands',
+            'pl'    => 'Polski',
+            'pt'    => 'Português',
+            'pt-BR' => 'Português (Brasil)',
+            'ru'    => 'Русский',
+            'tr'    => 'Türkçe',
+            'uk'    => 'Українська',
+            'ur'    => 'اردو',
+            'zh-CN' => '简体中文',
+            'zh-TW' => '繁體中文',
+        ];
+
+        $locale = str_replace('_', '-', (string) $locale);
+
+        if (isset($names[$locale])) {
+            return $names[$locale];
+        }
+
+        $short = strtolower(strstr($locale, '-', true) ?: $locale);
+
+        return $names[$short] ?? strtoupper($short);
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return bool
+     */
+    public static function localeIsRtl($locale)
+    {
+        return in_array(strtolower(substr((string) $locale, 0, 2)), self::RTL_LOCALES, true);
+    }
+
+    /**
+     * @param string $a
+     * @param string $b
+     *
+     * @return bool
+     */
+    public static function localeCodesMatch($a, $b)
+    {
+        $norm = function ($value) {
+            return strtolower(str_replace('_', '-', (string) $value));
+        };
+
+        $a = $norm($a);
+        $b = $norm($b);
+
+        return $a === $b || str_starts_with($a, $b.'-') || str_starts_with($b, $a.'-');
+    }
+
+    /**
      * Get the currently authenticated user.
      *
      * @return \Illuminate\Contracts\Auth\Authenticatable|null
@@ -387,6 +559,9 @@ class Admin
             $router->get('auth/logout', [$authController, 'getLogout'])->name('admin.logout');
             $router->get('auth/setting', [$authController, 'getSetting'])->name('admin.setting');
             $router->put('auth/setting', [$authController, 'putSetting']);
+            $router->get('locale/{locale}', [Controllers\LocaleController::class, 'update'])
+                ->name('admin.locale')
+                ->where('locale', '[A-Za-z0-9_-]+');
         });
     }
 
@@ -424,6 +599,8 @@ class Admin
      */
     public function bootstrap()
     {
+        $this->applyLocale();
+
         $this->fireBootingCallbacks();
 
         require config('admin.bootstrap', admin_path('bootstrap.php'));

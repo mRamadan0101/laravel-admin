@@ -109,4 +109,5 @@ return [
     'theme_dark'             => 'Dark',
     'theme_auto'             => 'Auto',
     'member_since'           => 'Member since',
+    'language'               => 'Language',
 ];

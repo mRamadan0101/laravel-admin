@@ -107,4 +107,5 @@ return [
         'menu'               => 'منو',
         'operation_log'      => 'گزارش عملیات',
     ],
+    'language'               => 'زبان',
 ];

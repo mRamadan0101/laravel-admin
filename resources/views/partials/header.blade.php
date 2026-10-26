@@ -16,6 +16,22 @@
 
             {!! Admin::getNavbar()->render() !!}
 
+            @if(Admin::localeSwitcherEnabled())
+            <li class="nav-item dropdown">
+                <a class="nav-link" href="#" data-bs-toggle="dropdown" aria-expanded="false" title="{{ __('admin.language') }}">
+                    <i class="fa-solid fa-language"></i>
+                    <span class="d-none d-md-inline ms-1">{{ Admin::localeName(app()->getLocale()) }}</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end admin-locale-switcher">
+                    @foreach(Admin::locales() as $code => $label)
+                    <li>
+                        <a class="dropdown-item{{ Admin::localeCodesMatch(app()->getLocale(), $code) ? ' active' : '' }}" href="{{ admin_url('locale/'.$code) }}" data-pjax="false">{{ $label }}</a>
+                    </li>
+                    @endforeach
+                </ul>
+            </li>
+            @endif
+
             <li class="nav-item dropdown">
                 <a class="nav-link" href="#" data-bs-toggle="dropdown" aria-expanded="false" title="{{ __('admin.theme') }}">
                     <i class="fa-solid fa-circle-half-stroke"></i>

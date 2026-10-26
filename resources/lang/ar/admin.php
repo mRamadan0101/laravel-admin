@@ -107,4 +107,5 @@ return [
     'theme_dark'             => 'داكن',
     'theme_auto'             => 'تلقائي',
     'member_since'           => 'عضو منذ',
+    'language'               => 'اللغة',
 ];
