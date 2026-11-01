@@ -43,7 +43,7 @@ class FileController extends AdminController
         $form->file('file2');
         $form->file('file3');
         $form->file('file4');
-        $form->file('file5');
+        $form->file('file5')->originalName();
         $form->file('file6');
 
         $form->display('created_at', 'Created At');

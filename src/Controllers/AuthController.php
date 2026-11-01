@@ -2,15 +2,19 @@
 
 namespace Encore\Admin\Controllers;
 
+use Encore\Admin\Auth\TwoFactor\Totp;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Layout\Content;
+use Encore\Admin\Widgets\Box;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -44,16 +48,198 @@ class AuthController extends Controller
     {
         $this->loginValidator($request->all())->validate();
 
-        $credentials = $request->only([$this->username(), 'password']);
-        $remember = $request->get('remember', false);
+        $throttleKey = $this->throttleKey($request);
 
-        if ($this->guard()->attempt($credentials, $remember)) {
-            return $this->sendLoginResponse($request);
+        if ($seconds = $this->lockedOutFor($throttleKey)) {
+            return $this->sendLockoutResponse($request, $seconds);
         }
 
-        return back()->withInput()->withErrors([
-            $this->username() => $this->getFailedLoginMessage(),
+        $credentials = $request->only([$this->username(), 'password']);
+        $remember = (bool) $request->get('remember', false);
+
+        $guard = $this->guard();
+
+        if (!$guard->validate($credentials)) {
+            $this->hitThrottle($throttleKey);
+
+            return back()->withInput($request->only($this->username(), 'remember'))->withErrors([
+                $this->username() => $this->getFailedLoginMessage(),
+            ]);
+        }
+
+        RateLimiter::clear($throttleKey);
+
+        $user = $guard->getLastAttempted();
+
+        if ($this->twoFactorRequired($user)) {
+            $request->session()->put('admin.two_factor', [
+                'id'       => $user->getAuthIdentifier(),
+                'remember' => $remember,
+                'expires'  => time() + 300,
+            ]);
+
+            return redirect(admin_url('auth/two-factor-challenge'));
+        }
+
+        $guard->login($user, $remember);
+
+        return $this->sendLoginResponse($request);
+    }
+
+    /**
+     * Show the two-factor challenge after a successful password check.
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
+     */
+    public function getTwoFactorChallenge(Request $request)
+    {
+        if (!$this->pendingTwoFactorUser($request)) {
+            return redirect(admin_url('auth/login'));
+        }
+
+        return view('admin::two-factor.challenge');
+    }
+
+    /**
+     * Verify the one-time code or a recovery code and finish logging in.
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postTwoFactorChallenge(Request $request)
+    {
+        if (!$user = $this->pendingTwoFactorUser($request)) {
+            return redirect(admin_url('auth/login'));
+        }
+
+        $throttleKey = 'admin-two-factor|'.$user->getAuthIdentifier().'|'.$request->ip();
+
+        if ($seconds = $this->lockedOutFor($throttleKey)) {
+            return back()->withErrors(['code' => $this->getLockoutMessage($seconds)]);
+        }
+
+        $valid = $request->filled('recovery_code')
+            ? $user->useRecoveryCode($request->input('recovery_code'))
+            : Totp::verify($user->two_factor_secret, $request->input('code'));
+
+        if (!$valid) {
+            $this->hitThrottle($throttleKey);
+
+            return back()->withErrors(['code' => trans('admin.two_factor.invalid_code')]);
+        }
+
+        RateLimiter::clear($throttleKey);
+
+        $remember = $request->session()->get('admin.two_factor.remember', false);
+
+        $request->session()->forget('admin.two_factor');
+
+        $this->guard()->login($user, $remember);
+
+        return $this->sendLoginResponse($request);
+    }
+
+    /**
+     * The user that passed the password step and still owes a 2FA code.
+     *
+     * @param Request $request
+     *
+     * @return \Encore\Admin\Auth\Database\Administrator|null
+     */
+    protected function pendingTwoFactorUser(Request $request)
+    {
+        $pending = $request->session()->get('admin.two_factor');
+
+        if (!$pending || $pending['expires'] < time()) {
+            $request->session()->forget('admin.two_factor');
+
+            return null;
+        }
+
+        $user = $this->guard()->getProvider()->retrieveById($pending['id']);
+
+        return $this->twoFactorRequired($user) ? $user : null;
+    }
+
+    /**
+     * @param \Illuminate\Contracts\Auth\Authenticatable|null $user
+     *
+     * @return bool
+     */
+    protected function twoFactorRequired($user)
+    {
+        return config('admin.auth.two_factor.enable', true)
+            && $user
+            && method_exists($user, 'hasTwoFactorEnabled')
+            && $user->hasTwoFactorEnabled();
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return string
+     */
+    protected function throttleKey(Request $request)
+    {
+        return 'admin-login|'.Str::transliterate(Str::lower((string) $request->input($this->username()))).'|'.$request->ip();
+    }
+
+    /**
+     * Seconds left until the key may try again, 0 when it is not locked.
+     *
+     * @param string $key
+     *
+     * @return int
+     */
+    protected function lockedOutFor($key)
+    {
+        if (!config('admin.auth.throttle.enable', true)) {
+            return 0;
+        }
+
+        if (!RateLimiter::tooManyAttempts($key, config('admin.auth.throttle.max_attempts', 5))) {
+            return 0;
+        }
+
+        return max(1, RateLimiter::availableIn($key));
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return void
+     */
+    protected function hitThrottle($key)
+    {
+        if (config('admin.auth.throttle.enable', true)) {
+            RateLimiter::hit($key, config('admin.auth.throttle.decay_seconds', 60));
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @param int     $seconds
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function sendLockoutResponse(Request $request, $seconds)
+    {
+        return back()->withInput($request->only($this->username(), 'remember'))->withErrors([
+            $this->username() => $this->getLockoutMessage($seconds),
         ]);
+    }
+
+    /**
+     * @param int $seconds
+     *
+     * @return string
+     */
+    protected function getLockoutMessage($seconds)
+    {
+        return trans('admin.login_throttled', ['seconds' => $seconds]);
     }
 
     /**
@@ -103,9 +289,18 @@ class AuthController extends Controller
             }
         );
 
-        return $content
+        $content
             ->title(trans('admin.user_setting'))
             ->body($form->edit(Admin::user()->id));
+
+        if (config('admin.auth.two_factor.enable', true)) {
+            $content->row(new Box(
+                trans('admin.two_factor.title'),
+                view('admin::two-factor.summary', ['user' => Admin::user()])
+            ));
+        }
+
+        return $content;
     }
 
     /**

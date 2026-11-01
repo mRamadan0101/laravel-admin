@@ -1,4 +1,27 @@
 
+# Upgrading from 2.0 to 2.1
+
+1. Publish and run the new migration, which adds the `two_factor_*` columns to `admin_users`:
+
+   ```
+   php artisan vendor:publish --tag=laravel-admin-migrations
+   php artisan migrate
+   ```
+
+2. Republish the assets (`laravel-admin.js`, `laravel-admin.css` and the new `qrcode-generator`):
+
+   ```
+   php artisan vendor:publish --tag=laravel-admin-assets --force
+   ```
+
+3. Uploads now get random file names. To keep the old behaviour everywhere set
+   `'upload' => ['unique_name' => false]`, or call `->originalName()` on a single field.
+   Fields that already use `name()`, `uniqueName()` or `sequenceName()` are not affected.
+
+4. Optional new keys in `config/admin.php`: `auth.throttle`, `auth.two_factor`,
+   `upload.unique_name`, `global_search` and `operation_log.hidden_fields`.
+   All of them have defaults, so an older config file keeps working.
+
 # Upgrading from 1.x to 2.x
 
 laravel-admin 2.x targets modern stacks only. Applications that must stay on

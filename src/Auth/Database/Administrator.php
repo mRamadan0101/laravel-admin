@@ -22,6 +22,14 @@ class Administrator extends Model implements AuthenticatableContract
 
     protected $fillable = ['username', 'password', 'name', 'avatar'];
 
+    protected $hidden = ['two_factor_secret', 'two_factor_recovery_codes'];
+
+    protected $casts = [
+        'two_factor_secret'         => 'encrypted',
+        'two_factor_recovery_codes' => 'encrypted:array',
+        'two_factor_confirmed_at'   => 'datetime',
+    ];
+
     /**
      * Create a new Eloquent model instance.
      *
@@ -88,5 +96,40 @@ class Administrator extends Model implements AuthenticatableContract
         $relatedModel = config('admin.database.permissions_model');
 
         return $this->belongsToMany($relatedModel, $pivotTable, 'user_id', 'permission_id');
+    }
+
+    /**
+     * Whether the user finished setting up two-factor authentication.
+     *
+     * @return bool
+     */
+    public function hasTwoFactorEnabled(): bool
+    {
+        return !empty($this->two_factor_secret) && !is_null($this->two_factor_confirmed_at);
+    }
+
+    /**
+     * Consume a recovery code, each one works only once.
+     *
+     * @param string $code
+     *
+     * @return bool
+     */
+    public function useRecoveryCode($code): bool
+    {
+        $code = strtoupper(trim((string) $code));
+        $codes = (array) $this->two_factor_recovery_codes;
+
+        foreach ($codes as $index => $stored) {
+            if ($code !== '' && hash_equals($stored, $code)) {
+                unset($codes[$index]);
+
+                $this->forceFill(['two_factor_recovery_codes' => array_values($codes)])->save();
+
+                return true;
+            }
+        }
+
+        return false;
     }
 }

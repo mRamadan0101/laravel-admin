@@ -80,6 +80,13 @@ return new class extends Migration
             $table->index(['user_id', 'tag_id']);
             $table->timestamps();
         });
+
+        Schema::create('test_posts', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('title');
+            $table->timestamps();
+            $table->softDeletes();
+        });
     }
 
     /**
@@ -96,5 +103,6 @@ return new class extends Migration
         Schema::dropIfExists('test_user_profiles');
         Schema::dropIfExists('test_tags');
         Schema::dropIfExists('test_user_tags');
+        Schema::dropIfExists('test_posts');
     }
 };

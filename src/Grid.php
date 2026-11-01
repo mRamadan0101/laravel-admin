@@ -29,6 +29,7 @@ class Grid
         Concerns\HasHotKeys,
         Concerns\HasQuickCreate,
         Concerns\HasActions,
+        Concerns\HasTrash,
         Concerns\HasSelector,
         Concerns\CanHidesColumns,
         Concerns\CanFixHeader,
@@ -555,6 +556,8 @@ class Grid
         if ($this->builded) {
             return;
         }
+
+        $this->setupTrash();
 
         $this->applyQuery();
 

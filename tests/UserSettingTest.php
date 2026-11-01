@@ -50,7 +50,21 @@ class UserSettingTest extends TestCase
 
         $avatar = Administrator::first()->avatar;
 
-        $this->assertEquals('http://localhost:8000/uploads/images/test.jpg', $avatar);
+        $this->assertMatchesRegularExpression('#^http://localhost:8000/uploads/images/[A-Za-z0-9]{40}\.jpg$#', $avatar);
+    }
+
+    public function testUpdateAvatarWithOriginalNameWhenUniqueNamesAreOff()
+    {
+        File::cleanDirectory(public_path('uploads/images'));
+
+        config(['admin.upload.unique_name' => false]);
+
+        $this->visit('admin/auth/setting')
+            ->attach(__DIR__.'/assets/test.jpg', 'avatar')
+            ->press('Submit')
+            ->seePageIs('admin/auth/setting');
+
+        $this->assertEquals('http://localhost:8000/uploads/images/test.jpg', Administrator::first()->avatar);
     }
 
     public function testUpdatePasswordConfirmation()

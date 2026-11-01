@@ -85,6 +85,35 @@ Dark mode
 
 Set `theme` in `config/admin.php` to `light`, `dark` or `auto`. Users can switch the color mode from the navbar.
 
+Global search
+------------
+
+The navbar search box (`/` or `Ctrl+K`) searches the menu and every model you register, for example in `app/Admin/bootstrap.php`:
+
+```php
+Admin::globalSearch(App\Models\Post::class)
+    ->label('Posts')
+    ->columns(['title', 'author.name'])   // `relation.column` searches through a relation
+    ->subtitle('author.name')
+    ->url('posts/{id}/edit')
+    ->permission('posts');                // hidden from users without this permission
+```
+
+You can also list resources under `global_search.resources` in `config/admin.php`.
+
+Trash for soft deletes
+------------
+
+For models that use `SoftDeletes`, `$grid->enableTrash()` adds an *All / Trash* switch to the grid. Deleting a row still only soft-deletes it. In the trash view each row, or a batch selection, can be restored or deleted permanently.
+
+Security
+------------
+
+- **Two-factor authentication**: each admin can turn on TOTP (Google Authenticator, Authy, 1Password, ...) from *Settings*. Recovery codes are included. Disable the feature with `ADMIN_TWO_FACTOR=false`.
+- **Login throttling**: 5 failed attempts per username and IP lock the login for 60 seconds (`auth.throttle`).
+- **Operation log**: passwords, tokens and 2FA codes are masked. Add more keys in `operation_log.hidden_fields`.
+- **Uploads**: files get random names so they can't overwrite each other. Use `->originalName()` to keep the client file name.
+
 ## Extensions
 
 These extensions were written for laravel-admin 1.x. Check each one before using it with 2.x.

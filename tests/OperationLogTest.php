@@ -43,6 +43,27 @@ class OperationLogTest extends TestCase
         $this->assertEquals(4, OperationLog::count());
     }
 
+    public function testSensitiveInputIsMasked()
+    {
+        config(['admin.operation_log.hidden_fields' => ['api_key']]);
+
+        $this->post('admin/auth/users', [
+            'username'              => 'masked',
+            'password'              => 'secret-password',
+            'password_confirmation' => 'secret-password',
+            'api_key'               => 'sk-live-123',
+            'nested'                => ['password' => 'nested-secret', 'keep' => 'visible'],
+        ]);
+
+        $input = OperationLog::where('method', 'POST')->latest('id')->value('input');
+
+        $this->assertStringNotContainsString('secret-password', $input);
+        $this->assertStringNotContainsString('nested-secret', $input);
+        $this->assertStringNotContainsString('sk-live-123', $input);
+        $this->assertStringContainsString('visible', $input);
+        $this->assertSame('******', json_decode($input, true)['password']);
+    }
+
     public function testDeleteLogs()
     {
         $table = config('admin.database.operation_log_table');

@@ -49,6 +49,39 @@ class AuthTest extends TestCase
             ->seeInElement('.sidebar-menu .nav-link p', 'Menu');
     }
 
+    public function testLoginIsThrottledAfterTooManyFailures()
+    {
+        config(['admin.auth.throttle.max_attempts' => 3]);
+
+        foreach (range(1, 3) as $attempt) {
+            $this->visit('admin/auth/login')
+                ->submitForm('Login', ['username' => 'admin', 'password' => 'wrong'])
+                ->seePageIs('admin/auth/login')
+                ->dontSee('Too many login attempts');
+        }
+
+        $this->visit('admin/auth/login')
+            ->submitForm('Login', ['username' => 'admin', 'password' => 'admin'])
+            ->seePageIs('admin/auth/login')
+            ->see('Too many login attempts')
+            ->dontSeeIsAuthenticated('admin');
+    }
+
+    public function testSuccessfulLoginClearsFailedAttempts()
+    {
+        config(['admin.auth.throttle.max_attempts' => 3]);
+
+        foreach (range(1, 2) as $attempt) {
+            $this->visit('admin/auth/login')
+                ->submitForm('Login', ['username' => 'admin', 'password' => 'wrong']);
+        }
+
+        $this->visit('admin/auth/login')
+            ->submitForm('Login', ['username' => 'admin', 'password' => 'admin'])
+            ->seeIsAuthenticated('admin')
+            ->seePageIs('admin');
+    }
+
     public function testLogout()
     {
         $this->visit('admin/auth/logout')

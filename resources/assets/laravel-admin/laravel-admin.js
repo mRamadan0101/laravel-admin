@@ -222,6 +222,137 @@ $(function () {
 });
 
 /* ---------------------------------------------------------------------
+ * Global search
+ * ------------------------------------------------------------------- */
+(function ($) {
+
+    var timer = null;
+    var request = null;
+
+    function escapeHtml(value) {
+        return $('<div>').text(value == null ? '' : String(value)).html();
+    }
+
+    function $box() {
+        return $('.admin-global-search');
+    }
+
+    function close() {
+        var $search = $box();
+        $search.find('.admin-global-search-results').removeClass('show').empty();
+        $search.find('input').attr('aria-expanded', 'false');
+    }
+
+    function render(data) {
+        var $search = $box();
+        var $results = $search.find('.admin-global-search-results');
+        var html = '';
+
+        $.each(data.groups || [], function (_, group) {
+            html += '<h6 class="dropdown-header"><i class="' + escapeHtml(group.icon) + ' me-2"></i>' + escapeHtml(group.label) + '</h6>';
+            $.each(group.items, function (_, item) {
+                html += '<a class="dropdown-item" role="option" href="' + escapeHtml(item.url) + '">' +
+                    '<span class="admin-global-search-title">' + escapeHtml(item.title) + '</span>' +
+                    (item.subtitle ? '<small class="admin-global-search-subtitle">' + escapeHtml(item.subtitle) + '</small>' : '') +
+                    '</a>';
+            });
+        });
+
+        if (!html) {
+            html = '<div class="dropdown-item-text text-body-secondary">' +
+                escapeHtml(String($search.data('empty')).replace(':query', data.query)) + '</div>';
+        }
+
+        $results.html(html).addClass('show');
+        $search.find('input').attr('aria-expanded', 'true');
+    }
+
+    function search(keyword) {
+        if (request) {
+            request.abort();
+        }
+
+        if (!keyword) {
+            close();
+            return;
+        }
+
+        request = $.ajax({url: $box().data('url'), data: {q: keyword}, dataType: 'json'})
+            .done(render)
+            .always(function () { request = null; });
+    }
+
+    function move(step) {
+        var $items = $box().find('.admin-global-search-results .dropdown-item[href]');
+        if (!$items.length) {
+            return;
+        }
+        var index = $items.index($items.filter('.active'));
+        $items.removeClass('active');
+        index = (index + step + $items.length) % $items.length;
+        $items.eq(index).addClass('active')[0].scrollIntoView({block: 'nearest'});
+    }
+
+    function open(url) {
+        close();
+        $box().find('input').val('').trigger('blur');
+        if ($.pjax && $.support.pjax) {
+            $.pjax({url: url, container: '#pjax-container'});
+        } else {
+            window.location.href = url;
+        }
+    }
+
+    $(document).on('input', '.admin-global-search input', function () {
+        var keyword = $.trim($(this).val());
+        clearTimeout(timer);
+        timer = setTimeout(function () { search(keyword); }, 250);
+    });
+
+    $(document).on('keydown', '.admin-global-search input', function (event) {
+        if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+            event.preventDefault();
+            move(event.key === 'ArrowDown' ? 1 : -1);
+        } else if (event.key === 'Enter') {
+            var $active = $box().find('.admin-global-search-results .dropdown-item.active');
+            if (!$active.length) {
+                $active = $box().find('.admin-global-search-results .dropdown-item[href]').first();
+            }
+            if ($active.length) {
+                event.preventDefault();
+                open($active.attr('href'));
+            }
+        } else if (event.key === 'Escape') {
+            close();
+            $(this).trigger('blur');
+        }
+    });
+
+    $(document).on('click', '.admin-global-search-results .dropdown-item[href]', function (event) {
+        if (event.ctrlKey || event.metaKey || event.shiftKey) {
+            return;
+        }
+        event.preventDefault();
+        open($(this).attr('href'));
+    });
+
+    $(document).on('click', function (event) {
+        if (!$(event.target).closest('.admin-global-search').length) {
+            close();
+        }
+    });
+
+    $(document).on('keydown', function (event) {
+        var typing = $(event.target).is('input, textarea, select, [contenteditable="true"]');
+        var shortcut = (event.key === '/' && !typing) || (event.key.toLowerCase() === 'k' && (event.ctrlKey || event.metaKey));
+        if (shortcut && $box().length) {
+            event.preventDefault();
+            $box().find('input').trigger('focus').select();
+        }
+    });
+})(jQuery);
+
+/* ---------------------------------------------------------------------
  * Back to top
  * ------------------------------------------------------------------- */
 $(window).on('scroll', function () {

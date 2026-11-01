@@ -6,6 +6,7 @@ use Encore\Admin\Layout\Content;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Translation\FileLoader;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 
@@ -170,6 +171,37 @@ class AdminServiceProvider extends ServiceProvider
         $this->commands($this->commands);
 
         $this->macroRouter();
+
+        $this->registerFallbackTranslations();
+    }
+
+    /**
+     * Let the bundled `admin.php` lines fill keys missing from a published
+     * (possibly older) copy, the published copy still wins for every key.
+     *
+     * @return void
+     */
+    protected function registerFallbackTranslations()
+    {
+        $path = realpath(__DIR__.'/../resources/lang');
+
+        $prepend = function ($loader) use ($path) {
+            if (!$loader instanceof FileLoader || !property_exists($loader, 'paths')) {
+                return;
+            }
+
+            (function () use ($path) {
+                if (!in_array($path, $this->paths, true)) {
+                    array_unshift($this->paths, $path);
+                }
+            })->call($loader);
+        };
+
+        if ($this->app->resolved('translation.loader')) {
+            $prepend($this->app['translation.loader']);
+        } else {
+            $this->app->afterResolving('translation.loader', $prepend);
+        }
     }
 
     /**

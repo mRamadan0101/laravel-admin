@@ -38,7 +38,7 @@ class Authenticate
     protected function shouldPassThrough($request)
     {
         // 下面的路由不验证登陆
-        $excepts = config('admin.auth.excepts', []);
+        $excepts = array_merge(config('admin.auth.excepts', []), ['auth/two-factor-challenge']);
 
         array_delete($excepts, [
             '_handle_action_',

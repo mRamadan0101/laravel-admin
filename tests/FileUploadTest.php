@@ -50,18 +50,14 @@ class FileUploadTest extends TestCase
 
         $this->assertEquals(FileModel::count(), 1);
 
-        $where = [
-            'file1' => 'files/AuthTest.php',
-            'file2' => 'files/InstallTest.php',
-            'file3' => 'files/IndexTest.php',
-            'file4' => 'files/MenuTest.php',
-            'file5' => 'files/routes.php',
-            'file6' => 'files/2016_11_22_093148_create_test_tables.php',
-        ];
-
-        $this->seeInDatabase('test_files', $where);
-
         $files = FileModel::first()->toArray();
+
+        foreach ([1, 2, 3, 4, 6] as $index) {
+            $this->assertMatchesRegularExpression('#^files/[A-Za-z0-9]{40}\.php$#', $files['file'.$index]);
+        }
+
+        $this->assertSame('files/routes.php', $files['file5']);
+        $this->assertCount(6, array_unique(array_intersect_key($files, array_flip(['file1', 'file2', 'file3', 'file4', 'file5', 'file6']))));
 
         foreach (range(1, 6) as $index) {
             $this->assertFileExists(public_path('uploads/'.$files['file'.$index]));

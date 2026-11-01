@@ -304,6 +304,182 @@ body:is(.skin-blue, .skin-yellow, .skin-green, .skin-purple, .skin-red, .skin-bl
     border-inline-start: 3px solid var(--admin-skin);
 }
 
+/* ---------- global search ---------- */
+
+.admin-global-search {
+    position: relative;
+    flex: 0 1 22rem;
+    margin-inline-start: .5rem;
+}
+
+.admin-global-search .form-control {
+    height: 2.25rem;
+    padding-inline: 2.25rem 2rem;
+    border-radius: 999px;
+    background-color: var(--bs-tertiary-bg);
+    border-color: transparent;
+    font-size: .875rem;
+}
+
+.admin-global-search .form-control:focus {
+    background-color: var(--bs-body-bg);
+    border-color: var(--bs-primary);
+}
+
+.admin-global-search .form-control::-webkit-search-cancel-button {
+    display: none;
+}
+
+.admin-global-search-icon {
+    position: absolute;
+    inset-inline-start: .875rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--bs-secondary-color);
+    font-size: .8125rem;
+    pointer-events: none;
+}
+
+.admin-global-search-kbd {
+    position: absolute;
+    inset-inline-end: .625rem;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: .0625rem .375rem;
+    font-size: .6875rem;
+    color: var(--bs-secondary-color);
+    background: transparent;
+    border: 1px solid var(--bs-border-color);
+    border-radius: .25rem;
+    pointer-events: none;
+}
+
+.admin-global-search .form-control:focus ~ .admin-global-search-kbd {
+    display: none;
+}
+
+.admin-global-search-results {
+    width: 100%;
+    min-width: 20rem;
+    max-height: 70vh;
+    overflow-y: auto;
+    margin-top: .375rem;
+    padding-block: .25rem;
+}
+
+.admin-global-search-results .dropdown-header {
+    text-align: start;
+    font-size: .6875rem;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+.admin-global-search-results .dropdown-item {
+    display: flex;
+    flex-direction: column;
+    white-space: normal;
+    padding-block: .375rem;
+}
+
+.admin-global-search-results .dropdown-item.active .admin-global-search-subtitle {
+    color: inherit;
+    opacity: .85;
+}
+
+.admin-global-search-title {
+    font-weight: 500;
+}
+
+.admin-global-search-subtitle {
+    color: var(--bs-secondary-color);
+    font-size: .75rem;
+}
+
+body:is(.skin-blue, .skin-yellow, .skin-green, .skin-purple, .skin-red) .app-header .admin-global-search .form-control:not(:focus) {
+    background-color: rgba(255, 255, 255, .18);
+    color: #fff;
+}
+
+body:is(.skin-blue, .skin-yellow, .skin-green, .skin-purple, .skin-red) .app-header .admin-global-search .form-control:not(:focus)::placeholder,
+body:is(.skin-blue, .skin-yellow, .skin-green, .skin-purple, .skin-red) .app-header .admin-global-search .form-control:not(:focus) ~ .admin-global-search-icon,
+body:is(.skin-blue, .skin-yellow, .skin-green, .skin-purple, .skin-red) .app-header .admin-global-search .form-control:not(:focus) ~ .admin-global-search-kbd {
+    color: rgba(255, 255, 255, .8);
+    border-color: rgba(255, 255, 255, .4);
+}
+
+@media (max-width: 767.98px) {
+    .admin-global-search {
+        flex-basis: 10rem;
+    }
+
+    .admin-global-search-kbd {
+        display: none;
+    }
+}
+
+/* ---------- two-factor ---------- */
+
+.two-factor-qr {
+    width: 13rem;
+    height: 13rem;
+    padding: .5rem;
+    background: #fff;
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius-lg);
+}
+
+.two-factor-qr svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.two-factor-steps {
+    padding-inline-start: 1.25rem;
+    margin: 0;
+}
+
+.two-factor-steps li + li {
+    margin-top: 1rem;
+}
+
+.two-factor-secret {
+    display: inline-block;
+    margin-top: .375rem;
+    padding: .375rem .625rem;
+    font-size: .9375rem;
+    letter-spacing: .06em;
+    background: var(--bs-tertiary-bg);
+    border-radius: var(--bs-border-radius);
+}
+
+.two-factor-code-input {
+    max-width: 12rem;
+    font-size: 1.25rem;
+    letter-spacing: .35em;
+    font-variant-numeric: tabular-nums;
+}
+
+.login-card-body .two-factor-code-input {
+    max-width: none;
+    text-align: center;
+}
+
+.two-factor-codes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+    gap: .5rem;
+}
+
+.two-factor-codes code {
+    padding: .5rem;
+    text-align: center;
+    font-size: .9375rem;
+    background: var(--bs-tertiary-bg);
+    border-radius: var(--bs-border-radius);
+}
+
 /* ---------- forms ---------- */
 
 input.content {

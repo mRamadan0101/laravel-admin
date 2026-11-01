@@ -25,7 +25,7 @@ class Admin
      *
      * @var string
      */
-    const VERSION = '2.0.0';
+    const VERSION = '2.1.0';
 
     /**
      * @var Navbar
@@ -197,6 +197,18 @@ class Admin
         }
 
         return $links;
+    }
+
+    /**
+     * Register a model in the navbar global search.
+     *
+     * @param string $model
+     *
+     * @return GlobalSearch\SearchResource
+     */
+    public function globalSearch($model)
+    {
+        return GlobalSearch\GlobalSearch::resource($model);
     }
 
     /**
@@ -551,6 +563,7 @@ class Admin
             $router->post('_handle_action_', [Controllers\HandleController::class, 'handleAction'])->name('admin.handle-action');
             $router->get('_handle_selectable_', [Controllers\HandleController::class, 'handleSelectable'])->name('admin.handle-selectable');
             $router->get('_handle_renderable_', [Controllers\HandleController::class, 'handleRenderable'])->name('admin.handle-renderable');
+            $router->get('_global_search_', [Controllers\GlobalSearchController::class, 'search'])->name('admin.global-search');
 
             $authController = config('admin.auth.controller', AuthController::class);
 
@@ -559,6 +572,15 @@ class Admin
             $router->get('auth/logout', [$authController, 'getLogout'])->name('admin.logout');
             $router->get('auth/setting', [$authController, 'getSetting'])->name('admin.setting');
             $router->put('auth/setting', [$authController, 'putSetting']);
+
+            if (config('admin.auth.two_factor.enable', true)) {
+                $router->get('auth/two-factor-challenge', [$authController, 'getTwoFactorChallenge'])->name('admin.two-factor.challenge');
+                $router->post('auth/two-factor-challenge', [$authController, 'postTwoFactorChallenge']);
+                $router->get('auth/two-factor', [Controllers\TwoFactorController::class, 'index'])->name('admin.two-factor');
+                $router->post('auth/two-factor', [Controllers\TwoFactorController::class, 'enable']);
+                $router->delete('auth/two-factor', [Controllers\TwoFactorController::class, 'disable']);
+                $router->post('auth/two-factor/recovery-codes', [Controllers\TwoFactorController::class, 'regenerateRecoveryCodes']);
+            }
             $router->get('locale/{locale}', [Controllers\LocaleController::class, 'update'])
                 ->name('admin.locale')
                 ->where('locale', '[A-Za-z0-9_-]+');

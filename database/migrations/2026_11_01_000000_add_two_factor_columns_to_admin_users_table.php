@@ -1,0 +1,42 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function getConnection()
+    {
+        return config('admin.database.connection') ?: config('database.default');
+    }
+
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::table(config('admin.database.users_table'), function (Blueprint $table) {
+            $table->text('two_factor_secret')->nullable()->after('password');
+            $table->text('two_factor_recovery_codes')->nullable()->after('two_factor_secret');
+            $table->timestamp('two_factor_confirmed_at')->nullable()->after('two_factor_recovery_codes');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table(config('admin.database.users_table'), function (Blueprint $table) {
+            $table->dropColumn(['two_factor_secret', 'two_factor_recovery_codes', 'two_factor_confirmed_at']);
+        });
+    }
+};

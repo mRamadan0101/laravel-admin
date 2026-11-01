@@ -11,6 +11,15 @@
             {!! Admin::getNavbar()->render('left') !!}
         </ul>
 
+        @if(\Encore\Admin\GlobalSearch\GlobalSearch::enabled())
+        <div class="admin-global-search" data-url="{{ admin_url('_global_search_') }}" data-empty="{{ trans('admin.global_search.no_results') }}">
+            <i class="fa-solid fa-magnifying-glass admin-global-search-icon" aria-hidden="true"></i>
+            <input type="search" class="form-control" placeholder="{{ trans('admin.global_search.placeholder') }}" aria-label="{{ trans('admin.search') }}" title="{{ trans('admin.global_search.shortcut') }}" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="false" aria-controls="admin-global-search-results" aria-autocomplete="list">
+            <kbd class="admin-global-search-kbd" aria-hidden="true">/</kbd>
+            <div class="dropdown-menu admin-global-search-results" id="admin-global-search-results" role="listbox"></div>
+        </div>
+        @endif
+
         <!-- Navbar Right Menu -->
         <ul class="navbar-nav ms-auto">
 

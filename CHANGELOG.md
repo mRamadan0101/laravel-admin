@@ -1,5 +1,26 @@
 # Changelog
 
+## v2.1.0
+
+Security:
+
+- The operation log masks passwords, 2FA codes and the CSRF token at every nesting level.
+  Add your own keys in `admin.operation_log.hidden_fields`.
+- Login is rate limited per username + IP (`admin.auth.throttle`, 5 attempts / 60 seconds by default).
+- Uploaded files get random 40 character names by default (`admin.upload.unique_name`).
+  `->originalName()` keeps the client file name for a single field.
+- Optional TOTP two-factor authentication. Each user turns it on from
+  *Settings → Two-factor authentication*, with a QR code and 8 single-use recovery codes.
+  The secret and codes are stored encrypted. Toggle the feature with `admin.auth.two_factor.enable`.
+
+Features:
+
+- Global search in the navbar (`/` or `Ctrl+K`). It searches the menu pages the user can see and
+  any model registered with `Admin::globalSearch(Model::class)` or `admin.global_search.resources`.
+- Trash for soft-deleted models: `$grid->enableTrash()` adds an *All / Trash* switch, and the trash
+  view has row and batch actions for restore and permanent delete.
+- Bundled `admin.php` translations fill in keys missing from an older published copy.
+
 ## v2.0.0
 
 New major version for modern stacks. See [UPGRADE.md](UPGRADE.md) for the migration guide.

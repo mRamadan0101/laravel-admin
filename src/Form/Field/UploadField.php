@@ -6,6 +6,7 @@ use Encore\Admin\Form;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 trait UploadField
@@ -44,6 +45,13 @@ trait UploadField
      * @var bool
      */
     protected $useSequenceName = false;
+
+    /**
+     * Keep the client file name instead of the default unique name.
+     *
+     * @var bool
+     */
+    protected $useOriginalName = false;
 
     /**
      * Retain file when delete record from DB.
@@ -339,6 +347,18 @@ trait UploadField
     }
 
     /**
+     * Store the upload under the name the client sent.
+     *
+     * @return $this
+     */
+    public function originalName()
+    {
+        $this->useOriginalName = true;
+
+        return $this;
+    }
+
+    /**
      * Get store name of upload file.
      *
      * @param UploadedFile $file
@@ -363,7 +383,11 @@ trait UploadField
             return $this->name;
         }
 
-        return $file->getClientOriginalName();
+        if ($this->useOriginalName || !config('admin.upload.unique_name', true)) {
+            return $file->getClientOriginalName();
+        }
+
+        return $this->generateUniqueName($file);
     }
 
     /**
@@ -459,7 +483,9 @@ trait UploadField
      */
     protected function generateUniqueName(UploadedFile $file)
     {
-        return md5(uniqid()).'.'.$file->getClientOriginalExtension();
+        $extension = $file->getClientOriginalExtension();
+
+        return Str::random(40).($extension ? '.'.$extension : '');
     }
 
     /**

@@ -37,6 +37,7 @@ class TestCase extends BaseTestCase
         $config->set('database.connections.mysql.password', env('MYSQL_PASSWORD', ''));
         $config->set('app.key', 'base64:'.base64_encode('AckfSECXIvnK5r28GVIWUAxmbBSjTsmF'));
         $config->set('filesystems', require __DIR__.'/config/filesystems.php');
+        $config->set('cache.default', 'array');
         $config->set('admin', $adminConfig);
 
         foreach (Arr::dot(Arr::get($adminConfig, 'auth'), 'auth.') as $key => $value) {
@@ -69,7 +70,10 @@ class TestCase extends BaseTestCase
 
         $this->migration(__DIR__.'/migrations/2016_11_22_093148_create_test_tables.php')->down();
 
-        DB::delete('delete from `migrations` where `migration` = ?', ['2016_01_04_173148_create_admin_tables']);
+        DB::table('migrations')->whereIn('migration', [
+            '2016_01_04_173148_create_admin_tables',
+            '2026_11_01_000000_add_two_factor_columns_to_admin_users_table',
+        ])->delete();
 
         parent::tearDown();
     }

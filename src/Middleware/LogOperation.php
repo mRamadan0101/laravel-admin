@@ -10,6 +10,23 @@ use Illuminate\Support\Str;
 class LogOperation
 {
     /**
+     * Input keys that are never written to the log, in any nesting level.
+     *
+     * @var array
+     */
+    public static $hiddenFields = [
+        'password',
+        'password_confirmation',
+        'current_password',
+        'old_password',
+        'new_password',
+        'two_factor_code',
+        'two_factor_secret',
+        'recovery_code',
+        '_token',
+    ];
+
+    /**
      * Handle an incoming request.
      *
      * @param \Illuminate\Http\Request $request
@@ -25,7 +42,7 @@ class LogOperation
                 'path'    => substr($request->path(), 0, 255),
                 'method'  => $request->method(),
                 'ip'      => $request->getClientIp(),
-                'input'   => json_encode($request->input()),
+                'input'   => json_encode($this->maskInput($request->input())),
             ];
 
             try {
@@ -36,6 +53,31 @@ class LogOperation
         }
 
         return $next($request);
+    }
+
+    /**
+     * Replace the values of sensitive keys with a placeholder.
+     *
+     * @param array $input
+     *
+     * @return array
+     */
+    protected function maskInput(array $input)
+    {
+        $hidden = array_map('strtolower', array_merge(
+            static::$hiddenFields,
+            (array) config('admin.operation_log.hidden_fields', [])
+        ));
+
+        foreach ($input as $key => $value) {
+            if (in_array(strtolower((string) $key), $hidden, true)) {
+                $input[$key] = '******';
+            } elseif (is_array($value)) {
+                $input[$key] = $this->maskInput($value);
+            }
+        }
+
+        return $input;
     }
 
     /**
@@ -80,7 +122,11 @@ class LogOperation
      */
     protected function inExceptArray($request)
     {
-        foreach (config('admin.operation_log.except') as $except) {
+        $excepts = array_merge((array) config('admin.operation_log.except'), [
+            admin_base_path('_global_search_'),
+        ]);
+
+        foreach ($excepts as $except) {
             if ($except !== '/') {
                 $except = trim($except, '/');
             }
