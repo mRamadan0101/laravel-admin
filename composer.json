@@ -1,11 +1,16 @@
 {
-    "name": "encore/laravel-admin",
-    "description": "laravel admin",
+    "name": "mramadan0101/laravel-admin",
+    "description": "Laravel admin builder for CRUD backends, maintained for PHP 8.2+ and Laravel 10-12",
     "type": "library",
-    "keywords": ["laravel", "admin", "grid", "form"],
-    "homepage": "https://github.com/z-song/laravel-admin",
+    "keywords": ["laravel", "admin", "grid", "form", "adminlte"],
+    "homepage": "https://github.com/mRamadan0101/laravel-admin",
     "license": "MIT",
     "authors": [
+        {
+            "name": "Mohamed Ramadan",
+            "email": "mramadan0101@hotmail.com",
+            "homepage": "https://github.com/mRamadan0101"
+        },
         {
             "name": "zsong",
             "email": "zosong@126.com"

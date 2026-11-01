@@ -13,8 +13,11 @@ receiving security and compatibility fixes.
 ## 1. Update the package
 
 ```
-composer require encore/laravel-admin:^2.0
+composer remove encore/laravel-admin
+composer require mramadan0101/laravel-admin
 ```
+
+The package name changed. `encore/laravel-admin` on Packagist is the original 1.x package. This 2.x line is `mramadan0101/laravel-admin`. The PHP namespace is still `Encore\Admin`.
 
 `doctrine/dbal` is no longer required: `admin:make` reads the table columns with
 `Schema::getColumns()`. Remove it from your `composer.json` if nothing else uses it.
