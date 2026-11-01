@@ -9,7 +9,8 @@
 <p align="center">
 <a href="https://github.com/mRamadan0101/laravel-admin">Repository</a> |
 <a href="UPGRADE.md">Upgrade guide</a> |
-<a href="#extensions">Extensions</a>
+<a href="#extensions">Extensions</a> |
+<a href="CONTRIBUTING.md">Contribute</a>
 </p>
 
 <p align="center">
@@ -150,9 +151,11 @@ These extensions were written for laravel-admin 1.x. Check each one before using
 | [watermark](https://github.com/laravel-admin-extensions/watermark) | Text watermark for laravel-admin |~1.6 |
 | [google-authenticator](https://github.com/ylic/laravel-admin-google-authenticator) | Google authenticator |~1.6 |
 
-## Contributors
+## Contribute
 
-<a href="https://github.com/mRamadan0101/laravel-admin/graphs/contributors">Contributors</a>
+Bug reports and pull requests are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) for how to report a bug and how the `master` and `1.x` branches differ.
+
+<a href="https://github.com/mRamadan0101/laravel-admin/graphs/contributors">People who already contributed</a>
 
 Other
 ------------

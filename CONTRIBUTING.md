@@ -1,67 +1,26 @@
 # Contribute
 
-## Introduction
+Thanks for helping with this project. This repository is the independently maintained 2.x line of laravel-admin (`mramadan0101/laravel-admin`). The original project lives at [z-song/laravel-admin](https://github.com/z-song/laravel-admin); issues and pull requests for this line belong here.
 
-First, thank you for considering contributing to laravel-admin! It's people like you that make the open source community such a great community! 😊
+## Reporting a bug
 
-We welcome any type of contribution, not only code. You can help with 
-- **QA**: file bug reports, the more details you can give the better (e.g. screenshots with the console open)
-- **Marketing**: writing blog posts, howto's, printing stickers, ...
-- **Community**: presenting the project at meetups, organizing a dedicated meetup for the local community, ...
-- **Code**: take a look at the [open issues](issues). Even if you can't write code, commenting on them, showing that you care about a given issue matters. It helps us triage them.
-- **Money**: we welcome financial contributions in full transparency on our [open collective](https://opencollective.com/laravel-admin).
+Open an [issue](https://github.com/mRamadan0101/laravel-admin/issues) and include:
 
-## Your First Contribution
+- PHP, Laravel and laravel-admin versions
+- what you expected and what happened
+- the smallest steps that reproduce it, plus the relevant grid or form code
+- a screenshot or the browser console output when the problem is visual
 
-Working on your first Pull Request? You can learn how from this *free* series, [How to Contribute to an Open Source Project on GitHub](https://app.egghead.io/playlists/how-to-contribute-to-an-open-source-project-on-github).
+Search the existing issues first so the same report is not opened twice.
 
-## Submitting code
+## Pull requests
 
-Any code change should be submitted as a pull request. The description should explain what the code does and give steps to execute it. The pull request should also contain tests.
-
-## Code review process
-
-The bigger the pull request, the longer it will take to review and merge. Try to break down large pull requests in smaller chunks that are easier to review and merge.
-It is also always helpful to have some context for your pull request. What was the purpose? Why does it matter to you?
-
-## Financial contributions
-
-We also welcome financial contributions in full transparency on our [open collective](https://opencollective.com/laravel-admin).
-Anyone can file an expense. If the expense makes sense for the development of the community, it will be "merged" in the ledger of our open collective by the core contributors and the person who filed the expense will be reimbursed.
+1. Fork the repository and branch off `master`. `master` is the 2.x line (PHP 8.2+, Laravel 10–12). The `1.x` branch only takes security and compatibility fixes for the legacy line.
+2. Keep the change focused. A pull request that does one thing is much easier to review.
+3. Match the style of the code around your change.
+4. Add or update a test when the change has behavior that can break. The suite runs with `./vendor/bin/phpunit` and needs a MySQL database (see `phpunit.xml.dist`).
+5. Describe what the change does and how to check it.
 
 ## Questions
 
-If you have any questions, create an [issue](issue) (protip: do a quick search first to see if someone else didn't ask the same question before!).
-You can also reach us at hello@laravel-admin.opencollective.com.
-
-## Credits
-
-### Contributors
-
-Thank you to all the people who have already contributed to laravel-admin!
-<a href="graphs/contributors"><img src="https://opencollective.com/laravel-admin/contributors.svg?width=890" /></a>
-
-
-### Backers
-
-Thank you to all our backers! [[Become a backer](https://opencollective.com/laravel-admin#backer)]
-
-<a href="https://opencollective.com/laravel-admin#backers" target="_blank"><img src="https://opencollective.com/laravel-admin/backers.svg?width=890"></a>
-
-
-### Sponsors
-
-Thank you to all our sponsors! (please ask your company to also support this open source project by [becoming a sponsor](https://opencollective.com/laravel-admin#sponsor))
-
-<a href="https://opencollective.com/laravel-admin/sponsor/0/website" target="_blank"><img src="https://opencollective.com/laravel-admin/sponsor/0/avatar.svg"></a>
-<a href="https://opencollective.com/laravel-admin/sponsor/1/website" target="_blank"><img src="https://opencollective.com/laravel-admin/sponsor/1/avatar.svg"></a>
-<a href="https://opencollective.com/laravel-admin/sponsor/2/website" target="_blank"><img src="https://opencollective.com/laravel-admin/sponsor/2/avatar.svg"></a>
-<a href="https://opencollective.com/laravel-admin/sponsor/3/website" target="_blank"><img src="https://opencollective.com/laravel-admin/sponsor/3/avatar.svg"></a>
-<a href="https://opencollective.com/laravel-admin/sponsor/4/website" target="_blank"><img src="https://opencollective.com/laravel-admin/sponsor/4/avatar.svg"></a>
-<a href="https://opencollective.com/laravel-admin/sponsor/5/website" target="_blank"><img src="https://opencollective.com/laravel-admin/sponsor/5/avatar.svg"></a>
-<a href="https://opencollective.com/laravel-admin/sponsor/6/website" target="_blank"><img src="https://opencollective.com/laravel-admin/sponsor/6/avatar.svg"></a>
-<a href="https://opencollective.com/laravel-admin/sponsor/7/website" target="_blank"><img src="https://opencollective.com/laravel-admin/sponsor/7/avatar.svg"></a>
-<a href="https://opencollective.com/laravel-admin/sponsor/8/website" target="_blank"><img src="https://opencollective.com/laravel-admin/sponsor/8/avatar.svg"></a>
-<a href="https://opencollective.com/laravel-admin/sponsor/9/website" target="_blank"><img src="https://opencollective.com/laravel-admin/sponsor/9/avatar.svg"></a>
-
-<!-- This `CONTRIBUTING.md` is based on @nayafia's template https://github.com/nayafia/contributing-template -->
+Ask in an [issue](https://github.com/mRamadan0101/laravel-admin/issues). A quick search usually shows whether it was already answered.
