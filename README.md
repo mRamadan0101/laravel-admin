@@ -3,7 +3,13 @@
 <img src="https://laravel-admin.org/images/logo002.png" alt="laravel-admin">
 </a>
 </p>
+## Contributors
 
+Thanks to everyone who has contributed to this project!
+
+<a href="https://github.com/mramadan0101/laravel-admin/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=maddog888/laravel-admin" />
+</a>
 <p align="center">Administrative interface builder for Laravel. Build CRUD backends with a few lines of code.</p>
 
 <p align="center">
