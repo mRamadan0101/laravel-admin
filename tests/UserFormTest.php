@@ -5,7 +5,7 @@ use Tests\Models\User as UserModel;
 
 class UserFormTest extends TestCase
 {
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -29,11 +29,11 @@ class UserFormTest extends TestCase
             ->seeElement("input[type=text][name='profile[color]']")
             ->seeElement("input[type=text][name='profile[start_at]']")
             ->seeElement("input[type=text][name='profile[end_at]']")
-            ->seeElement('span[class=help-block] i[class*=fa-info-circle]')
-            ->seeInElement('span[class=help-block]', 'Please input your postcode')
-            ->seeElement('span[class=help-block] i[class*=fa-image]')
-            ->seeInElement('span[class=help-block]', '上传头像')
-            ->seeElement("select[name='tags[]'][multiple=multiple]")
+            ->seeElement('span[class=form-text] i[class*=fa-info-circle]')
+            ->seeInElement('span[class=form-text]', 'Please input your postcode')
+            ->seeElement('span[class=form-text] i[class*=fa-image]')
+            ->seeInElement('span[class=form-text]', '上传头像')
+            ->seeElement("select[name='tags[]'][multiple]")
             ->seeInElement('a[html-field]', 'html...');
     }
 
@@ -101,11 +101,11 @@ class UserFormTest extends TestCase
 
     protected function seedsTable($count = 100)
     {
-        factory(\Tests\Models\User::class, $count)
+        \Tests\Models\User::factory()->count($count)
             ->create()
             ->each(function ($u) {
-                $u->profile()->save(factory(\Tests\Models\Profile::class)->make());
-                $u->tags()->saveMany(factory(\Tests\Models\Tag::class, 5)->make());
+                $u->profile()->save(\Tests\Models\Profile::factory()->make());
+                $u->tags()->saveMany(\Tests\Models\Tag::factory()->count(5)->make());
             });
     }
 
@@ -131,7 +131,7 @@ class UserFormTest extends TestCase
             ->seeElement("input[type=text][name='profile[color]'][value='{$user->profile->color}']")
             ->seeElement("input[type=text][name='profile[start_at]'][value='{$user->profile->start_at}']")
             ->seeElement("input[type=text][name='profile[end_at]'][value='{$user->profile->end_at}']")
-            ->seeElement("select[name='tags[]'][multiple=multiple]");
+            ->seeElement("select[name='tags[]'][multiple]");
 
         $this->assertCount(50, $this->crawler()->filter("select[name='tags[]'] option"));
         $this->assertCount(5, $this->crawler()->filter("select[name='tags[]'] option[selected]"));
@@ -171,14 +171,14 @@ class UserFormTest extends TestCase
         $this->type('xxaxx', 'email')
             ->press('Submit')
             ->seePageIs("admin/users/$id/edit")
-            ->see('The email must be a valid email address.');
+            ->see('The email field must be a valid email address.');
 
         $this->visit("admin/users/$id/edit")
             ->type('123', 'password')
             ->type('1234', 'password_confirmation')
             ->press('Submit')
             ->seePageIs("admin/users/$id/edit")
-            ->see('The Password confirmation does not match.');
+            ->see('The Password field confirmation does not match.');
 
         $this->type('xx@xx.xx', 'email')
             ->type('123', 'password')
@@ -194,7 +194,7 @@ class UserFormTest extends TestCase
 
         $this->visit('admin/users/1/edit')
             ->seeInElement('a[class*=btn-danger]', 'Delete')
-            ->seeInElement('a[class*=btn-default]', 'List')
+            ->seeInElement('a[class*=btn-outline-secondary]', 'List')
             ->seeInElement('a[class*=btn-primary]', 'View');
     }
 

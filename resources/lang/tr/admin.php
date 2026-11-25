@@ -104,4 +104,5 @@ return [
     'prev'                   => 'Önceki',
     'next'                   => 'Sonraki',
     'quick_create'           => 'Hemen oluştur',
+    'language'               => 'Dil',
 ];

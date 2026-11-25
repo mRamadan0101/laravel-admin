@@ -31,6 +31,7 @@ class Help implements Renderable
         $data = [
             'toggle'    => 'tooltip',
             'placement' => 'right',
+            'html'      => 'true',
             'title'     => $this->message,
         ];
 
@@ -40,7 +41,7 @@ class Help implements Renderable
 
         return <<<HELP
 <a href="javascript:void(0);" class="grid-column-help" {$data}>
-    <i class="fa fa-question-circle"></i>
+    <i class="fa-solid fa-circle-question"></i>
 </a>
 HELP;
     }

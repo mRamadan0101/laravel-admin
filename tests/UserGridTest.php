@@ -6,7 +6,7 @@ use Tests\Models\User as UserModel;
 
 class UserGridTest extends TestCase
 {
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -16,7 +16,7 @@ class UserGridTest extends TestCase
     public function testIndexPage()
     {
         $this->visit('admin/users')
-            ->see('All users')
+            ->see('Users')
             ->seeInElement('tr th', 'Username')
             ->seeInElement('tr th', 'Email')
             ->seeInElement('tr th', 'Mobile')
@@ -51,11 +51,11 @@ class UserGridTest extends TestCase
 
     protected function seedsTable($count = 100)
     {
-        factory(\Tests\Models\User::class, $count)
+        \Tests\Models\User::factory()->count($count)
             ->create()
             ->each(function ($u) {
-                $u->profile()->save(factory(\Tests\Models\Profile::class)->make());
-                $u->tags()->saveMany(factory(\Tests\Models\Tag::class, 5)->make());
+                $u->profile()->save(\Tests\Models\Profile::factory()->make());
+                $u->tags()->saveMany(\Tests\Models\Tag::factory()->count(5)->make());
                 $u->data = ['json' => ['field' => random_int(0, 50)]];
                 $u->save();
             });
@@ -66,7 +66,7 @@ class UserGridTest extends TestCase
         $this->seedsTable();
 
         $this->visit('admin/users')
-            ->see('All users');
+            ->see('Users');
 
         $this->assertCount(100, UserModel::all());
         $this->assertCount(100, ProfileModel::all());
@@ -77,19 +77,19 @@ class UserGridTest extends TestCase
         $this->seedsTable(65);
 
         $this->visit('admin/users')
-            ->see('All users');
+            ->see('Users');
 
         $this->visit('admin/users?page=2');
-        $this->assertCount(20, $this->crawler()->filter('td a i[class*=fa-edit]'));
+        $this->assertCount(20, $this->crawler()->filter('td a i[class*=fa-pen-to-square]'));
 
         $this->visit('admin/users?page=3');
-        $this->assertCount(20, $this->crawler()->filter('td a i[class*=fa-edit]'));
+        $this->assertCount(20, $this->crawler()->filter('td a i[class*=fa-pen-to-square]'));
 
         $this->visit('admin/users?page=4');
-        $this->assertCount(5, $this->crawler()->filter('td a i[class*=fa-edit]'));
+        $this->assertCount(5, $this->crawler()->filter('td a i[class*=fa-pen-to-square]'));
 
         $this->click(1)->seePageIs('admin/users?page=1');
-        $this->assertCount(20, $this->crawler()->filter('td a i[class*=fa-edit]'));
+        $this->assertCount(20, $this->crawler()->filter('td a i[class*=fa-pen-to-square]'));
     }
 
     public function testOrderByJson()
@@ -114,7 +114,7 @@ class UserGridTest extends TestCase
         $this->seedsTable(50);
 
         $this->visit('admin/users')
-            ->see('All users');
+            ->see('Users');
 
         $this->assertCount(50, UserModel::all());
         $this->assertCount(50, ProfileModel::all());
@@ -129,12 +129,12 @@ class UserGridTest extends TestCase
             ->seeInElement('td', $user->mobile)
             ->seeElement("img[src='{$user->avatar}']")
             ->seeInElement('td', "{$user->profile->first_name} {$user->profile->last_name}")
-            ->seeInElement('td', $user->postcode)
-            ->seeInElement('td', $user->address)
+            ->seeInElement('td', $user->profile->postcode)
+            ->seeInElement('td', $user->profile->address)
             ->seeInElement('td', "{$user->profile->latitude} {$user->profile->longitude}")
-            ->seeInElement('td', $user->color)
-            ->seeInElement('td', $user->start_at)
-            ->seeInElement('td', $user->end_at);
+            ->seeInElement('td', $user->profile->color)
+            ->seeInElement('td', $user->profile->start_at)
+            ->seeInElement('td', $user->profile->end_at);
     }
 
     public function testLikeFilter()
@@ -142,7 +142,7 @@ class UserGridTest extends TestCase
         $this->seedsTable(50);
 
         $this->visit('admin/users')
-            ->see('All users');
+            ->see('Users');
 
         $this->assertCount(50, UserModel::all());
         $this->assertCount(50, ProfileModel::all());
@@ -170,12 +170,12 @@ class UserGridTest extends TestCase
             ->seeInElement('td', $user->mobile)
             ->seeElement("img[src='{$user->avatar}']")
             ->seeInElement('td', "{$user->profile->first_name} {$user->profile->last_name}")
-            ->seeInElement('td', $user->postcode)
-            ->seeInElement('td', $user->address)
+            ->seeInElement('td', $user->profile->postcode)
+            ->seeInElement('td', $user->profile->address)
             ->seeInElement('td', "{$user->profile->latitude} {$user->profile->longitude}")
-            ->seeInElement('td', $user->color)
-            ->seeInElement('td', $user->start_at)
-            ->seeInElement('td', $user->end_at);
+            ->seeInElement('td', $user->profile->color)
+            ->seeInElement('td', $user->profile->start_at)
+            ->seeInElement('td', $user->profile->end_at);
     }
 
     public function testDisplayCallback()
@@ -193,11 +193,11 @@ class UserGridTest extends TestCase
 
     public function testHasManyRelation()
     {
-        factory(\Tests\Models\User::class, 10)
+        \Tests\Models\User::factory()->count(10)
             ->create()
             ->each(function ($u) {
-                $u->profile()->save(factory(\Tests\Models\Profile::class)->make());
-                $u->tags()->saveMany(factory(\Tests\Models\Tag::class, 5)->make());
+                $u->profile()->save(\Tests\Models\Profile::factory()->make());
+                $u->tags()->saveMany(\Tests\Models\Tag::factory()->count(5)->make());
             });
 
         $this->visit('admin/users')
@@ -212,7 +212,7 @@ class UserGridTest extends TestCase
 
         $this->visit('admin/users');
 
-        $this->assertCount(15, $this->crawler()->filter('td a i[class*=fa-edit]'));
+        $this->assertCount(15, $this->crawler()->filter('td a i[class*=fa-pen-to-square]'));
         $this->assertCount(15, $this->crawler()->filter('td a i[class*=fa-trash]'));
     }
 

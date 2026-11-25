@@ -2,8 +2,9 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateTestTables extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -79,6 +80,13 @@ class CreateTestTables extends Migration
             $table->index(['user_id', 'tag_id']);
             $table->timestamps();
         });
+
+        Schema::create('test_posts', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('title');
+            $table->timestamps();
+            $table->softDeletes();
+        });
     }
 
     /**
@@ -95,5 +103,6 @@ class CreateTestTables extends Migration
         Schema::dropIfExists('test_user_profiles');
         Schema::dropIfExists('test_tags');
         Schema::dropIfExists('test_user_tags');
+        Schema::dropIfExists('test_posts');
     }
-}
+};

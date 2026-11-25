@@ -103,4 +103,5 @@ return [
     'menu_titles'            => [],
     'prev'                   => 'Sebelumnya',
     'next'                   => 'Selanjutnya',
+    'language'               => 'Bahasa',
 ];

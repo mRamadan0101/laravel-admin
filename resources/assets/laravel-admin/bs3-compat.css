@@ -1,0 +1,411 @@
+/*
+ * Bootstrap 3 / AdminLTE 2 class names that laravel-admin 1.x extensions and
+ * user views commonly rely on, mapped onto Bootstrap 5 / AdminLTE 4.
+ */
+
+.hide,
+.hidden {
+    display: none !important;
+}
+
+.show-inline {
+    display: inline !important;
+}
+
+.pull-right {
+    float: right !important;
+}
+
+.pull-left {
+    float: left !important;
+}
+
+[dir="rtl"] .pull-right {
+    float: left !important;
+}
+
+[dir="rtl"] .pull-left {
+    float: right !important;
+}
+
+.center-block {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+.no-margin {
+    margin: 0 !important;
+}
+
+.no-padding {
+    padding: 0 !important;
+}
+
+.no-border {
+    border: 0 !important;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-inline {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    gap: .5rem;
+}
+
+.form-inline .form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+}
+
+.form-inline .form-control {
+    display: inline-block;
+    width: auto;
+}
+
+.control-label {
+    padding-top: calc(.375rem + 1px);
+    margin-bottom: 0;
+}
+
+.help-block {
+    display: block;
+    margin-top: .25rem;
+    font-size: .875em;
+    color: var(--bs-secondary-color);
+}
+
+.has-error .help-block,
+.has-error .control-label {
+    color: var(--bs-form-invalid-color);
+}
+
+.input-group-addon {
+    display: flex;
+    align-items: center;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--bs-body-color);
+    background-color: var(--bs-tertiary-bg);
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+}
+
+.input-group-btn {
+    display: flex;
+}
+
+.input-group > .input-group-btn > .btn {
+    position: relative;
+    border-radius: 0;
+}
+
+.btn-default {
+    --bs-btn-color: var(--bs-body-color);
+    --bs-btn-bg: var(--bs-tertiary-bg);
+    --bs-btn-border-color: var(--bs-border-color);
+    --bs-btn-hover-color: var(--bs-body-color);
+    --bs-btn-hover-bg: var(--bs-secondary-bg);
+    --bs-btn-hover-border-color: var(--bs-border-color);
+    --bs-btn-active-color: var(--bs-body-color);
+    --bs-btn-active-bg: var(--bs-secondary-bg);
+    --bs-btn-active-border-color: var(--bs-border-color);
+}
+
+.btn-xs {
+    --bs-btn-padding-y: .125rem;
+    --bs-btn-padding-x: .375rem;
+    --bs-btn-font-size: .75rem;
+    --bs-btn-border-radius: var(--bs-border-radius-sm);
+}
+
+.btn-flat {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+/* AdminLTE 2 social buttons */
+.btn-twitter,
+.btn-facebook,
+.btn-dropbox,
+.btn-instagram,
+.btn-github,
+.btn-google {
+    --bs-btn-color: #fff;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-active-color: #fff;
+    --bs-btn-border-color: rgba(0, 0, 0, .2);
+    --bs-btn-hover-border-color: rgba(0, 0, 0, .2);
+}
+
+.btn-twitter { --bs-btn-bg: #55acee; --bs-btn-hover-bg: #2795e9; --bs-btn-active-bg: #2795e9; }
+.btn-facebook { --bs-btn-bg: #3b5998; --bs-btn-hover-bg: #2d4373; --bs-btn-active-bg: #2d4373; }
+.btn-dropbox { --bs-btn-bg: #1087dd; --bs-btn-hover-bg: #0d6aad; --bs-btn-active-bg: #0d6aad; }
+.btn-instagram { --bs-btn-bg: #3f729b; --bs-btn-hover-bg: #305777; --bs-btn-active-bg: #305777; }
+.btn-github { --bs-btn-bg: #444; --bs-btn-hover-bg: #2b2b2b; --bs-btn-active-bg: #2b2b2b; }
+.btn-google { --bs-btn-bg: #dd4b39; --bs-btn-hover-bg: #c23321; --bs-btn-active-bg: #c23321; }
+
+/* labels -> badges */
+.label {
+    display: inline-block;
+    padding: .35em .65em;
+    font-size: .75em;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: var(--bs-border-radius);
+}
+
+.label-default { background-color: var(--bs-secondary); }
+.label-primary { background-color: var(--bs-primary); }
+.label-success { background-color: var(--bs-success); }
+.label-info { background-color: var(--bs-info); color: #000; }
+.label-warning { background-color: var(--bs-warning); color: #000; }
+.label-danger { background-color: var(--bs-danger); }
+
+/* AdminLTE 2 colors */
+.bg-red, .bg-maroon, .bg-fuchsia { background-color: var(--bs-danger) !important; color: #fff !important; }
+.bg-yellow, .bg-orange { background-color: var(--bs-warning) !important; color: #000 !important; }
+.bg-aqua, .bg-light-blue, .bg-teal { background-color: var(--bs-info) !important; color: #000 !important; }
+.bg-blue, .bg-navy, .bg-purple { background-color: var(--bs-primary) !important; color: #fff !important; }
+.bg-green, .bg-olive, .bg-lime { background-color: var(--bs-success) !important; color: #fff !important; }
+.bg-gray, .bg-grey { background-color: var(--bs-secondary) !important; color: #fff !important; }
+.bg-black { background-color: var(--bs-dark) !important; color: #fff !important; }
+
+.text-red, .text-maroon, .text-fuchsia { color: var(--bs-danger) !important; }
+.text-yellow, .text-orange { color: var(--bs-warning) !important; }
+.text-aqua, .text-light-blue, .text-teal { color: var(--bs-info) !important; }
+.text-blue, .text-navy, .text-purple { color: var(--bs-primary) !important; }
+.text-green, .text-olive, .text-lime { color: var(--bs-success) !important; }
+.text-gray, .text-grey { color: var(--bs-secondary-color) !important; }
+
+/* AdminLTE 2 boxes */
+.box {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    margin-bottom: 1rem;
+    word-wrap: break-word;
+    background-color: var(--bs-body-bg);
+    border-top: 3px solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    box-shadow: 0 0 1px rgba(0, 0, 0, .125), 0 1px 3px rgba(0, 0, 0, .2);
+}
+
+.box.box-primary { border-top-color: var(--bs-primary); }
+.box.box-info { border-top-color: var(--bs-info); }
+.box.box-success { border-top-color: var(--bs-success); }
+.box.box-warning { border-top-color: var(--bs-warning); }
+.box.box-danger { border-top-color: var(--bs-danger); }
+
+.box-header {
+    position: relative;
+    padding: .75rem 1.25rem;
+}
+
+.box-header.with-border {
+    border-bottom: 1px solid var(--bs-border-color);
+}
+
+.box-header::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.box-title {
+    display: inline-block;
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.box-tools {
+    float: right;
+}
+
+.box-body {
+    padding: 1.25rem;
+    flex: 1 1 auto;
+}
+
+.box-footer {
+    padding: .75rem 1.25rem;
+    border-top: 1px solid var(--bs-border-color);
+}
+
+.box-footer::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.panel {
+    margin-bottom: 1rem;
+    background-color: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+}
+
+.panel-heading {
+    padding: .5rem 1rem;
+    border-bottom: 1px solid var(--bs-border-color);
+}
+
+.panel-body {
+    padding: 1rem;
+}
+
+.panel-footer {
+    padding: .5rem 1rem;
+    border-top: 1px solid var(--bs-border-color);
+    background-color: var(--bs-tertiary-bg);
+}
+
+/* bare links inside dropdown menus */
+.dropdown-menu > li > a:not(.dropdown-item) {
+    display: block;
+    width: 100%;
+    padding: var(--bs-dropdown-item-padding-y) var(--bs-dropdown-item-padding-x);
+    clear: both;
+    font-weight: 400;
+    color: var(--bs-dropdown-link-color);
+    text-align: inherit;
+    white-space: nowrap;
+    text-decoration: none;
+    background-color: transparent;
+    border: 0;
+}
+
+.dropdown-menu > li > a:not(.dropdown-item):hover,
+.dropdown-menu > li > a:not(.dropdown-item):focus {
+    color: var(--bs-dropdown-link-hover-color);
+    background-color: var(--bs-dropdown-link-hover-bg);
+}
+
+.dropdown-menu > li.divider {
+    height: 0;
+    margin: var(--bs-dropdown-divider-margin-y) 0;
+    overflow: hidden;
+    border-top: 1px solid var(--bs-dropdown-divider-bg);
+}
+
+/* bare <li><a> tabs */
+.nav-tabs > li:not(.nav-item) > a {
+    display: block;
+    padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);
+    margin-bottom: calc(-1 * var(--bs-nav-tabs-border-width));
+    border: var(--bs-nav-tabs-border-width) solid transparent;
+    border-top-left-radius: var(--bs-nav-tabs-border-radius);
+    border-top-right-radius: var(--bs-nav-tabs-border-radius);
+    text-decoration: none;
+}
+
+.nav-tabs > li.active:not(.nav-item) > a {
+    color: var(--bs-nav-tabs-link-active-color);
+    background-color: var(--bs-nav-tabs-link-active-bg);
+    border-color: var(--bs-nav-tabs-link-active-border-color);
+}
+
+.tab-content > .tab-pane.active {
+    display: block;
+}
+
+.modal-header .close {
+    order: 2;
+    margin-left: auto;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    font-size: 1.5rem;
+    line-height: 1;
+    opacity: .5;
+}
+
+.well {
+    min-height: 20px;
+    padding: 19px;
+    margin-bottom: 20px;
+    background-color: var(--bs-tertiary-bg);
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+}
+
+.img-circle {
+    border-radius: 50%;
+}
+
+.img-responsive {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.table-condensed > :not(caption) > * > * {
+    padding: .25rem .25rem;
+}
+
+.mailbox-attachments {
+    padding: 0;
+    list-style: none;
+}
+
+.mailbox-attachments li {
+    float: left;
+    margin: 0 10px 10px 0;
+    border: 1px solid var(--bs-border-color);
+}
+
+.mailbox-attachment-icon {
+    display: block;
+    text-align: center;
+    font-size: 65px;
+    color: var(--bs-secondary-color);
+    padding: 20px 10px;
+}
+
+.mailbox-attachment-icon.has-img {
+    padding: 0;
+}
+
+.mailbox-attachment-icon.has-img > img {
+    max-width: 100%;
+    height: auto;
+}
+
+.mailbox-attachment-info {
+    padding: 10px;
+    background: var(--bs-tertiary-bg);
+}
+
+.mailbox-attachment-name {
+    font-weight: bold;
+    color: var(--bs-body-color);
+    word-break: break-all;
+}
+
+.mailbox-attachment-size {
+    color: var(--bs-secondary-color);
+    font-size: 12px;
+}

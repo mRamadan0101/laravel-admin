@@ -17,11 +17,11 @@ class Orderable extends AbstractDisplayer
         return <<<EOT
 
 <div class="btn-group">
-    <button type="button" class="btn btn-xs btn-info {$this->grid->getGridRowName()}-orderable" data-id="{$this->getKey()}" data-direction="1">
-        <i class="fa fa-caret-up fa-fw"></i>
+    <button type="button" class="btn btn-sm btn-info {$this->grid->getGridRowName()}-orderable" data-id="{$this->getKey()}" data-direction="1">
+        <i class="fa-solid fa-caret-up fa-fw"></i>
     </button>
-    <button type="button" class="btn btn-xs btn-default {$this->grid->getGridRowName()}-orderable" data-id="{$this->getKey()}" data-direction="0">
-        <i class="fa fa-caret-down fa-fw"></i>
+    <button type="button" class="btn btn-sm btn-outline-secondary {$this->grid->getGridRowName()}-orderable" data-id="{$this->getKey()}" data-direction="0">
+        <i class="fa-solid fa-caret-down fa-fw"></i>
     </button>
 </div>
 

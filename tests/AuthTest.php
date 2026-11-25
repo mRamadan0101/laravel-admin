@@ -38,18 +38,48 @@ class AuthTest extends TestCase
             ->seeLink('laravel-admin-ext/backup', 'https://github.com/laravel-admin-extensions/backup')
             ->seeLink('laravel-admin-ext/media-manager', 'https://github.com/laravel-admin-extensions/media-manager')
 
-            ->see('Dependencies')
-            ->see('php')
-//            ->see('>=7.0.0')
-            ->see('laravel/framework');
+            ->see('Dependencies');
 
         $this
-            ->see('<span>Admin</span>')
-            ->see('<span>Users</span>')
-            ->see('<span>Roles</span>')
-            ->see('<span>Permission</span>')
-            ->see('<span>Operation log</span>')
-            ->see('<span>Menu</span>');
+            ->seeInElement('.sidebar-menu .nav-link p', 'Admin')
+            ->seeInElement('.sidebar-menu .nav-link p', 'Users')
+            ->seeInElement('.sidebar-menu .nav-link p', 'Roles')
+            ->seeInElement('.sidebar-menu .nav-link p', 'Permission')
+            ->seeInElement('.sidebar-menu .nav-link p', 'Operation log')
+            ->seeInElement('.sidebar-menu .nav-link p', 'Menu');
+    }
+
+    public function testLoginIsThrottledAfterTooManyFailures()
+    {
+        config(['admin.auth.throttle.max_attempts' => 3]);
+
+        foreach (range(1, 3) as $attempt) {
+            $this->visit('admin/auth/login')
+                ->submitForm('Login', ['username' => 'admin', 'password' => 'wrong'])
+                ->seePageIs('admin/auth/login')
+                ->dontSee('Too many login attempts');
+        }
+
+        $this->visit('admin/auth/login')
+            ->submitForm('Login', ['username' => 'admin', 'password' => 'admin'])
+            ->seePageIs('admin/auth/login')
+            ->see('Too many login attempts')
+            ->dontSeeIsAuthenticated('admin');
+    }
+
+    public function testSuccessfulLoginClearsFailedAttempts()
+    {
+        config(['admin.auth.throttle.max_attempts' => 3]);
+
+        foreach (range(1, 2) as $attempt) {
+            $this->visit('admin/auth/login')
+                ->submitForm('Login', ['username' => 'admin', 'password' => 'wrong']);
+        }
+
+        $this->visit('admin/auth/login')
+            ->submitForm('Login', ['username' => 'admin', 'password' => 'admin'])
+            ->seeIsAuthenticated('admin')
+            ->seePageIs('admin');
     }
 
     public function testLogout()

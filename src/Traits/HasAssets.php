@@ -61,38 +61,45 @@ trait HasAssets
      * @var array
      */
     public static $baseCss = [
-        'vendor/laravel-admin/AdminLTE/bootstrap/css/bootstrap.min.css',
-        'vendor/laravel-admin/font-awesome/css/font-awesome.min.css',
-        'vendor/laravel-admin/laravel-admin/laravel-admin.css',
+        'vendor/laravel-admin/google-fonts/fonts.css',
+        'vendor/laravel-admin/fontawesome/css/all.min.css',
+        'vendor/laravel-admin/fontawesome/css/v4-shims.min.css',
+        'vendor/laravel-admin/overlayscrollbars/overlayscrollbars.min.css',
+        'vendor/laravel-admin/AdminLTE/dist/css/adminlte.min.css',
         'vendor/laravel-admin/nprogress/nprogress.css',
-        'vendor/laravel-admin/sweetalert2/dist/sweetalert2.css',
+        'vendor/laravel-admin/sweetalert2/sweetalert2.min.css',
         'vendor/laravel-admin/nestable/nestable.css',
         'vendor/laravel-admin/toastr/build/toastr.min.css',
-        'vendor/laravel-admin/bootstrap3-editable/css/bootstrap-editable.css',
-        'vendor/laravel-admin/google-fonts/fonts.css',
-        'vendor/laravel-admin/AdminLTE/dist/css/AdminLTE.min.css',
+        'vendor/laravel-admin/laravel-admin/laravel-admin.css',
     ];
+
+    /**
+     * Bootstrap 3 / AdminLTE 2 class aliases for extensions written against 1.x.
+     * Set to null to disable.
+     *
+     * @var string|null
+     */
+    public static $compatCss = 'vendor/laravel-admin/laravel-admin/bs3-compat.css';
 
     /**
      * @var array
      */
     public static $baseJs = [
-        'vendor/laravel-admin/AdminLTE/bootstrap/js/bootstrap.min.js',
-        'vendor/laravel-admin/AdminLTE/plugins/slimScroll/jquery.slimscroll.min.js',
-        'vendor/laravel-admin/AdminLTE/dist/js/app.min.js',
+        'vendor/laravel-admin/bootstrap/js/bootstrap.bundle.min.js',
+        'vendor/laravel-admin/overlayscrollbars/overlayscrollbars.browser.es6.min.js',
+        'vendor/laravel-admin/AdminLTE/dist/js/adminlte.min.js',
         'vendor/laravel-admin/jquery-pjax/jquery.pjax.js',
         'vendor/laravel-admin/nprogress/nprogress.js',
         'vendor/laravel-admin/nestable/jquery.nestable.js',
         'vendor/laravel-admin/toastr/build/toastr.min.js',
-        'vendor/laravel-admin/bootstrap3-editable/js/bootstrap-editable.min.js',
-        'vendor/laravel-admin/sweetalert2/dist/sweetalert2.min.js',
+        'vendor/laravel-admin/sweetalert2/sweetalert2.min.js',
         'vendor/laravel-admin/laravel-admin/laravel-admin.js',
     ];
 
     /**
      * @var string
      */
-    public static $jQuery = 'vendor/laravel-admin/AdminLTE/plugins/jQuery/jQuery-2.1.4.min.js';
+    public static $jQuery = 'vendor/laravel-admin/jquery/jquery.min.js';
 
     /**
      * @var array
@@ -116,7 +123,7 @@ trait HasAssets
         }
 
         if (!$css = static::getMinifiedCss()) {
-            $css = array_merge(static::$css, static::baseCss());
+            $css = static::orderedCss();
         }
 
         $css = array_filter(array_unique($css));
@@ -138,11 +145,51 @@ trait HasAssets
             return static::$baseCss = $css;
         }
 
-        $skin = config('admin.skin', 'skin-blue-light');
+        $css = static::$baseCss;
 
-        array_unshift(static::$baseCss, "vendor/laravel-admin/AdminLTE/dist/css/skins/{$skin}.min.css");
+        if (static::isRtl()) {
+            $css = str_replace('adminlte.min.css', 'adminlte.rtl.min.css', $css);
+        }
 
-        return static::$baseCss;
+        if (static::$compatCss) {
+            $css[] = static::$compatCss;
+        }
+
+        return $css;
+    }
+
+    /**
+     * Base css first, then plugin css, then laravel-admin's own stylesheets so they can override both.
+     *
+     * @return array
+     */
+    public static function orderedCss()
+    {
+        $css = array_values(array_unique(array_merge(static::baseCss(), static::$css)));
+
+        $own = array_filter($css, function ($path) {
+            return strpos($path, 'vendor/laravel-admin/laravel-admin/') !== false;
+        });
+
+        usort($own, function ($a, $b) {
+            return (strpos($a, 'bs3-compat') !== false ? 0 : 1) <=> (strpos($b, 'bs3-compat') !== false ? 0 : 1);
+        });
+
+        return array_merge(array_diff($css, $own), $own);
+    }
+
+    /**
+     * @return bool
+     */
+    public static function isRtl()
+    {
+        $rtl = config('admin.rtl');
+
+        if (is_bool($rtl)) {
+            return $rtl;
+        }
+
+        return self::localeIsRtl(app()->getLocale());
     }
 
     /**
@@ -230,7 +277,17 @@ trait HasAssets
             return self::$script = array_merge(self::$script, (array) $script);
         }
 
-        $script = array_unique(array_merge(static::$script, static::$deferredScript));
+        $script = collect(static::$script)
+            ->merge(static::$deferredScript)
+            ->unique()
+            ->map(function ($line) {
+                return $line;
+                //@see https://stackoverflow.com/questions/19509863/how-to-remove-js-comments-using-php
+                $pattern = '/(?:(?:\/\*(?:[^*]|(?:\*+[^*\/]))*\*+\/)|(?:(?<!\:|\\\|\')\/\/.*))/';
+                $line = preg_replace($pattern, '', $line);
+
+                return preg_replace('/\s+/', ' ', $line);
+            });
 
         return view('admin::partials.script', compact('script'));
     }
@@ -246,7 +303,13 @@ trait HasAssets
             return self::$style = array_merge(self::$style, (array) $style);
         }
 
-        return view('admin::partials.style', ['style' => array_unique(self::$style)]);
+        $style = collect(static::$style)
+            ->unique()
+            ->map(function ($line) {
+                return preg_replace('/\s+/', ' ', $line);
+            });
+
+        return view('admin::partials.style', compact('style'));
     }
 
     /**
@@ -275,7 +338,8 @@ trait HasAssets
         }
 
         static::$manifestData = json_decode(
-            file_get_contents(public_path(static::$manifest)), true
+            file_get_contents(public_path(static::$manifest)),
+            true
         );
 
         return static::$manifestData[$key];
@@ -311,5 +375,75 @@ trait HasAssets
     public function jQuery()
     {
         return admin_asset(static::$jQuery);
+    }
+
+    /**
+     * @param $component
+     */
+    public static function component($component, $data = [])
+    {
+        $string = view($component, $data)->render();
+
+        $dom = new \DOMDocument();
+
+        libxml_use_internal_errors(true);
+        $dom->loadHTML('<?xml encoding="utf-8" ?>'.$string);
+        libxml_use_internal_errors(false);
+
+        if ($head = $dom->getElementsByTagName('head')->item(0)) {
+            foreach ($head->childNodes as $child) {
+                if ($child instanceof \DOMElement) {
+                    if ($child->tagName == 'style' && !empty($child->nodeValue)) {
+                        static::style($child->nodeValue);
+                        continue;
+                    }
+
+                    if ($child->tagName == 'link' && $child->hasAttribute('href')) {
+                        static::css($child->getAttribute('href'));
+                    }
+
+                    if ($child->tagName == 'script') {
+                        if ($child->hasAttribute('src')) {
+                            static::js($child->getAttribute('src'));
+                        } else {
+                            static::script(';(function () {'.$child->nodeValue.'})();');
+                        }
+
+                        continue;
+                    }
+                }
+            }
+        }
+
+        $render = '';
+
+        if ($body = $dom->getElementsByTagName('body')->item(0)) {
+            foreach ($body->childNodes as $child) {
+                if ($child instanceof \DOMElement) {
+                    if ($child->tagName == 'style' && !empty($child->nodeValue)) {
+                        static::style($child->nodeValue);
+                        continue;
+                    }
+
+                    if ($child->tagName == 'script' && !empty($child->nodeValue)) {
+                        static::script(';(function () {'.$child->nodeValue.'})();');
+                        continue;
+                    }
+
+                    if ($child->tagName == 'template') {
+                        $html = '';
+                        foreach ($child->childNodes as $childNode) {
+                            $html .= $child->ownerDocument->saveHTML($childNode);
+                        }
+                        $html && static::html($html);
+                        continue;
+                    }
+                }
+
+                $render .= $body->ownerDocument->saveHTML($child);
+            }
+        }
+
+        return trim($render);
     }
 }

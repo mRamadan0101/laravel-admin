@@ -1,6 +1,6 @@
 <div class="{{$viewClass['form-group']}} {!! !$errors->has($errorKey) ? '' : 'has-error' !!}">
 
-<label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
+<label for="{{$id}}" class="{{$viewClass['label']}} col-form-label">{{$label}}</label>
 
     <div class="{{$viewClass['field']}}">
 
@@ -8,7 +8,7 @@
 
         <input type="hidden" name="{{$name}}"/>
 
-        <select class="form-control {{$class}}" style="width: 100%;" name="{{$name}}" {!! $attributes !!} >
+        <select class="form-select {{$class}}" style="width: 100%;" name="{{$name}}" {!! $attributes !!} >
             @if($groups)
                 @foreach($groups as $group)
                     <optgroup label="{{ $group['label'] }}">

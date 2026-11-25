@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\File;
 
 class UserSettingTest extends TestCase
 {
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -23,7 +23,7 @@ class UserSettingTest extends TestCase
             ->see('Password confirmation');
 
         $this->seeElement('input[value=Administrator]')
-            ->seeInElement('.box-body', 'administrator');
+            ->seeInElement('.card-body', 'administrator');
     }
 
     public function testUpdateName()
@@ -50,7 +50,21 @@ class UserSettingTest extends TestCase
 
         $avatar = Administrator::first()->avatar;
 
-        $this->assertEquals('http://localhost:8000/uploads/images/test.jpg', $avatar);
+        $this->assertMatchesRegularExpression('#^http://localhost:8000/uploads/images/[A-Za-z0-9]{40}\.jpg$#', $avatar);
+    }
+
+    public function testUpdateAvatarWithOriginalNameWhenUniqueNamesAreOff()
+    {
+        File::cleanDirectory(public_path('uploads/images'));
+
+        config(['admin.upload.unique_name' => false]);
+
+        $this->visit('admin/auth/setting')
+            ->attach(__DIR__.'/assets/test.jpg', 'avatar')
+            ->press('Submit')
+            ->seePageIs('admin/auth/setting');
+
+        $this->assertEquals('http://localhost:8000/uploads/images/test.jpg', Administrator::first()->avatar);
     }
 
     public function testUpdatePasswordConfirmation()
@@ -63,7 +77,7 @@ class UserSettingTest extends TestCase
         $this->visit('admin/auth/setting')
             ->submitForm('Submit', $data)
             ->seePageIs('admin/auth/setting')
-            ->see('The Password confirmation does not match.');
+            ->see('The Password field confirmation does not match.');
     }
 
     public function testUpdatePassword()

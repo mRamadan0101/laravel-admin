@@ -104,4 +104,5 @@ return [
     'next'                   => 'Volgende',
     'quick_create'           => 'Snel aanmaken',
     'menu_titles'            => [],
+    'language'               => 'Taal',
 ];

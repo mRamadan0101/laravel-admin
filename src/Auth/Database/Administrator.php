@@ -2,7 +2,7 @@
 
 namespace Encore\Admin\Auth\Database;
 
-use Encore\Admin\Traits\AdminBuilder;
+use Encore\Admin\Traits\DefaultDatetimeFormat;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Model;
@@ -16,9 +16,19 @@ use Illuminate\Support\Facades\Storage;
  */
 class Administrator extends Model implements AuthenticatableContract
 {
-    use Authenticatable, AdminBuilder, HasPermissions;
+    use Authenticatable;
+    use HasPermissions;
+    use DefaultDatetimeFormat;
 
     protected $fillable = ['username', 'password', 'name', 'avatar'];
+
+    protected $hidden = ['two_factor_secret', 'two_factor_recovery_codes'];
+
+    protected $casts = [
+        'two_factor_secret'         => 'encrypted',
+        'two_factor_recovery_codes' => 'encrypted:array',
+        'two_factor_confirmed_at'   => 'datetime',
+    ];
 
     /**
      * Create a new Eloquent model instance.
@@ -45,7 +55,7 @@ class Administrator extends Model implements AuthenticatableContract
      */
     public function getAvatarAttribute($avatar)
     {
-        if (url()->isValidUrl($avatar)) {
+        if ($avatar && url()->isValidUrl($avatar)) {
             return $avatar;
         }
 
@@ -65,7 +75,7 @@ class Administrator extends Model implements AuthenticatableContract
      *
      * @return BelongsToMany
      */
-    public function roles() : BelongsToMany
+    public function roles(): BelongsToMany
     {
         $pivotTable = config('admin.database.role_users_table');
 
@@ -79,12 +89,47 @@ class Administrator extends Model implements AuthenticatableContract
      *
      * @return BelongsToMany
      */
-    public function permissions() : BelongsToMany
+    public function permissions(): BelongsToMany
     {
         $pivotTable = config('admin.database.user_permissions_table');
 
         $relatedModel = config('admin.database.permissions_model');
 
         return $this->belongsToMany($relatedModel, $pivotTable, 'user_id', 'permission_id');
+    }
+
+    /**
+     * Whether the user finished setting up two-factor authentication.
+     *
+     * @return bool
+     */
+    public function hasTwoFactorEnabled(): bool
+    {
+        return !empty($this->two_factor_secret) && !is_null($this->two_factor_confirmed_at);
+    }
+
+    /**
+     * Consume a recovery code, each one works only once.
+     *
+     * @param string $code
+     *
+     * @return bool
+     */
+    public function useRecoveryCode($code): bool
+    {
+        $code = strtoupper(trim((string) $code));
+        $codes = (array) $this->two_factor_recovery_codes;
+
+        foreach ($codes as $index => $stored) {
+            if ($code !== '' && hash_equals($stored, $code)) {
+                unset($codes[$index]);
+
+                $this->forceFill(['two_factor_recovery_codes' => array_values($codes)])->save();
+
+                return true;
+            }
+        }
+
+        return false;
     }
 }

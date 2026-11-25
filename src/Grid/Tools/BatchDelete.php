@@ -24,9 +24,9 @@ class BatchDelete extends BatchAction
 
 $('{$this->getElementClass()}').on('click', function() {
 
-    swal({
+    $.admin.swal({
         title: "{$trans['delete_confirm']}",
-        type: "warning",
+        icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#DD6B55",
         confirmButtonText: "{$trans['confirm']}",
@@ -53,9 +53,9 @@ $('{$this->getElementClass()}').on('click', function() {
         var data = result.value;
         if (typeof data === 'object') {
             if (data.status) {
-                swal(data.message, '', 'success');
+                $.admin.swal(data.message, '', 'success');
             } else {
-                swal(data.message, '', 'error');
+                $.admin.swal(data.message, '', 'error');
             }
         }
     });

@@ -30,7 +30,7 @@ class LogController extends AdminController
         $grid->column('method')->display(function ($method) {
             $color = Arr::get(OperationLog::$methodColors, $method, 'grey');
 
-            return "<span class=\"badge bg-$color\">$method</span>";
+            return "<span class=\"badge text-bg-".admin_bs_color($color)."\">$method</span>";
         });
         $grid->column('path')->label('info');
         $grid->column('ip')->label('primary');
@@ -41,7 +41,7 @@ class LogController extends AdminController
                 return '<code>{}</code>';
             }
 
-            return '<pre>'.json_encode($input, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE).'</pre>';
+            return '<pre>'.json_encode($input, JSON_PRETTY_PRINT | JSON_HEX_TAG).'</pre>';
         });
 
         $grid->column('created_at', trans('admin.created_at'));

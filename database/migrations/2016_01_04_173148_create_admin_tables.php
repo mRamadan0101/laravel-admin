@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAdminTables extends Migration
+return new class extends Migration
 {
     /**
      * {@inheritdoc}
@@ -53,7 +53,7 @@ class CreateAdminTables extends Migration
             $table->integer('order')->default(0);
             $table->string('title', 50);
             $table->string('icon', 50);
-            $table->string('uri', 50)->nullable();
+            $table->string('uri')->nullable();
             $table->string('permission')->nullable();
 
             $table->timestamps();
@@ -116,4 +116,4 @@ class CreateAdminTables extends Migration
         Schema::dropIfExists(config('admin.database.role_menu_table'));
         Schema::dropIfExists(config('admin.database.operation_log_table'));
     }
-}
+};

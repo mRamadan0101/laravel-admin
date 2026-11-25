@@ -9,4 +9,5 @@ Route::group([
     $router->resource('multiple-images', MultipleImageController::class);
     $router->resource('files', FileController::class);
     $router->resource('users', UserController::class);
+    $router->resource('posts', PostController::class);
 });

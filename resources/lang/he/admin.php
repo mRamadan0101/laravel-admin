@@ -76,4 +76,5 @@ return [
     ],
 
     'menu_titles' => [],
+    'language'               => 'שפה',
 ];

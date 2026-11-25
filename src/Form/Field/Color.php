@@ -5,11 +5,11 @@ namespace Encore\Admin\Form\Field;
 class Color extends Text
 {
     protected static $css = [
-        '/vendor/laravel-admin/AdminLTE/plugins/colorpicker/bootstrap-colorpicker.min.css',
+        '/vendor/laravel-admin/bootstrap-colorpicker/bootstrap-colorpicker.min.css',
     ];
 
     protected static $js = [
-        '/vendor/laravel-admin/AdminLTE/plugins/colorpicker/bootstrap-colorpicker.min.js',
+        '/vendor/laravel-admin/bootstrap-colorpicker/bootstrap-colorpicker.min.js',
     ];
 
     /**

@@ -87,4 +87,5 @@ return [
     'current_page'          => 'Página actual',
     'selected_rows'         => 'Filas seleccionadas',
     'menu_titles'           => [],
+    'language'               => 'Idioma',
 ];

@@ -101,4 +101,5 @@ return [
     'grid_items_selected' => '{n} 선택한 항목',
 
     'menu_titles' => [],
+    'language'               => '언어',
 ];

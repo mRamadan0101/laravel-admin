@@ -75,4 +75,5 @@ return [
         'range' => 'Wyświetlono :first do :last z wszystkich :total',
     ],
     'menu_titles'           => [],
+    'language'               => 'Język',
 ];

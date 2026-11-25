@@ -68,12 +68,26 @@ class Scope implements Renderable
     public function render()
     {
         if ($this->key == static::SEPARATOR) {
-            return '<li role="separator" class="divider"></li>';
+            return '<li><hr class="dropdown-divider"></li>';
         }
 
         $url = request()->fullUrlWithQuery([static::QUERY_NAME => $this->key]);
 
         return "<li><a href=\"{$url}\">{$this->label}</a></li>";
+    }
+
+    /**
+     * Set this scope as default.
+     *
+     * @return self
+     */
+    public function asDefault()
+    {
+        if (!request()->input('_scope_')) {
+            request()->merge(['_scope_' => $this->key]);
+        }
+
+        return $this;
     }
 
     /**

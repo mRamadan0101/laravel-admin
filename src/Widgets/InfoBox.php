@@ -34,7 +34,19 @@ class InfoBox extends Widget implements Renderable
             'info' => $info,
         ];
 
-        $this->class("small-box bg-$color");
+        $this->class('small-box '.static::colorClass($color));
+    }
+
+    /**
+     * Bootstrap 5 background class for the given color.
+     *
+     * @param string $color
+     *
+     * @return string
+     */
+    public static function colorClass($color)
+    {
+        return 'text-bg-'.admin_bs_color($color);
     }
 
     /**

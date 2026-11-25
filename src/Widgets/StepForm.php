@@ -149,15 +149,15 @@ class StepForm extends Form
         if ($index !== 0) {
             $step = $this->steps[$index - 1];
             $prevUrl = request()->fullUrlWithQuery(compact('step'));
-            $footer .= "<a href=\"{$prevUrl}\" class=\"btn btn-warning pull-left\">{$trans['prev']}</a>";
+            $footer .= "<a href=\"{$prevUrl}\" class=\"btn btn-warning float-start\">{$trans['prev']}</a>";
         }
 
         if ($index !== count($this->steps) - 1) {
-            $footer .= "<button class=\"btn btn-info pull-right\">{$trans['next']}</button>";
+            $footer .= "<button class=\"btn btn-info float-end\">{$trans['next']}</button>";
         }
 
         if ($index === count($this->steps) - 1) {
-            $footer .= "<button class=\"btn btn-info pull-right\">{$trans['submit']}</button>";
+            $footer .= "<button class=\"btn btn-info float-end\">{$trans['submit']}</button>";
         }
 
         $this->html($footer);

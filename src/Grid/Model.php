@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Database\Query\Expression;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
@@ -94,17 +94,12 @@ class Model
     protected $relation;
 
     /**
-     * @var array
-     */
-    protected $eagerLoads = [];
-
-    /**
      * Create a new grid model instance.
      *
      * @param EloquentModel $model
      * @param Grid          $grid
      */
-    public function __construct(EloquentModel $model, Grid $grid = null)
+    public function __construct(EloquentModel $model, ?Grid $grid = null)
     {
         $this->model = $model;
 
@@ -284,7 +279,7 @@ class Model
      *
      * @return $this
      */
-    public function collection(\Closure $callback = null)
+    public function collection(?\Closure $callback = null)
     {
         $this->collectionCallback = $callback;
 
@@ -378,7 +373,7 @@ class Model
         }
 
         if ($this->relation) {
-            $this->model = $this->relation->getQuery();
+            $this->model = $this->relation;
         }
 
         $this->setSort();
@@ -532,6 +527,9 @@ class Model
 
         $columnNameContainsDots = Str::contains($columnName, '.');
         $isRelation = $this->queries->contains(function ($query) use ($columnName) {
+            // relationship should be camel case
+            $columnName = Str::camel(Str::before($columnName, '.'));
+
             return $query['method'] === 'with' && in_array($columnName, $query['arguments'], true);
         });
         if ($columnNameContainsDots === true && $isRelation) {
@@ -545,7 +543,7 @@ class Model
                 $explodedCols = explode('.', $this->sort['column']);
                 $col = array_shift($explodedCols);
                 $parts = implode('.', $explodedCols);
-                $columnName = "{$col}->>'$.{$parts}'";
+                $columnName = "JSON_EXTRACT({$col}, '$.{$parts}')";
             }
 
             // get column. if contains "cast", set set column as cast
@@ -554,7 +552,7 @@ class Model
                 $method = 'orderByRaw';
                 $arguments = [$column];
             } else {
-                $column = $columnName;
+                $column = $columnNameContainsDots ? new Expression($columnName) : $columnName;
                 $method = 'orderBy';
                 $arguments = [$column, $this->sort['type']];
             }
@@ -576,6 +574,8 @@ class Model
     protected function setRelationSort($column)
     {
         list($relationName, $relationColumn) = explode('.', $column);
+        // relationship should be camel case
+        $relationName = Str::camel($relationName);
 
         if ($this->queries->contains(function ($query) use ($relationName) {
             return $query['method'] == 'with' && in_array($relationName, $query['arguments']);
@@ -632,11 +632,9 @@ class Model
         $relatedTable = $relation->getRelated()->getTable();
 
         if ($relation instanceof BelongsTo) {
-            $foreignKeyMethod = version_compare(app()->version(), '5.8.0', '<') ? 'getForeignKey' : 'getForeignKeyName';
-
             return [
                 $relatedTable,
-                $relation->{$foreignKeyMethod}(),
+                $relation->getForeignKeyName(),
                 '=',
                 $relatedTable.'.'.$relation->getRelated()->getKeyName(),
             ];
@@ -668,42 +666,6 @@ class Model
         ]);
 
         return $this;
-    }
-
-    /**
-     * Set the relationships that should be eager loaded.
-     *
-     * @param mixed $relations
-     *
-     * @return $this|Model
-     */
-    public function with($relations)
-    {
-        if (is_array($relations)) {
-            if (Arr::isAssoc($relations)) {
-                $relations = array_keys($relations);
-            }
-
-            $this->eagerLoads = array_merge($this->eagerLoads, $relations);
-        }
-
-        if (is_string($relations)) {
-            if (Str::contains($relations, '.')) {
-                $relations = explode('.', $relations)[0];
-            }
-
-            if (Str::contains($relations, ':')) {
-                $relations = explode(':', $relations)[0];
-            }
-
-            if (in_array($relations, $this->eagerLoads)) {
-                return $this;
-            }
-
-            $this->eagerLoads[] = $relations;
-        }
-
-        return $this->__call('with', (array) $relations);
     }
 
     /**

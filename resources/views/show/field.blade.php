@@ -1,16 +1,16 @@
 <div class="form-group ">
-    <label class="col-sm-{{$width['label']}} control-label">{{ $label }}</label>
+    <label class="col-sm-{{$width['label']}} col-form-label">{{ $label }}</label>
     <div class="col-sm-{{$width['field']}}">
         @if($wrapped)
-        <div class="box box-solid box-default no-margin box-show">
-            <!-- /.box-header -->
-            <div class="box-body">
+        <div class="card m-0 box-show">
+            <!-- /.card-header -->
+            <div class="card-body">
                 @if($escape)
                     {{ $content }}&nbsp;
                 @else
                     {!! $content !!}&nbsp;
                 @endif
-            </div><!-- /.box-body -->
+            </div><!-- /.card-body -->
         </div>
         @else
             @if($escape)

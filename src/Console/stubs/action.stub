@@ -19,7 +19,7 @@ DummyInteractor
     public function html()
     {
         return <<<HTML
-        <a class="btn btn-sm btn-default DummySelector">DummyName</a>
+        <a class="btn btn-sm btn-outline-secondary DummySelector">DummyName</a>
 HTML;
     }
 }

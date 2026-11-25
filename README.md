@@ -1,87 +1,129 @@
 <p align="center">
-<a href="https://laravel-admin.org/">
+<a href="https://github.com/mRamadan0101/laravel-admin">
 <img src="https://laravel-admin.org/images/logo002.png" alt="laravel-admin">
 </a>
+</p>
+## Contributors
 
-<p align="center">⛵<code>laravel-admin</code> is administrative interface builder for laravel which can help you build CRUD backends just with few lines of code.</p>
+Thanks to everyone who has contributed to this project!
+
+<a href="https://github.com/mramadan0101/laravel-admin/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=maddog888/laravel-admin" />
+</a>
+<p align="center">Administrative interface builder for Laravel. Build CRUD backends with a few lines of code.</p>
 
 <p align="center">
-<a href="https://laravel-admin.org/docs">Documentation</a> |
-<a href="https://laravel-admin.org/docs/zh">中文文档</a> |
-<a href="https://demo.laravel-admin.org">Demo</a> |
-<a href="https://github.com/z-song/demo.laravel-admin.org">Demo source code</a> |
-<a href="#extensions">Extensions</a>
+<a href="https://github.com/mRamadan0101/laravel-admin">Repository</a> |
+<a href="UPGRADE.md">Upgrade guide</a> |
+<a href="#extensions">Extensions</a> |
+<a href="CONTRIBUTING.md">Contribute</a>
 </p>
 
 <p align="center">
-    <a href="https://travis-ci.org/z-song/laravel-admin">
-        <img src="https://travis-ci.org/z-song/laravel-admin.svg?branch=master" alt="Build Status">
+    <a href="https://github.com/mRamadan0101/laravel-admin/actions/workflows/tests.yml">
+        <img src="https://github.com/mRamadan0101/laravel-admin/actions/workflows/tests.yml/badge.svg" alt="Tests">
     </a>
-    <a href="https://styleci.io/repos/48796179">
-        <img src="https://styleci.io/repos/48796179/shield" alt="StyleCI">
+    <a href="https://github.com/mRamadan0101/laravel-admin">
+        <img src="https://img.shields.io/badge/PHP-8.2%2B-777BB4?style=flat-square" alt="PHP 8.2+">
     </a>
-    <a href="https://packagist.org/packages/encore/laravel-admin">
-        <img src="https://img.shields.io/packagist/l/encore/laravel-admin.svg?maxAge=2592000&&style=flat-square" alt="Packagist">
+    <a href="https://github.com/mRamadan0101/laravel-admin">
+        <img src="https://img.shields.io/badge/Laravel-10%20%7C%2011%20%7C%2012-FF2D20?style=flat-square" alt="Laravel 10 to 12">
     </a>
-    <a href="https://packagist.org/packages/encore/laravel-admin">
-        <img src="https://img.shields.io/packagist/dt/encore/laravel-admin.svg?style=flat-square" alt="Total Downloads">
+    <a href="https://packagist.org/packages/mramadan0101/laravel-admin">
+        <img src="https://img.shields.io/packagist/v/mramadan0101/laravel-admin.svg?style=flat-square" alt="Packagist">
     </a>
-    <a href="https://github.com/z-song/laravel-admin">
-        <img src="https://img.shields.io/badge/Awesome-Laravel-brightgreen.svg?style=flat-square" alt="Awesome Laravel">
-    </a>
-    <a href="#backers" alt="sponsors on Open Collective">
-        <img src="https://opencollective.com/laravel-admin/backers/badge.svg?style=flat-square" />
-    </a> 
-    <a href="https://www.paypal.me/zousong" alt="Paypal donate">
-        <img src="https://img.shields.io/badge/Donate-Paypal-green.svg?style=flat-square" />
-    </a> 
-</div>
-
-<p align="center">
-    Inspired by <a href="https://github.com/sleeping-owl/admin" target="_blank">SleepingOwlAdmin</a> and <a href="https://github.com/zofe/rapyd-laravel" target="_blank">rapyd-laravel</a>.
 </p>
 
-Screenshots
-------------
-
-![laravel-admin](https://cloud.githubusercontent.com/assets/1479100/19625297/3b3deb64-9947-11e6-807c-cffa999004be.jpg)
+<p align="center">
+    Maintained independently from <a href="https://github.com/z-song/laravel-admin">z-song/laravel-admin</a>.
+    The PHP namespace stays <code>Encore\Admin</code>. The Packagist name is <code>mramadan0101/laravel-admin</code>.
+</p>
 
 Requirements
 ------------
- - PHP >= 7.0.0
- - Laravel >= 5.5.0
- - Fileinfo PHP Extension
+
+- PHP >= 8.2
+- Laravel 10, 11 or 12
+- Fileinfo PHP Extension
+
+Versions
+------------
+
+| Version | Branch   | PHP       | Laravel | Frontend                                              | Status |
+|---------|----------|-----------|---------|-------------------------------------------------------|--------|
+| 2.x     | `master` | 8.2+      | 10 – 12 | AdminLTE 4, Bootstrap 5.3, jQuery 3.7, Font Awesome 6 | active |
+| 1.x     | `1.x`    | 7.2 – 8.x | 6 – 8   | AdminLTE 2, Bootstrap 3.4.1, jQuery 3.7 + migrate, FA 4 | legacy |
+
+`master` is the 2.x line. Upgrading an existing 1.x app? Read [UPGRADE.md](UPGRADE.md).
 
 Installation
 ------------
 
-> This package requires PHP 7+ and Laravel 5.5, for old versions please refer to [1.4](https://laravel-admin.org/docs/v1.4/#/)
-
-First, install laravel 5.5, and make sure that the database connection settings are correct.
-
-```
-composer require encore/laravel-admin
+```bash
+composer require mramadan0101/laravel-admin
 ```
 
-Then run these commands to publish assets and config：
+Do not install this next to the original `encore/laravel-admin` package. Both ship the `Encore\Admin` namespace, so remove the old one first if it is already in the application.
 
-```
+Publish the assets and install the admin tables:
+
+```bash
 php artisan vendor:publish --provider="Encore\Admin\AdminServiceProvider"
-```
-After run command you can find config file in `config/admin.php`, in this file you can change the install directory,db connection or table names.
-
-At last run following command to finish install.
-```
 php artisan admin:install
 ```
 
-Open `http://localhost/admin/` in browser,use username `admin` and password `admin` to login.
+The config file is `config/admin.php`. It controls the route prefix, database connection, and table names.
+
+Open `http://localhost/admin/` and log in with username `admin` and password `admin`.
 
 Configurations
 ------------
-The file `config/admin.php` contains an array of configurations, you can find the default configurations in there.
+
+`config/admin.php` holds the admin settings.
+
+Right to left support
+------------
+
+The RTL build of AdminLTE loads automatically for right-to-left locales (`ar`, `fa`, `he`, `ur`, ...).
+Set `rtl` in `config/admin.php` to `true` or `false` to force it on or off.
+
+Dark mode
+------------
+
+Set `theme` in `config/admin.php` to `light`, `dark` or `auto`. Users can switch the color mode from the navbar.
+
+Global search
+------------
+
+The navbar search box (`/` or `Ctrl+K`) searches the menu and every model you register, for example in `app/Admin/bootstrap.php`:
+
+```php
+Admin::globalSearch(App\Models\Post::class)
+    ->label('Posts')
+    ->columns(['title', 'author.name'])   // `relation.column` searches through a relation
+    ->subtitle('author.name')
+    ->url('posts/{id}/edit')
+    ->permission('posts');                // hidden from users without this permission
+```
+
+You can also list resources under `global_search.resources` in `config/admin.php`.
+
+Trash for soft deletes
+------------
+
+For models that use `SoftDeletes`, `$grid->enableTrash()` adds an *All / Trash* switch to the grid. Deleting a row still only soft-deletes it. In the trash view each row, or a batch selection, can be restored or deleted permanently.
+
+Security
+------------
+
+- **Two-factor authentication**: each admin can turn on TOTP (Google Authenticator, Authy, 1Password, ...) from *Settings*. Recovery codes are included. Disable the feature with `ADMIN_TWO_FACTOR=false`.
+- **Login throttling**: 5 failed attempts per username and IP lock the login for 60 seconds (`auth.throttle`).
+- **Operation log**: passwords, tokens and 2FA codes are masked. Add more keys in `operation_log.hidden_fields`.
+- **Uploads**: files get random names so they can't overwrite each other. Use `->originalName()` to keep the client file name.
 
 ## Extensions
+
+These extensions were written for laravel-admin 1.x. Check each one before using it with 2.x.
 
 | Extension                                        | Description                              | laravel-admin                              |
 | ------------------------------------------------ | ---------------------------------------- |---------------------------------------- |
@@ -112,47 +154,36 @@ The file `config/admin.php` contains an array of configurations, you can find th
 | [cropper](https://github.com/laravel-admin-extensions/cropper) | A simple jQuery image cropping plugin.          |~1.6 |
 | [composer-viewer](https://github.com/laravel-admin-extensions/composer-viewer) | A web interface of composer packages in laravel.          |~1.6 |
 | [data-table](https://github.com/laravel-admin-extensions/data-table) | Advanced table widget for laravel-admin |~1.6 |
+| [watermark](https://github.com/laravel-admin-extensions/watermark) | Text watermark for laravel-admin |~1.6 |
+| [google-authenticator](https://github.com/ylic/laravel-admin-google-authenticator) | Google authenticator |~1.6 |
 
+## Contribute
 
-## Contributors
- This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
-<a href="graphs/contributors"><img src="https://opencollective.com/laravel-admin/contributors.svg?width=890&button=false" /></a>
- ## Backers
- Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/laravel-admin#backer)]
- <a href="https://opencollective.com/laravel-admin#backers" target="_blank"><img src="https://opencollective.com/laravel-admin/backers.svg?width=890"></a>
- ## Sponsors
- Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/laravel-admin#sponsor)]
- <a href="https://opencollective.com/laravel-admin/sponsor/0/website" target="_blank"><img src="https://opencollective.com/laravel-admin/sponsor/0/avatar.svg"></a>
-<a href="https://opencollective.com/laravel-admin/sponsor/1/website" target="_blank"><img src="https://opencollective.com/laravel-admin/sponsor/1/avatar.svg"></a>
-<a href="https://opencollective.com/laravel-admin/sponsor/2/website" target="_blank"><img src="https://opencollective.com/laravel-admin/sponsor/2/avatar.svg"></a>
-<a href="https://opencollective.com/laravel-admin/sponsor/3/website" target="_blank"><img src="https://opencollective.com/laravel-admin/sponsor/3/avatar.svg"></a>
-<a href="https://opencollective.com/laravel-admin/sponsor/4/website" target="_blank"><img src="https://opencollective.com/laravel-admin/sponsor/4/avatar.svg"></a>
-<a href="https://opencollective.com/laravel-admin/sponsor/5/website" target="_blank"><img src="https://opencollective.com/laravel-admin/sponsor/5/avatar.svg"></a>
-<a href="https://opencollective.com/laravel-admin/sponsor/6/website" target="_blank"><img src="https://opencollective.com/laravel-admin/sponsor/6/avatar.svg"></a>
-<a href="https://opencollective.com/laravel-admin/sponsor/7/website" target="_blank"><img src="https://opencollective.com/laravel-admin/sponsor/7/avatar.svg"></a>
-<a href="https://opencollective.com/laravel-admin/sponsor/8/website" target="_blank"><img src="https://opencollective.com/laravel-admin/sponsor/8/avatar.svg"></a>
-<a href="https://opencollective.com/laravel-admin/sponsor/9/website" target="_blank"><img src="https://opencollective.com/laravel-admin/sponsor/9/avatar.svg"></a>
+Bug reports and pull requests are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) for how to report a bug and how the `master` and `1.x` branches differ.
+
+<a href="https://github.com/mRamadan0101/laravel-admin/graphs/contributors">People who already contributed</a>
 
 Other
 ------------
-`laravel-admin` based on following plugins or services:
 
-+ [Laravel](https://laravel.com/)
-+ [AdminLTE](https://adminlte.io/)
-+ [Datetimepicker](http://eonasdan.github.io/bootstrap-datetimepicker/)
-+ [font-awesome](http://fontawesome.io)
-+ [moment](http://momentjs.com/)
-+ [Google map](https://www.google.com/maps)
-+ [Tencent map](http://lbs.qq.com/)
-+ [bootstrap-fileinput](https://github.com/kartik-v/bootstrap-fileinput)
-+ [jquery-pjax](https://github.com/defunkt/jquery-pjax)
-+ [Nestable](http://dbushell.github.io/Nestable/)
-+ [toastr](http://codeseven.github.io/toastr/)
-+ [X-editable](http://github.com/vitalets/x-editable)
-+ [bootstrap-number-input](https://github.com/wpic/bootstrap-number-input)
-+ [fontawesome-iconpicker](https://github.com/itsjavi/fontawesome-iconpicker)
-+ [sweetalert2](https://github.com/sweetalert2/sweetalert2)
+2.x is built on:
+
+- [Laravel](https://laravel.com/)
+- [AdminLTE 4](https://adminlte.io/)
+- [Bootstrap 5](https://getbootstrap.com/)
+- [jQuery](https://jquery.com/)
+- [Font Awesome](https://fontawesome.com/)
+- [flatpickr](https://flatpickr.js.org/)
+- [select2](https://select2.org/)
+- [bootstrap-fileinput](https://github.com/kartik-v/bootstrap-fileinput)
+- [jquery-pjax](https://github.com/defunkt/jquery-pjax)
+- [Nestable](http://dbushell.github.io/Nestable/)
+- [toastr](https://github.com/CodeSeven/toastr)
+- [SweetAlert2](https://github.com/sweetalert2/sweetalert2)
+- [OverlayScrollbars](https://github.com/KingSora/OverlayScrollbars)
+- [fontawesome-iconpicker](https://github.com/farbelous/fontawesome-iconpicker)
 
 License
 ------------
+
 `laravel-admin` is licensed under [The MIT License (MIT)](LICENSE).

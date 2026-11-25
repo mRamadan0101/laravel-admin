@@ -185,8 +185,10 @@ if (!function_exists('array_delete')) {
      */
     function array_delete(&$array, $value)
     {
+        $value = \Illuminate\Support\Arr::wrap($value);
+
         foreach ($array as $index => $item) {
-            if ($value == $item) {
+            if (in_array($item, $value)) {
                 unset($array[$index]);
             }
         }
@@ -316,5 +318,71 @@ if (!function_exists('json_encode_options')) {
         $json = json_encode($data['options']);
 
         return str_replace($data['toReplace'], $data['original'], $json);
+    }
+}
+
+if (!function_exists('admin_get_route')) {
+    function admin_get_route(string $name): string
+    {
+        return config('admin.route.prefix').'.'.$name;
+    }
+}
+
+if (!function_exists('admin_bs_color')) {
+
+    /**
+     * Map AdminLTE 2 / Bootstrap 3 color names to Bootstrap 5 contextual colors.
+     *
+     * @param string $color
+     *
+     * @return string
+     */
+    function admin_bs_color($color)
+    {
+        $map = [
+            'default'    => 'secondary',
+            'aqua'       => 'info',
+            'light-blue' => 'info',
+            'teal'       => 'info',
+            'blue'       => 'primary',
+            'navy'       => 'primary',
+            'purple'     => 'primary',
+            'green'      => 'success',
+            'olive'      => 'success',
+            'lime'       => 'success',
+            'yellow'     => 'warning',
+            'orange'     => 'warning',
+            'red'        => 'danger',
+            'maroon'     => 'danger',
+            'fuchsia'    => 'danger',
+            'gray'       => 'secondary',
+            'grey'       => 'secondary',
+            'black'      => 'dark',
+        ];
+
+        return $map[$color] ?? $color;
+    }
+}
+
+if (!function_exists('admin_icon_class')) {
+
+    /**
+     * Build the class list for a stored icon value. Bare names like `fa-bars`
+     * get the `fa` prefix, values that carry their own style (`fab fa-github`,
+     * `fa-regular fa-bell`) are used as is.
+     *
+     * @param string|null $icon
+     *
+     * @return string
+     */
+    function admin_icon_class($icon)
+    {
+        $icon = trim((string) $icon);
+
+        if (preg_match('/(^|\s)(fa[bsrldt]|fa-(solid|regular|brands|light|duotone|thin))(\s|$)/', $icon)) {
+            return $icon;
+        }
+
+        return 'fa '.$icon;
     }
 }

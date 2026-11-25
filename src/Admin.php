@@ -25,7 +25,7 @@ class Admin
      *
      * @var string
      */
-    const VERSION = '1.7.9';
+    const VERSION = '2.1.0';
 
     /**
      * @var Navbar
@@ -106,7 +106,7 @@ class Admin
      *
      * @return \Encore\Admin\Tree
      */
-    public function tree($model, Closure $callable = null)
+    public function tree($model, ?Closure $callable = null)
     {
         return new Tree($this->getModel($model), $callable);
     }
@@ -133,7 +133,7 @@ class Admin
      *
      * @deprecated since v1.6.1
      */
-    public function content(Closure $callable = null)
+    public function content(?Closure $callable = null)
     {
         return new Content($callable);
     }
@@ -200,6 +200,18 @@ class Admin
     }
 
     /**
+     * Register a model in the navbar global search.
+     *
+     * @param string $model
+     *
+     * @return GlobalSearch\SearchResource
+     */
+    public function globalSearch($model)
+    {
+        return GlobalSearch\GlobalSearch::resource($model);
+    }
+
+    /**
      * Set admin title.
      *
      * @param string $title
@@ -226,13 +238,240 @@ class Admin
      *
      * @return string|void
      */
-    public function favicon($favicon = null)
+    public static function favicon($favicon = null)
     {
         if (is_null($favicon)) {
             return static::$favicon;
         }
 
         static::$favicon = $favicon;
+    }
+
+    /**
+     * Parse `admin.skin` into an accent color and a sidebar color mode.
+     *
+     * @return array{color: string, sidebar: string}
+     */
+    public function skin()
+    {
+        $skin = preg_replace('/^skin-/', '', (string) config('admin.skin', 'blue-light'));
+
+        $light = str_ends_with($skin, '-light');
+
+        $color = $light ? substr($skin, 0, -6) : $skin;
+
+        if (!in_array($color, ['blue', 'yellow', 'green', 'purple', 'red', 'black'], true)) {
+            $color = 'blue';
+        }
+
+        return ['color' => $color, 'sidebar' => $light ? 'light' : 'dark'];
+    }
+
+    /**
+     * CSS classes of the <body> element, derived from `admin.layout`.
+     *
+     * @return string
+     */
+    public function bodyClass()
+    {
+        $map = [
+            'fixed'            => 'layout-fixed fixed-header',
+            'fixed-footer'     => 'fixed-footer',
+            'sidebar-mini'     => 'sidebar-mini',
+            'sidebar-collapse' => 'sidebar-collapse',
+        ];
+
+        $classes = ['sidebar-expand-lg', 'bg-body-tertiary', 'skin-'.$this->skin()['color']];
+
+        foreach ((array) config('admin.layout', []) as $layout) {
+            $classes[] = $map[$layout] ?? $layout;
+        }
+
+        return implode(' ', array_unique($classes));
+    }
+
+    /**
+     * Initial Bootstrap color mode: light, dark or auto.
+     *
+     * @return string
+     */
+    public function theme()
+    {
+        $theme = config('admin.theme', 'light');
+
+        return in_array($theme, ['light', 'dark', 'auto'], true) ? $theme : 'light';
+    }
+
+    /**
+     * Locales that use a right-to-left layout.
+     *
+     * @var string[]
+     */
+    public const RTL_LOCALES = ['ar', 'fa', 'he', 'ur', 'ku', 'ps'];
+
+    /**
+     * Application locale captured before the admin switcher overrides it.
+     *
+     * @var string|null
+     */
+    protected static $defaultLocale;
+
+    /**
+     * Apply the locale stored by the navbar language switcher.
+     */
+    public function applyLocale()
+    {
+        if (is_null(static::$defaultLocale)) {
+            static::$defaultLocale = (string) config('app.locale');
+        }
+
+        if (!$this->localeSwitcherEnabled()) {
+            return;
+        }
+
+        $locale = session('admin.locale');
+
+        if (is_string($locale) && ($resolved = $this->resolveLocale($locale))) {
+            app()->setLocale($resolved);
+        }
+    }
+
+    /**
+     * Whether the navbar should show a language switcher.
+     *
+     * Shown when `admin.rtl` is `true` or a locale code such as `"ar"`.
+     *
+     * @return bool
+     */
+    public function localeSwitcherEnabled()
+    {
+        $rtl = config('admin.rtl');
+
+        if ($rtl === false || $rtl === null || $rtl === '') {
+            return false;
+        }
+
+        return count($this->locales()) > 1;
+    }
+
+    /**
+     * Locales offered by the navbar switcher: app language + RTL language.
+     *
+     * @return array<string, string>
+     */
+    public function locales()
+    {
+        $rtl = config('admin.rtl');
+        $locales = [];
+
+        $push = function ($code) use (&$locales) {
+            $code = str_replace('_', '-', trim((string) $code));
+
+            if ($code !== '') {
+                $locales[$code] = static::localeName($code);
+            }
+        };
+
+        $push(static::$defaultLocale ?: config('app.locale'));
+        $push(config('app.fallback_locale', 'en'));
+
+        if (is_string($rtl) && $rtl !== '') {
+            $push($rtl);
+        } elseif ($rtl === true) {
+            $push('ar');
+        }
+
+        return $locales;
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return string|null
+     */
+    public function resolveLocale($locale)
+    {
+        foreach (array_keys($this->locales()) as $code) {
+            if (static::localeCodesMatch($locale, $code)) {
+                return $code;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Native display name of a locale.
+     *
+     * @param string $locale
+     *
+     * @return string
+     */
+    public static function localeName($locale)
+    {
+        $names = [
+            'ar'    => 'العربية',
+            'az'    => 'Azərbaycan',
+            'bn'    => 'বাংলা',
+            'de'    => 'Deutsch',
+            'en'    => 'English',
+            'es'    => 'Español',
+            'fa'    => 'فارسی',
+            'fr'    => 'Français',
+            'he'    => 'עברית',
+            'id'    => 'Indonesia',
+            'ja'    => '日本語',
+            'ko'    => '한국어',
+            'ms'    => 'Bahasa Melayu',
+            'nl'    => 'Nederlands',
+            'pl'    => 'Polski',
+            'pt'    => 'Português',
+            'pt-BR' => 'Português (Brasil)',
+            'ru'    => 'Русский',
+            'tr'    => 'Türkçe',
+            'uk'    => 'Українська',
+            'ur'    => 'اردو',
+            'zh-CN' => '简体中文',
+            'zh-TW' => '繁體中文',
+        ];
+
+        $locale = str_replace('_', '-', (string) $locale);
+
+        if (isset($names[$locale])) {
+            return $names[$locale];
+        }
+
+        $short = strtolower(strstr($locale, '-', true) ?: $locale);
+
+        return $names[$short] ?? strtoupper($short);
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return bool
+     */
+    public static function localeIsRtl($locale)
+    {
+        return in_array(strtolower(substr((string) $locale, 0, 2)), self::RTL_LOCALES, true);
+    }
+
+    /**
+     * @param string $a
+     * @param string $b
+     *
+     * @return bool
+     */
+    public static function localeCodesMatch($a, $b)
+    {
+        $norm = function ($value) {
+            return strtolower(str_replace('_', '-', (string) $value));
+        };
+
+        $a = $norm($a);
+        $b = $norm($b);
+
+        return $a === $b || str_starts_with($a, $b.'-') || str_starts_with($b, $a.'-');
     }
 
     /**
@@ -264,7 +503,7 @@ class Admin
      *
      * @return Navbar
      */
-    public function navbar(Closure $builder = null)
+    public function navbar(?Closure $builder = null)
     {
         if (is_null($builder)) {
             return $this->getNavbar();
@@ -313,28 +552,38 @@ class Admin
 
         app('router')->group($attributes, function ($router) {
 
-            /* @var \Illuminate\Support\Facades\Route $router */
-            $router->namespace('\Encore\Admin\Controllers')->group(function ($router) {
+            /* @var \Illuminate\Routing\Router $router */
+            $router->resource('auth/users', Controllers\UserController::class)->names('admin.auth.users');
+            $router->resource('auth/roles', Controllers\RoleController::class)->names('admin.auth.roles');
+            $router->resource('auth/permissions', Controllers\PermissionController::class)->names('admin.auth.permissions');
+            $router->resource('auth/menu', Controllers\MenuController::class, ['except' => ['create']])->names('admin.auth.menu');
+            $router->resource('auth/logs', Controllers\LogController::class, ['only' => ['index', 'destroy']])->names('admin.auth.logs');
 
-                /* @var \Illuminate\Routing\Router $router */
-                $router->resource('auth/users', 'UserController')->names('admin.auth.users');
-                $router->resource('auth/roles', 'RoleController')->names('admin.auth.roles');
-                $router->resource('auth/permissions', 'PermissionController')->names('admin.auth.permissions');
-                $router->resource('auth/menu', 'MenuController', ['except' => ['create']])->names('admin.auth.menu');
-                $router->resource('auth/logs', 'LogController', ['only' => ['index', 'destroy']])->names('admin.auth.logs');
-
-                $router->post('_handle_form_', 'HandleController@handleForm')->name('admin.handle-form');
-                $router->post('_handle_action_', 'HandleController@handleAction')->name('admin.handle-action');
-            });
+            $router->post('_handle_form_', [Controllers\HandleController::class, 'handleForm'])->name('admin.handle-form');
+            $router->post('_handle_action_', [Controllers\HandleController::class, 'handleAction'])->name('admin.handle-action');
+            $router->get('_handle_selectable_', [Controllers\HandleController::class, 'handleSelectable'])->name('admin.handle-selectable');
+            $router->get('_handle_renderable_', [Controllers\HandleController::class, 'handleRenderable'])->name('admin.handle-renderable');
+            $router->get('_global_search_', [Controllers\GlobalSearchController::class, 'search'])->name('admin.global-search');
 
             $authController = config('admin.auth.controller', AuthController::class);
 
-            /* @var \Illuminate\Routing\Router $router */
-            $router->get('auth/login', $authController.'@getLogin')->name('admin.login');
-            $router->post('auth/login', $authController.'@postLogin');
-            $router->get('auth/logout', $authController.'@getLogout')->name('admin.logout');
-            $router->get('auth/setting', $authController.'@getSetting')->name('admin.setting');
-            $router->put('auth/setting', $authController.'@putSetting');
+            $router->get('auth/login', [$authController, 'getLogin'])->name('admin.login');
+            $router->post('auth/login', [$authController, 'postLogin']);
+            $router->get('auth/logout', [$authController, 'getLogout'])->name('admin.logout');
+            $router->get('auth/setting', [$authController, 'getSetting'])->name('admin.setting');
+            $router->put('auth/setting', [$authController, 'putSetting']);
+
+            if (config('admin.auth.two_factor.enable', true)) {
+                $router->get('auth/two-factor-challenge', [$authController, 'getTwoFactorChallenge'])->name('admin.two-factor.challenge');
+                $router->post('auth/two-factor-challenge', [$authController, 'postTwoFactorChallenge']);
+                $router->get('auth/two-factor', [Controllers\TwoFactorController::class, 'index'])->name('admin.two-factor');
+                $router->post('auth/two-factor', [Controllers\TwoFactorController::class, 'enable']);
+                $router->delete('auth/two-factor', [Controllers\TwoFactorController::class, 'disable']);
+                $router->post('auth/two-factor/recovery-codes', [Controllers\TwoFactorController::class, 'regenerateRecoveryCodes']);
+            }
+            $router->get('locale/{locale}', [Controllers\LocaleController::class, 'update'])
+                ->name('admin.locale')
+                ->where('locale', '[A-Za-z0-9_-]+');
         });
     }
 
@@ -372,6 +621,8 @@ class Admin
      */
     public function bootstrap()
     {
+        $this->applyLocale();
+
         $this->fireBootingCallbacks();
 
         require config('admin.bootstrap', admin_path('bootstrap.php'));
@@ -390,6 +641,37 @@ class Admin
 
         self::css($assets['css']);
         self::js($assets['js']);
+        self::js($this->localeAssets());
+        self::js('vendor/laravel-admin/laravel-admin/plugins.js');
+    }
+
+    /**
+     * Locale files of flatpickr and select2 that match the application locale.
+     *
+     * @return array
+     */
+    protected function localeAssets()
+    {
+        $locale = str_replace('_', '-', (string) config('app.locale'));
+        $short = strtolower(strstr($locale, '-', true) ?: $locale);
+        $assets = __DIR__.'/../resources/assets';
+        $js = [];
+
+        $candidates = [
+            'flatpickr/dist/l10n/' => [strtolower($locale), $short],
+            'select2/js/i18n/'     => [$locale, $short],
+        ];
+
+        foreach ($candidates as $dir => $names) {
+            foreach (array_unique($names) as $name) {
+                if ($name !== 'en' && is_file("{$assets}/{$dir}{$name}.js")) {
+                    $js[] = "vendor/laravel-admin/{$dir}{$name}.js";
+                    break;
+                }
+            }
+        }
+
+        return $js;
     }
 
     /**

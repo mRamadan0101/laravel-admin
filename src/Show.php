@@ -101,7 +101,7 @@ class Show implements Renderable
      *
      * @param \Closure $callback
      */
-    public static function init(\Closure $callback = null)
+    public static function init(?\Closure $callback = null)
     {
         static::$initCallback = $callback;
     }
@@ -341,7 +341,7 @@ class Show implements Renderable
     public function setWidth($fieldWidth = 8, $labelWidth = 2)
     {
         collect($this->fields)->each(function ($field) use ($fieldWidth, $labelWidth) {
-            $field->each->setWidth($fieldWidth, $labelWidth);
+            $field->setWidth($fieldWidth, $labelWidth);
         });
 
         return $this;

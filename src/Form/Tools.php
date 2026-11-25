@@ -179,8 +179,8 @@ class Tools implements Renderable
         $text = trans('admin.list');
 
         return <<<EOT
-<div class="btn-group pull-right" style="margin-right: 5px">
-    <a href="{$this->getListPath()}" class="btn btn-sm btn-default" title="$text"><i class="fa fa-list"></i><span class="hidden-xs">&nbsp;$text</span></a>
+<div class="btn-group float-end" style="margin-right: 5px">
+    <a href="{$this->getListPath()}" class="btn btn-sm btn-outline-secondary" title="$text"><i class="fa-solid fa-list"></i><span class="d-none d-sm-inline-block">&nbsp;$text</span></a>
 </div>
 EOT;
     }
@@ -195,9 +195,9 @@ EOT;
         $view = trans('admin.view');
 
         return <<<HTML
-<div class="btn-group pull-right" style="margin-right: 5px">
+<div class="btn-group float-end" style="margin-right: 5px">
     <a href="{$this->getViewPath()}" class="btn btn-sm btn-primary" title="{$view}">
-        <i class="fa fa-eye"></i><span class="hidden-xs"> {$view}</span>
+        <i class="fa-regular fa-eye"></i><span class="d-none d-sm-inline-block"> {$view}</span>
     </a>
 </div>
 HTML;
@@ -223,9 +223,9 @@ HTML;
 
 $('.{$class}-delete').unbind('click').click(function() {
 
-    swal({
+    $.admin.swal({
         title: "{$trans['delete_confirm']}",
-        type: "warning",
+        icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#DD6B55",
         confirmButtonText: "{$trans['confirm']}",
@@ -252,9 +252,9 @@ $('.{$class}-delete').unbind('click').click(function() {
         var data = result.value;
         if (typeof data === 'object') {
             if (data.status) {
-                swal(data.message, '', 'success');
+                $.admin.swal(data.message, '', 'success');
             } else {
-                swal(data.message, '', 'error');
+                $.admin.swal(data.message, '', 'error');
             }
         }
     });
@@ -265,9 +265,9 @@ SCRIPT;
         Admin::script($script);
 
         return <<<HTML
-<div class="btn-group pull-right" style="margin-right: 5px">
+<div class="btn-group float-end" style="margin-right: 5px">
     <a href="javascript:void(0);" class="btn btn-sm btn-danger {$class}-delete" title="{$trans['delete']}">
-        <i class="fa fa-trash"></i><span class="hidden-xs">  {$trans['delete']}</span>
+        <i class="fa-solid fa-trash"></i><span class="d-none d-sm-inline-block">  {$trans['delete']}</span>
     </a>
 </div>
 HTML;

@@ -7,11 +7,11 @@ class Icon extends Text
     protected $default = 'fa-pencil';
 
     protected static $css = [
-        '/vendor/laravel-admin/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.min.css',
+        '/vendor/laravel-admin/fontawesome-iconpicker/fontawesome-iconpicker.min.css',
     ];
 
     protected static $js = [
-        '/vendor/laravel-admin/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.min.js',
+        '/vendor/laravel-admin/fontawesome-iconpicker/fontawesome-iconpicker.min.js',
     ];
 
     public function render()
@@ -22,7 +22,7 @@ $('{$this->getElementClassSelector()}').iconpicker({placement:'bottomLeft'});
 
 EOT;
 
-        $this->prepend('<i class="fa fa-pencil fa-fw"></i>')
+        $this->prepend('<i class="fa-solid fa-pencil fa-fw"></i>')
             ->defaultAttribute('style', 'width: 140px');
 
         return parent::render();

@@ -138,7 +138,22 @@ return [
         'excepts' => [
             'auth/login',
             'auth/logout',
-            '_handle_action_',
+        ],
+
+        // Lock a username + IP pair out after too many failed logins.
+        'throttle' => [
+            'enable'        => true,
+            'max_attempts'  => 5,
+            'decay_seconds' => 60,
+        ],
+
+        // Optional TOTP two-factor authentication, each user turns it on from
+        // the settings page. Needs the `two_factor_*` columns migration.
+        'two_factor' => [
+            'enable' => env('ADMIN_TWO_FACTOR', true),
+
+            // Account issuer shown in authenticator apps, defaults to `name`.
+            'issuer' => null,
         ],
     ],
 
@@ -161,6 +176,10 @@ return [
             'image' => 'images',
             'file'  => 'files',
         ],
+
+        // Store uploads under random names so clients can't overwrite each
+        // other's files. Use `->originalName()` on a field to opt out.
+        'unique_name' => true,
     ],
 
     /*
@@ -202,6 +221,39 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Global search
+    |--------------------------------------------------------------------------
+    |
+    | The navbar search box looks through the menu pages the user can see and
+    | every registered resource. Register resources here, or in bootstrap.php:
+    |
+    |   Admin::globalSearch(App\Models\Post::class)
+    |       ->columns(['title', 'author.name'])
+    |       ->subtitle('author.name')
+    |       ->url('posts/{id}/edit')
+    |       ->permission('posts');
+    |
+    */
+    'global_search' => [
+
+        'enable' => true,
+
+        // Results per group.
+        'limit' => 5,
+
+        // Search the sidebar menu titles too.
+        'menu' => true,
+
+        'resources' => [
+            // App\Models\Post::class => [
+            //     'columns' => ['title', 'body'],
+            //     'url'     => 'posts/{id}/edit',
+            // ],
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | User operation log setting
     |--------------------------------------------------------------------------
     |
@@ -224,8 +276,14 @@ return [
          * or specific method to path like: get:admin/auth/logs.
          */
         'except' => [
-            'admin/auth/logs*',
+            env('ADMIN_ROUTE_PREFIX', 'admin').'/auth/logs*',
         ],
+
+        /*
+         * Extra input keys to mask in the log. Passwords, 2FA codes and the
+         * CSRF token are always masked.
+         */
+        'hidden_fields' => [],
     ],
 
     /*
@@ -267,16 +325,40 @@ return [
     | Application Skin
     |--------------------------------------------------------------------------
     |
-    | This value is the skin of admin pages.
-    | @see https://adminlte.io/docs/2.4/layout
+    | The accent color and sidebar style of admin pages. 1.x skin names keep working:
+    | "{color}" gives a dark sidebar and "{color}-light" a light one.
     |
-    | Supported:
-    |    "skin-blue", "skin-blue-light", "skin-yellow", "skin-yellow-light",
-    |    "skin-green", "skin-green-light", "skin-purple", "skin-purple-light",
-    |    "skin-red", "skin-red-light", "skin-black", "skin-black-light".
+    | Supported colors: "blue", "yellow", "green", "purple", "red", "black".
+    | e.g. "blue", "blue-light", "skin-blue-light".
     |
     */
-    'skin' => 'skin-blue-light',
+    'skin' => env('ADMIN_SKIN', 'blue-light'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Color mode
+    |--------------------------------------------------------------------------
+    |
+    | Bootstrap 5 color mode of admin pages: "light", "dark" or "auto" (follow the
+    | operating system preference). Users can switch it from the navbar.
+    |
+    */
+    'theme' => env('ADMIN_THEME', 'light'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Right-to-left layout
+    |--------------------------------------------------------------------------
+    |
+    | Load the RTL build of AdminLTE.
+    | - null: follow the current locale (ar, fa, he, ur, ...).
+    | - true / false: force RTL on or off.
+    | - a locale code such as "ar": show a navbar language switcher between
+    |   that language and the application locale. Direction follows the
+    |   selected language.
+    |
+    */
+    'rtl' => null,
 
     /*
     |--------------------------------------------------------------------------
@@ -284,13 +366,13 @@ return [
     |--------------------------------------------------------------------------
     |
     | This value is the layout of admin pages.
-    | @see https://adminlte.io/docs/2.4/layout
+    | @see https://adminlte.io/themes/v4/docs/layout.html
     |
-    | Supported: "fixed", "layout-boxed", "layout-top-nav", "sidebar-collapse",
-    | "sidebar-mini".
+    | Supported: "fixed" (fixed header and sidebar), "fixed-footer",
+    | "sidebar-mini", "sidebar-collapse".
     |
     */
-    'layout' => ['sidebar-mini', 'sidebar-collapse'],
+    'layout' => ['sidebar-mini', 'fixed'],
 
     /*
     |--------------------------------------------------------------------------
@@ -361,6 +443,16 @@ return [
     |--------------------------------------------------------------------------
     */
     'enable_menu_search' => true,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Exclude route from generate menu command
+    |--------------------------------------------------------------------------
+    */
+    'menu_exclude' => [
+        '_handle_selectable_',
+        '_handle_renderable_',
+    ],
 
     /*
     |--------------------------------------------------------------------------

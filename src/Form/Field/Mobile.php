@@ -5,7 +5,7 @@ namespace Encore\Admin\Form\Field;
 class Mobile extends Text
 {
     protected static $js = [
-        '/vendor/laravel-admin/AdminLTE/plugins/input-mask/jquery.inputmask.bundle.min.js',
+        '/vendor/laravel-admin/inputmask/jquery.inputmask.min.js',
     ];
 
     /**
@@ -21,7 +21,7 @@ class Mobile extends Text
     {
         $this->inputmask($this->options);
 
-        $this->prepend('<i class="fa fa-phone fa-fw"></i>')
+        $this->prepend('<i class="fa-solid fa-phone fa-fw"></i>')
             ->defaultAttribute('style', 'width: 150px');
 
         return parent::render();

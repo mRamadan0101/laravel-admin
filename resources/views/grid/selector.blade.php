@@ -3,9 +3,9 @@
     .grid-selector .wrap {
         position: relative;
         line-height: 34px;
-        border-bottom: 1px dashed #eee;
+        border-bottom: 1px dashed var(--bs-border-color);
         padding: 0 30px;
-        font-size: 13px;
+        font-size: .875rem;
         overflow:auto;
     }
 
@@ -17,7 +17,7 @@
         float: left;
         width: 100px;
         padding-left: 10px;
-        color: #999;
+        color: var(--bs-secondary-color);
     }
 
     .grid-selector .select-options {
@@ -35,12 +35,12 @@
     }
 
     .grid-selector ul > li a {
-        color: #666;
+        color: var(--bs-body-color);
         text-decoration: none;
     }
 
     .grid-selector .select-options a.active {
-        color: #dd4b39;
+        color: var(--bs-primary);
         font-weight: 600;
     }
 
@@ -57,7 +57,7 @@
     }
 
     .grid-selector ul:hover .clear {
-        color: #3c8dbc;
+        color: var(--bs-primary);
         visibility: visible;
     }
 </style>
@@ -78,15 +78,15 @@
                             @if(!$active && $selector['type'] == 'many')
                                 &nbsp;
                                 <a href="{{ \Encore\Admin\Grid\Tools\Selector::url($column, $value) }}" class="add"><i
-                                            class="fa fa-plus-square-o"></i></a>
+                                            class="fa-regular fa-square-plus"></i></a>
                             @else
-                                <a style="visibility: hidden;"><i class="fa fa-plus-square-o"></i></a>
+                                <a style="visibility: hidden;"><i class="fa-regular fa-square-plus"></i></a>
                             @endif
                         </li>
                     @endforeach
                     <li>
                         <a href="{{ \Encore\Admin\Grid\Tools\Selector::url($column) }}" class="clear"><i
-                                    class="fa fa-trash"></i></a>
+                                    class="fa-solid fa-trash"></i></a>
                     </li>
                 </ul>
             </div>

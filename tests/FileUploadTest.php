@@ -6,7 +6,7 @@ use Tests\Models\File as FileModel;
 
 class FileUploadTest extends TestCase
 {
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -16,8 +16,8 @@ class FileUploadTest extends TestCase
     public function testFileUploadPage()
     {
         $this->visit('admin/files/create')
-            ->see('Upload file')
-            ->seeInElement('h3[class=box-title]', 'Create')
+            ->see('Files')
+            ->seeInElement('h3[class=card-title]', 'Create')
             ->seeElement('input[name=file1]')
             ->seeElement('input[name=file2]')
             ->seeElement('input[name=file3]')
@@ -35,7 +35,7 @@ class FileUploadTest extends TestCase
             ->attach(__DIR__.'/AuthTest.php', 'file1')
             ->attach(__DIR__.'/InstallTest.php', 'file2')
             ->attach(__DIR__.'/IndexTest.php', 'file3')
-            ->attach(__DIR__.'/LaravelTest.php', 'file4')
+            ->attach(__DIR__.'/MenuTest.php', 'file4')
             ->attach(__DIR__.'/routes.php', 'file5')
             ->attach(__DIR__.'/migrations/2016_11_22_093148_create_test_tables.php', 'file6')
             ->press('Submit');
@@ -50,18 +50,14 @@ class FileUploadTest extends TestCase
 
         $this->assertEquals(FileModel::count(), 1);
 
-        $where = [
-            'file1' => 'files/AuthTest.php',
-            'file2' => 'files/InstallTest.php',
-            'file3' => 'files/IndexTest.php',
-            'file4' => 'files/LaravelTest.php',
-            'file5' => 'files/routes.php',
-            'file6' => 'files/2016_11_22_093148_create_test_tables.php',
-        ];
-
-        $this->seeInDatabase('test_files', $where);
-
         $files = FileModel::first()->toArray();
+
+        foreach ([1, 2, 3, 4, 6] as $index) {
+            $this->assertMatchesRegularExpression('#^files/[A-Za-z0-9]{40}\.php$#', $files['file'.$index]);
+        }
+
+        $this->assertSame('files/routes.php', $files['file5']);
+        $this->assertCount(6, array_unique(array_intersect_key($files, array_flip(['file1', 'file2', 'file3', 'file4', 'file5', 'file6']))));
 
         foreach (range(1, 6) as $index) {
             $this->assertFileExists(public_path('uploads/'.$files['file'.$index]));
@@ -126,7 +122,7 @@ class FileUploadTest extends TestCase
             ->dontSeeInDatabase('test_files', ['id' => 1]);
 
         foreach (range(1, 6) as $index) {
-            $this->assertFileNotExists(public_path('uploads/'.$files['file'.$index]));
+            $this->assertFileDoesNotExist(public_path('uploads/'.$files['file'.$index]));
         }
 
         $this->visit('admin/files')

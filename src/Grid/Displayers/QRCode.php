@@ -14,6 +14,7 @@ class QRCode extends AbstractDisplayer
         $script = <<<'SCRIPT'
 $('.grid-column-qrcode').popover({
     html: true,
+    container: 'body',
     trigger: 'focus'
 });
 SCRIPT;
@@ -32,13 +33,17 @@ SCRIPT;
         }
 
         $img = sprintf(
-            "<img src='https://api.qrserver.com/v1/create-qr-code/?size=%sx%s&data=%s' style='height:%spx;width:%spx;'/>",
-            $width, $height, $content, $height, $width
+            "<img src='https://api.qrserver.com/v1/create-qr-code/?size=%sx%s&data=%s' height='%s' width='%s'/>",
+            $width,
+            $height,
+            $content,
+            $height,
+            $width
         );
 
         return <<<HTML
-<a href="javascript:void(0);" class="grid-column-qrcode text-muted" data-content="{$img}" data-toggle='popover' tabindex='0'>
-    <i class="fa fa-qrcode"></i>
+<a href="javascript:void(0);" class="grid-column-qrcode text-muted" data-bs-content="{$img}" data-bs-toggle='popover' tabindex='0'>
+    <i class="fa-solid fa-qrcode"></i>
 </a>&nbsp;{$this->getValue()}
 HTML;
     }

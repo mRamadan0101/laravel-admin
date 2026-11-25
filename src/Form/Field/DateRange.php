@@ -7,12 +7,13 @@ use Encore\Admin\Form\Field;
 class DateRange extends Field
 {
     protected static $css = [
-        '/vendor/laravel-admin/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
+        '/vendor/laravel-admin/flatpickr/dist/flatpickr.min.css',
+        '/vendor/laravel-admin/flatpickr/dist/plugins/monthSelect/style.css',
     ];
 
     protected static $js = [
-        '/vendor/laravel-admin/moment/min/moment-with-locales.min.js',
-        '/vendor/laravel-admin/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
+        '/vendor/laravel-admin/flatpickr/dist/flatpickr.min.js',
+        '/vendor/laravel-admin/flatpickr/dist/plugins/monthSelect/index.js',
     ];
 
     protected $format = 'YYYY-MM-DD';
@@ -39,24 +40,6 @@ class DateRange extends Field
     /**
      * {@inheritdoc}
      */
-    public function value($value = null)
-    {
-        if (is_null($value)) {
-            if (!is_null($this->value) && is_null($this->value['start']) && is_null($this->value['end'])) {
-                return $this->getDefault();
-            }
-
-            return $this->value;
-        }
-
-        $this->value = $value;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function prepare($value)
     {
         if ($value === '') {
@@ -68,7 +51,7 @@ class DateRange extends Field
 
     public function render()
     {
-        $this->options['locale'] = config('app.locale');
+        $this->options['locale'] = array_key_exists('locale', $this->options) ? $this->options['locale'] : config('app.locale');
 
         $startOptions = json_encode($this->options);
         $endOptions = json_encode($this->options + ['useCurrent' => false]);

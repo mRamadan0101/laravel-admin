@@ -1,30 +1,31 @@
 {
-    "name": "encore/laravel-admin",
-    "description": "laravel admin",
+    "name": "mramadan0101/laravel-admin",
+    "description": "Laravel admin builder for CRUD backends, maintained for PHP 8.2+ and Laravel 10-12",
     "type": "library",
-    "keywords": ["laravel", "admin", "grid", "form"],
-    "homepage": "https://github.com/z-song/laravel-admin",
+    "keywords": ["laravel", "admin", "grid", "form", "adminlte"],
+    "homepage": "https://github.com/mRamadan0101/laravel-admin",
     "license": "MIT",
-    "version": "v1.7.9",
     "authors": [
+        {
+            "name": "Mohamed Ramadan",
+            "email": "mramadan0101@hotmail.com",
+            "homepage": "https://github.com/mRamadan0101"
+        },
         {
             "name": "zsong",
             "email": "zosong@126.com"
         }
     ],
     "require": {
-        "php": ">=7.0.0",
-        "symfony/dom-crawler": "~3.1|~4.0|~5.0",
-        "laravel/framework": "~5.5|~6.0",
-        "doctrine/dbal": "2.*"
+        "php": "^8.2",
+        "symfony/dom-crawler": "^6.0|^7.0",
+        "laravel/framework": "^10.0|^11.0|^12.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~6.0|~8.0",
-        "laravel/laravel": "~5.5|~6.0",
-        "symfony/css-selector": "~3.1",
-        "fzaninotto/faker": "~1.4",
-        "intervention/image": "~2.3",
-        "laravel/browser-kit-testing": "^2.0"
+        "fakerphp/faker": "^1.23",
+        "intervention/image": "^2.7",
+        "orchestra/testbench-browser-kit": "^8.0|^9.0|^10.0",
+        "phpunit/phpunit": "^10.5|^11.0"
     },
     "autoload": {
         "psr-4": {
@@ -37,7 +38,8 @@
     "autoload-dev": {
         "psr-4": {
             "Tests\\Models\\": "tests/models",
-            "Tests\\Controllers\\": "tests/controllers"
+            "Tests\\Controllers\\": "tests/controllers",
+            "Tests\\Factories\\": "tests/factories"
         },
         "classmap": [
             "tests/TestCase.php"
@@ -47,10 +49,15 @@
         "test": "./vendor/bin/phpunit"
     },
     "suggest": {
-        "intervention/image": "Required to handling and manipulation upload images (~2.3).",
+        "intervention/image": "Required to handling and manipulation upload images (^2.7).",
         "spatie/eloquent-sortable": "Required to built orderable gird."
     },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "extra": {
+        "branch-alias": {
+            "dev-master": "2.x-dev"
+        },
         "laravel": {
             "providers": [
                 "Encore\\Admin\\AdminServiceProvider"
@@ -58,7 +65,6 @@
             "aliases": {
                 "Admin": "Encore\\Admin\\Facades\\Admin"
             }
-
         }
     }
 }

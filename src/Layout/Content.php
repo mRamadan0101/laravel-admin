@@ -45,7 +45,7 @@ class Content implements Renderable
      *
      * @param Closure|null $callback
      */
-    public function __construct(\Closure $callback = null)
+    public function __construct(?\Closure $callback = null)
     {
         if ($callback instanceof Closure) {
             $callback($this);
@@ -171,6 +171,15 @@ class Content implements Renderable
         $this->view = compact('view', 'data');
 
         return $this;
+    }
+
+    /**
+     * @param string $view
+     * @param array  $data
+     */
+    public function component($view, $data = [])
+    {
+        return $this->body(Admin::component($view, $data));
     }
 
     /**

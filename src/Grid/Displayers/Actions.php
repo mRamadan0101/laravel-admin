@@ -36,6 +36,13 @@ class Actions extends AbstractDisplayer
     protected $disableAll = false;
 
     /**
+     * diy translate.
+     *
+     * @var array
+     */
+    protected $trans = [];
+
+    /**
      * Append a action.
      *
      * @param $action
@@ -191,7 +198,7 @@ class Actions extends AbstractDisplayer
     {
         return <<<EOT
 <a href="{$this->getResource()}/{$this->getRouteKey()}" class="{$this->grid->getGridRowName()}-view">
-    <i class="fa fa-eye"></i>
+    <i class="fa-regular fa-eye"></i>
 </a>
 EOT;
     }
@@ -205,7 +212,7 @@ EOT;
     {
         return <<<EOT
 <a href="{$this->getResource()}/{$this->getRouteKey()}/edit" class="{$this->grid->getGridRowName()}-edit">
-    <i class="fa fa-edit"></i>
+    <i class="fa-solid fa-pen-to-square"></i>
 </a>
 EOT;
     }
@@ -221,7 +228,7 @@ EOT;
 
         return <<<EOT
 <a href="javascript:void(0);" data-id="{$this->getKey()}" class="{$this->grid->getGridRowName()}-delete">
-    <i class="fa fa-trash"></i>
+    <i class="fa-solid fa-trash"></i>
 </a>
 EOT;
     }
@@ -234,15 +241,17 @@ EOT;
             'cancel'         => trans('admin.cancel'),
         ];
 
+        $trans = array_merge($trans, $this->trans);
+
         $script = <<<SCRIPT
 
 $('.{$this->grid->getGridRowName()}-delete').unbind('click').click(function() {
 
     var id = $(this).data('id');
 
-    swal({
+    $.admin.swal({
         title: "{$trans['delete_confirm']}",
-        type: "warning",
+        icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#DD6B55",
         confirmButtonText: "{$trans['confirm']}",
@@ -269,9 +278,9 @@ $('.{$this->grid->getGridRowName()}-delete').unbind('click').click(function() {
         var data = result.value;
         if (typeof data === 'object') {
             if (data.status) {
-                swal(data.message, '', 'success');
+                $.admin.swal(data.message, '', 'success');
             } else {
-                swal(data.message, '', 'error');
+                $.admin.swal(data.message, '', 'error');
             }
         }
     });
@@ -280,5 +289,15 @@ $('.{$this->grid->getGridRowName()}-delete').unbind('click').click(function() {
 SCRIPT;
 
         Admin::script($script);
+    }
+
+    /**
+     * diy delete translate.
+     *
+     * @param $tans
+     */
+    public function setTrans($tans)
+    {
+        $this->trans = $tans;
     }
 }

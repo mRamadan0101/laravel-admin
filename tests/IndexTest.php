@@ -4,7 +4,7 @@ use Encore\Admin\Auth\Database\Administrator;
 
 class IndexTest extends TestCase
 {
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -26,10 +26,7 @@ class IndexTest extends TestCase
             ->seeLink('laravel-admin-ext/backup', 'https://github.com/laravel-admin-extensions/backup')
             ->seeLink('laravel-admin-ext/media-manager', 'https://github.com/laravel-admin-extensions/media-manager')
 
-            ->see('Dependencies')
-            ->see('php')
-//            ->see('>=7.0.0')
-            ->see('laravel/framework');
+            ->see('Dependencies');
     }
 
     public function testClickMenu()
@@ -45,5 +42,47 @@ class IndexTest extends TestCase
             ->seePageis('admin/auth/menu')
             ->click('Operation log')
             ->seePageis('admin/auth/logs');
+    }
+
+    public function testSkinClassFollowsConfig()
+    {
+        config(['admin.skin' => 'skin-red']);
+
+        $this->visit('admin/');
+
+        $this->assertStringContainsString('skin-red', $this->crawler->filter('body')->attr('class'));
+        $this->assertEquals('dark', $this->crawler->filter('.app-sidebar')->attr('data-bs-theme'));
+
+        config(['admin.skin' => 'green-light']);
+
+        $this->visit('admin/');
+
+        $this->assertStringContainsString('skin-green', $this->crawler->filter('body')->attr('class'));
+        $this->assertStringContainsString('bg-body', $this->crawler->filter('.app-sidebar')->attr('class'));
+        $this->assertNull($this->crawler->filter('.app-sidebar')->attr('data-bs-theme'));
+    }
+
+    public function testLocaleSwitcherAppearsWhenRtlLocaleIsSet()
+    {
+        config(['admin.rtl' => 'ar']);
+
+        $this->visit('admin/')
+            ->see('English')
+            ->see('العربية')
+            ->seeElement('.admin-locale-switcher');
+
+        $this->visit('admin/locale/ar');
+
+        $this->assertEquals('rtl', $this->crawler->filter('html')->attr('dir'));
+        $this->assertEquals('ar', $this->crawler->filter('html')->attr('lang'));
+    }
+
+    public function testLocaleSwitcherHiddenWhenRtlIsAuto()
+    {
+        config(['admin.rtl' => null]);
+
+        $this->visit('admin/');
+
+        $this->assertCount(0, $this->crawler->filter('.admin-locale-switcher'));
     }
 }

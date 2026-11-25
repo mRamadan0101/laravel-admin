@@ -99,4 +99,5 @@ return [
         'filter_placeholder' => 'フィルタ',
     ],
     'menu_titles'           => [],
+    'language'               => '言語',
 ];
